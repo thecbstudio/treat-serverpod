@@ -22,3 +22,8 @@ Environment: Windows 11 Home (26200), Flutter 3.47.5, Dart 3.13.4, serverpod_cli
 - **What:** When `dart test` runs from a process inside an MSIX container (e.g. the Claude desktop app, likely also other Store-packaged terminals/IDEs), writes to `%LOCALAPPDATA%` are virtualized to `%LOCALAPPDATA%\Packages\<pkg>\LocalCache\...`. The recorded postmaster executable path and the path returned by `QueryFullProcessImageName` then differ, `verifyIdentity()` returns "not ours", `attach()` fails, and the harness reports `Another process is using the local database` — even though Serverpod started that postmaster itself seconds earlier.
 - **Workaround:** `SERVERPOD_PG_CACHE_DIR=C:\some\non-appdata\path` (found by reading `binary_store.dart`; not documented).
 - **Suggestion:** Normalize both paths with `GetFinalPathNameByHandle`/resolve virtualized paths before comparing, or fall back to comparing file identity (volume serial + file index). Document `SERVERPOD_PG_CACHE_DIR`.
+
+## 5. `default=` is rejected on `List` fields
+- **What:** `categoriesTried: List<OfferCategory>, default=[]` fails generation with `The "default" key is not supported for "List" types`.
+- **Impact:** Every constructor call has to pass an empty list by hand.
+- **Suggestion:** Support `default=[]` (empty collection) for `List`/`Set`/`Map`, at least as `defaultModel`.

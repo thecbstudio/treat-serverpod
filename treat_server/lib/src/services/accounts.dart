@@ -53,8 +53,9 @@ Future<Shop> requireShop(Session session, {Transaction? transaction}) async {
     requireAuthUserId(session),
     transaction: transaction,
   );
-  if (shop == null)
+  if (shop == null) {
     throw treatError('not_a_shop', 'Only businesses can do this.');
+  }
   return shop;
 }
 
