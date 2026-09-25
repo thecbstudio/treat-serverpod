@@ -17,12 +17,16 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'package:treat_server/src/generated/claim_view.dart' as _iuhj4d1o;
 import 'package:treat_server/src/generated/offer_card.dart' as _ipkteuk5;
 import 'badge_id.dart' as _i14xwlyb;
 import 'claim.dart' as _iywv5oz4;
 import 'claim_status.dart' as _i4cqplnc;
+import 'claim_view.dart' as _i48lh927;
 import 'eligibility.dart' as _iapxm79h;
 import 'eligibility_reason.dart' as _ixt5yy28;
+import 'future_calls_generated_models/expire_claim_call_expire_model.dart'
+    as _iizahf83;
 import 'me.dart' as _i22ljs0z;
 import 'offer.dart' as _iqlmmtnc;
 import 'offer_card.dart' as _irfq3mof;
@@ -31,6 +35,7 @@ import 'offer_frequency.dart' as _ix7dcs2a;
 import 'offer_input.dart' as _in0575rn;
 import 'offer_status.dart' as _i40dfi1m;
 import 'proof_type.dart' as _i671eu65;
+import 'redeem_result.dart' as _iggnnz44;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_input.dart' as _i5vfstp6;
 import 'student_profile.dart' as _iovtxv26;
@@ -40,6 +45,7 @@ import 'user_role.dart' as _ir0y0iu6;
 export 'badge_id.dart';
 export 'claim.dart';
 export 'claim_status.dart';
+export 'claim_view.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
 export 'me.dart';
@@ -50,6 +56,7 @@ export 'offer_frequency.dart';
 export 'offer_input.dart';
 export 'offer_status.dart';
 export 'proof_type.dart';
+export 'redeem_result.dart';
 export 'shop.dart';
 export 'shop_input.dart';
 export 'student_profile.dart';
@@ -729,11 +736,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i4cqplnc.ClaimStatus) {
       return _i4cqplnc.ClaimStatus.fromJson(data) as T;
     }
+    if (t == _i48lh927.ClaimView) {
+      return _i48lh927.ClaimView.fromJson(data) as T;
+    }
     if (t == _iapxm79h.Eligibility) {
       return _iapxm79h.Eligibility.fromJson(data) as T;
     }
     if (t == _ixt5yy28.EligibilityReason) {
       return _ixt5yy28.EligibilityReason.fromJson(data) as T;
+    }
+    if (t == _iizahf83.ExpireClaimCallExpireModel) {
+      return _iizahf83.ExpireClaimCallExpireModel.fromJson(data) as T;
     }
     if (t == _i22ljs0z.Me) {
       return _i22ljs0z.Me.fromJson(data) as T;
@@ -758,6 +771,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _i671eu65.ProofType) {
       return _i671eu65.ProofType.fromJson(data) as T;
+    }
+    if (t == _iggnnz44.RedeemResult) {
+      return _iggnnz44.RedeemResult.fromJson(data) as T;
     }
     if (t == _isgf2ncs.Shop) {
       return _isgf2ncs.Shop.fromJson(data) as T;
@@ -786,11 +802,20 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_i4cqplnc.ClaimStatus?>()) {
       return (data != null ? _i4cqplnc.ClaimStatus.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_i48lh927.ClaimView?>()) {
+      return (data != null ? _i48lh927.ClaimView.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iapxm79h.Eligibility?>()) {
       return (data != null ? _iapxm79h.Eligibility.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_ixt5yy28.EligibilityReason?>()) {
       return (data != null ? _ixt5yy28.EligibilityReason.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_iizahf83.ExpireClaimCallExpireModel?>()) {
+      return (data != null
+              ? _iizahf83.ExpireClaimCallExpireModel.fromJson(data)
+              : null)
           as T;
     }
     if (t == _is.getType<_i22ljs0z.Me?>()) {
@@ -818,6 +843,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i671eu65.ProofType?>()) {
       return (data != null ? _i671eu65.ProofType.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iggnnz44.RedeemResult?>()) {
+      return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_isgf2ncs.Shop?>()) {
       return (data != null ? _isgf2ncs.Shop.fromJson(data) : null) as T;
@@ -860,6 +888,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_iuhj4d1o.ClaimView>) {
+      return (data as List)
+              .map((e) => deserialize<_iuhj4d1o.ClaimView>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ipkteuk5.OfferCard>) {
       return (data as List)
               .map((e) => deserialize<_ipkteuk5.OfferCard>(e))
@@ -883,8 +917,10 @@ class Protocol extends _is.DatabaseSerializationManager {
       _i14xwlyb.BadgeId => 'BadgeId',
       _iywv5oz4.Claim => 'Claim',
       _i4cqplnc.ClaimStatus => 'ClaimStatus',
+      _i48lh927.ClaimView => 'ClaimView',
       _iapxm79h.Eligibility => 'Eligibility',
       _ixt5yy28.EligibilityReason => 'EligibilityReason',
+      _iizahf83.ExpireClaimCallExpireModel => 'ExpireClaimCallExpireModel',
       _i22ljs0z.Me => 'Me',
       _iqlmmtnc.Offer => 'Offer',
       _irfq3mof.OfferCard => 'OfferCard',
@@ -893,6 +929,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _in0575rn.OfferInput => 'OfferInput',
       _i40dfi1m.OfferStatus => 'OfferStatus',
       _i671eu65.ProofType => 'ProofType',
+      _iggnnz44.RedeemResult => 'RedeemResult',
       _isgf2ncs.Shop => 'Shop',
       _i5vfstp6.ShopInput => 'ShopInput',
       _iovtxv26.StudentProfile => 'StudentProfile',
@@ -919,10 +956,14 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'Claim';
       case _i4cqplnc.ClaimStatus():
         return 'ClaimStatus';
+      case _i48lh927.ClaimView():
+        return 'ClaimView';
       case _iapxm79h.Eligibility():
         return 'Eligibility';
       case _ixt5yy28.EligibilityReason():
         return 'EligibilityReason';
+      case _iizahf83.ExpireClaimCallExpireModel():
+        return 'ExpireClaimCallExpireModel';
       case _i22ljs0z.Me():
         return 'Me';
       case _iqlmmtnc.Offer():
@@ -939,6 +980,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'OfferStatus';
       case _i671eu65.ProofType():
         return 'ProofType';
+      case _iggnnz44.RedeemResult():
+        return 'RedeemResult';
       case _isgf2ncs.Shop():
         return 'Shop';
       case _i5vfstp6.ShopInput():
@@ -986,11 +1029,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'ClaimStatus') {
       return deserialize<_i4cqplnc.ClaimStatus>(data['data']);
     }
+    if (dataClassName == 'ClaimView') {
+      return deserialize<_i48lh927.ClaimView>(data['data']);
+    }
     if (dataClassName == 'Eligibility') {
       return deserialize<_iapxm79h.Eligibility>(data['data']);
     }
     if (dataClassName == 'EligibilityReason') {
       return deserialize<_ixt5yy28.EligibilityReason>(data['data']);
+    }
+    if (dataClassName == 'ExpireClaimCallExpireModel') {
+      return deserialize<_iizahf83.ExpireClaimCallExpireModel>(data['data']);
     }
     if (dataClassName == 'Me') {
       return deserialize<_i22ljs0z.Me>(data['data']);
@@ -1015,6 +1064,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ProofType') {
       return deserialize<_i671eu65.ProofType>(data['data']);
+    }
+    if (dataClassName == 'RedeemResult') {
+      return deserialize<_iggnnz44.RedeemResult>(data['data']);
     }
     if (dataClassName == 'Shop') {
       return deserialize<_isgf2ncs.Shop>(data['data']);

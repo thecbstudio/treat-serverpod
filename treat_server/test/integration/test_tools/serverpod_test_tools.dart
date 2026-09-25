@@ -17,11 +17,16 @@ import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_test/serverpod_test.dart' as _ist;
+import 'package:treat_server/src/generated/claim_view.dart' as _iuhj4d1o;
+import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
+import 'package:treat_server/src/generated/future_calls_generated_models/expire_claim_call_expire_model.dart'
+    as _i0ubflsj;
 import 'package:treat_server/src/generated/me.dart' as _ietetfc8;
 import 'package:treat_server/src/generated/offer.dart' as _i1s2ys04;
 import 'package:treat_server/src/generated/offer_card.dart' as _ipkteuk5;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
+import 'package:treat_server/src/generated/redeem_result.dart' as _itbz5dhb;
 import 'package:treat_server/src/generated/shop.dart' as _it3lip7k;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import 'package:treat_server/src/generated/protocol.dart';
@@ -152,13 +157,19 @@ void withServerpod(
 }
 
 class TestEndpoints {
+  late final futureCalls = _FutureCalls();
+
   late final _EmailIdpEndpoint emailIdp;
 
   late final _JwtRefreshEndpoint jwtRefresh;
 
+  late final _ClaimEndpoint claim;
+
   late final _OfferEndpoint offer;
 
   late final _ProfileEndpoint profile;
+
+  late final _ShopEndpoint shop;
 
   late final _ShopOffersEndpoint shopOffers;
 }
@@ -178,6 +189,10 @@ class _InternalTestEndpoints extends TestEndpoints
       endpoints,
       serializationManager,
     );
+    claim = _ClaimEndpoint(
+      endpoints,
+      serializationManager,
+    );
     offer = _OfferEndpoint(
       endpoints,
       serializationManager,
@@ -186,11 +201,19 @@ class _InternalTestEndpoints extends TestEndpoints
       endpoints,
       serializationManager,
     );
+    shop = _ShopEndpoint(
+      endpoints,
+      serializationManager,
+    );
     shopOffers = _ShopOffersEndpoint(
       endpoints,
       serializationManager,
     );
   }
+}
+
+class _FutureCalls {
+  late final expireClaimCall = _ExpireClaimCallFutureCall();
 }
 
 class _EmailIdpEndpoint {
@@ -511,6 +534,141 @@ class _JwtRefreshEndpoint {
   }
 }
 
+class _ClaimEndpoint {
+  _ClaimEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_iuhj4d1o.ClaimView> create(
+    _ist.TestSessionBuilder sessionBuilder,
+    int offerId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'claim',
+            method: 'create',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'claim',
+          methodName: 'create',
+          parameters: _ist.testObjectToJson({'offerId': offerId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iuhj4d1o.ClaimView>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_iuhj4d1o.ClaimView>> listMine(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'claim',
+            method: 'listMine',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'claim',
+          methodName: 'listMine',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_iuhj4d1o.ClaimView>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iuhj4d1o.ClaimView> get(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'claim',
+            method: 'get',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'claim',
+          methodName: 'get',
+          parameters: _ist.testObjectToJson({'claimId': claimId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iuhj4d1o.ClaimView>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Stream<_iuhj4d1o.ClaimView> watch(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) {
+    var _localTestStreamManager = _ist.TestStreamManager<_iuhj4d1o.ClaimView>();
+    _ist.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'claim',
+              method: 'watch',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'claim',
+              methodName: 'watch',
+              arguments: {'claimId': claimId},
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
+  }
+}
+
 class _OfferEndpoint {
   _OfferEndpoint(
     this._endpointDispatch,
@@ -721,6 +879,48 @@ class _ProfileEndpoint {
   }
 }
 
+class _ShopEndpoint {
+  _ShopEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_itbz5dhb.RedeemResult> redeem(
+    _ist.TestSessionBuilder sessionBuilder,
+    String input,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'shop',
+            method: 'redeem',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'shop',
+          methodName: 'redeem',
+          parameters: _ist.testObjectToJson({'input': input}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_itbz5dhb.RedeemResult>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
 class _ShopOffersEndpoint {
   _ShopOffersEndpoint(
     this._endpointDispatch,
@@ -860,5 +1060,24 @@ class _ShopOffersEndpoint {
         await _localUniqueSession.close();
       }
     });
+  }
+}
+
+class _ExpireClaimCallFutureCall {
+  Future<void> expire(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) async {
+    var object = _i0ubflsj.ExpireClaimCallExpireModel(claimId: claimId);
+    var _localUniqueSession =
+        (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild();
+    try {
+      await _ipmzuoh2.ExpireClaimCallExpireFutureCall().invoke(
+        _localUniqueSession,
+        object,
+      );
+    } finally {
+      await _localUniqueSession.close();
+    }
   }
 }

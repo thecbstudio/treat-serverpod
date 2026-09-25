@@ -15,14 +15,18 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
+import '../endpoints/claim_endpoint.dart' as _i0cek2rs;
 import '../endpoints/offer_endpoint.dart' as _i96ujqr4;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
+import '../endpoints/shop_endpoint.dart' as _i4fqeydl;
 import '../endpoints/shop_offers_endpoint.dart' as _ifm6c9vh;
+export 'future_calls.dart' show ServerpodFutureCallsGetter;
 
 class Endpoints extends _is.EndpointDispatch {
   @override
@@ -40,6 +44,12 @@ class Endpoints extends _is.EndpointDispatch {
           'jwtRefresh',
           null,
         ),
+      'claim': _i0cek2rs.ClaimEndpoint()
+        ..initialize(
+          server,
+          'claim',
+          null,
+        ),
       'offer': _i96ujqr4.OfferEndpoint()
         ..initialize(
           server,
@@ -50,6 +60,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'profile',
+          null,
+        ),
+      'shop': _i4fqeydl.ShopEndpoint()
+        ..initialize(
+          server,
+          'shop',
           null,
         ),
       'shopOffers': _ifm6c9vh.ShopOffersEndpoint()
@@ -265,6 +281,79 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['claim'] = _is.EndpointConnector(
+      name: 'claim',
+      endpoint: endpoints['claim']!,
+      methodConnectors: {
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'offerId': _is.ParameterDescription(
+              name: 'offerId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).create(
+                session,
+                params['offerId'],
+              ),
+        ),
+        'listMine': _is.MethodConnector(
+          name: 'listMine',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint)
+                  .listMine(session),
+        ),
+        'get': _is.MethodConnector(
+          name: 'get',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).get(
+                session,
+                params['claimId'],
+              ),
+        ),
+        'watch': _is.MethodStreamConnector(
+          name: 'watch',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          streamParams: {},
+          returnType: _is.MethodStreamReturnType.streamType,
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).watch(
+                session,
+                params['claimId'],
+              ),
+        ),
+      },
+    );
     connectors['offer'] = _is.EndpointConnector(
       name: 'offer',
       endpoint: endpoints['offer']!,
@@ -378,6 +467,30 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
+    connectors['shop'] = _is.EndpointConnector(
+      name: 'shop',
+      endpoint: endpoints['shop']!,
+      methodConnectors: {
+        'redeem': _is.MethodConnector(
+          name: 'redeem',
+          params: {
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['shop'] as _i4fqeydl.ShopEndpoint).redeem(
+                session,
+                params['input'],
+              ),
+        ),
+      },
+    );
     connectors['shopOffers'] = _is.EndpointConnector(
       name: 'shopOffers',
       endpoint: endpoints['shopOffers']!,
@@ -471,5 +584,10 @@ class Endpoints extends _is.EndpointDispatch {
       ..initializeEndpoints(server);
     modules['serverpod_auth_core'] = _iacs.Endpoints()
       ..initializeEndpoints(server);
+  }
+
+  @override
+  _is.FutureCallDispatch? get futureCalls {
+    return _ipmzuoh2.FutureCalls();
   }
 }

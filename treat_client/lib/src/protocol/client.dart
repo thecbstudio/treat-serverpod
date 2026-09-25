@@ -17,11 +17,13 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
+import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
 import 'package:treat_client/src/protocol/me.dart' as _iap2bcnj;
 import 'package:treat_client/src/protocol/offer.dart' as _ibnzpjkx;
 import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
 import 'package:treat_client/src/protocol/offer_input.dart' as _i8mx2n74;
 import 'package:treat_client/src/protocol/offer_status.dart' as _ipcd8cwl;
+import 'package:treat_client/src/protocol/redeem_result.dart' as _i8ej1owz;
 import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
 import 'package:treat_client/src/protocol/shop_input.dart' as _inznu32h;
 import 'protocol.dart' as _il2as5qe;
@@ -251,6 +253,49 @@ class EndpointJwtRefresh extends _iacc.EndpointRefreshJwtTokens {
       );
 }
 
+/// A student's claims: create, list, open, and watch one live.
+/// {@category Endpoint}
+class EndpointClaim extends _isc.EndpointRef {
+  EndpointClaim(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'claim';
+
+  _ida.Future<_iq1pcdgl.ClaimView> create(int offerId) =>
+      caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+        'claim',
+        'create',
+        {'offerId': offerId},
+      );
+
+  /// Newest first.
+  _ida.Future<List<_iq1pcdgl.ClaimView>> listMine() =>
+      caller.callServerEndpoint<List<_iq1pcdgl.ClaimView>>(
+        'claim',
+        'listMine',
+        {},
+      );
+
+  _ida.Future<_iq1pcdgl.ClaimView> get(int claimId) =>
+      caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+        'claim',
+        'get',
+        {'claimId': claimId},
+      );
+
+  /// Current state first, then every change (redeemed, expired, …).
+  _ida.Stream<_iq1pcdgl.ClaimView> watch(int claimId) =>
+      caller.callStreamingServerEndpoint<
+        _ida.Stream<_iq1pcdgl.ClaimView>,
+        _iq1pcdgl.ClaimView
+      >(
+        'claim',
+        'watch',
+        {'claimId': claimId},
+        {},
+      );
+}
+
 /// Browsing offers (Discover + offer detail). Students also get their
 /// eligibility for each offer, computed on the server.
 /// {@category Endpoint}
@@ -312,6 +357,23 @@ class EndpointProfile extends _isc.EndpointRef {
       caller.callServerEndpoint<_ij1m347g.Shop>(
         'profile',
         'updateShop',
+        {'input': input},
+      );
+}
+
+/// Business-side actions at the counter.
+/// {@category Endpoint}
+class EndpointShop extends _isc.EndpointRef {
+  EndpointShop(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'shop';
+
+  /// [input]: the scanned QR payload or the 6-character code.
+  _ida.Future<_i8ej1owz.RedeemResult> redeem(String input) =>
+      caller.callServerEndpoint<_i8ej1owz.RedeemResult>(
+        'shop',
+        'redeem',
         {'input': input},
       );
 }
@@ -406,8 +468,10 @@ class Client extends _isc.ServerpodClientShared {
        ) {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
+    claim = EndpointClaim(this);
     offer = EndpointOffer(this);
     profile = EndpointProfile(this);
+    shop = EndpointShop(this);
     shopOffers = EndpointShopOffers(this);
     modules = Modules(this);
   }
@@ -416,9 +480,13 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointJwtRefresh jwtRefresh;
 
+  late final EndpointClaim claim;
+
   late final EndpointOffer offer;
 
   late final EndpointProfile profile;
+
+  late final EndpointShop shop;
 
   late final EndpointShopOffers shopOffers;
 
@@ -428,8 +496,10 @@ class Client extends _isc.ServerpodClientShared {
   Map<String, _isc.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
+    'claim': claim,
     'offer': offer,
     'profile': profile,
+    'shop': shop,
     'shopOffers': shopOffers,
   };
 

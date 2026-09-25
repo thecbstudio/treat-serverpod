@@ -1,0 +1,6 @@
+### Result of scanning a code. `alreadyRedeemed`: this exact claim was already
+### redeemed by this shop (double scan) — nothing was counted twice.
+class: RedeemResult
+fields:
+  view: ClaimView
+  alreadyRedeemed: bool

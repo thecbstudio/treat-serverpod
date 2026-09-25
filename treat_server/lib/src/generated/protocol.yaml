@@ -9,6 +9,11 @@ emailIdp:
   - hasAccount:
 jwtRefresh:
   - refreshAccessToken:
+claim:
+  - create:
+  - listMine:
+  - get:
+  - watch:
 offer:
   - listActive:
   - get:
@@ -17,6 +22,8 @@ profile:
   - createStudent:
   - createShop:
   - updateShop:
+shop:
+  - redeem:
 shopOffers:
   - listMine:
   - create:

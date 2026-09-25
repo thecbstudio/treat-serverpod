@@ -1,0 +1,6 @@
+### A claim with the offer and shop it belongs to (student screens, scan result).
+class: ClaimView
+fields:
+  claim: Claim
+  offer: Offer
+  shop: Shop
