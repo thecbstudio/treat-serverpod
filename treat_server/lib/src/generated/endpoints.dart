@@ -15,9 +15,14 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
+import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
+import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
-import '../greetings/greeting_endpoint.dart' as _il624ik7;
+import '../endpoints/offer_endpoint.dart' as _i96ujqr4;
+import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
+import '../endpoints/shop_offers_endpoint.dart' as _ifm6c9vh;
 
 class Endpoints extends _is.EndpointDispatch {
   @override
@@ -35,10 +40,22 @@ class Endpoints extends _is.EndpointDispatch {
           'jwtRefresh',
           null,
         ),
-      'greeting': _il624ik7.GreetingEndpoint()
+      'offer': _i96ujqr4.OfferEndpoint()
         ..initialize(
           server,
-          'greeting',
+          'offer',
+          null,
+        ),
+      'profile': _i2cx2pww.ProfileEndpoint()
+        ..initialize(
+          server,
+          'profile',
+          null,
+        ),
+      'shopOffers': _ifm6c9vh.ShopOffersEndpoint()
+        ..initialize(
+          server,
+          'shopOffers',
           null,
         ),
     };
@@ -248,15 +265,64 @@ class Endpoints extends _is.EndpointDispatch {
         ),
       },
     );
-    connectors['greeting'] = _is.EndpointConnector(
-      name: 'greeting',
-      endpoint: endpoints['greeting']!,
+    connectors['offer'] = _is.EndpointConnector(
+      name: 'offer',
+      endpoint: endpoints['offer']!,
       methodConnectors: {
-        'hello': _is.MethodConnector(
-          name: 'hello',
+        'listActive': _is.MethodConnector(
+          name: 'listActive',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['offer'] as _i96ujqr4.OfferEndpoint)
+                  .listActive(session),
+        ),
+        'get': _is.MethodConnector(
+          name: 'get',
+          params: {
+            'offerId': _is.ParameterDescription(
+              name: 'offerId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['offer'] as _i96ujqr4.OfferEndpoint).get(
+                session,
+                params['offerId'],
+              ),
+        ),
+      },
+    );
+    connectors['profile'] = _is.EndpointConnector(
+      name: 'profile',
+      endpoint: endpoints['profile']!,
+      methodConnectors: {
+        'getMe': _is.MethodConnector(
+          name: 'getMe',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .getMe(session),
+        ),
+        'createStudent': _is.MethodConnector(
+          name: 'createStudent',
           params: {
             'name': _is.ParameterDescription(
               name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'university': _is.ParameterDescription(
+              name: 'university',
               type: _is.getType<String>(),
               nullable: false,
             ),
@@ -265,11 +331,139 @@ class Endpoints extends _is.EndpointDispatch {
               (
                 _is.Session session,
                 Map<String, dynamic> params,
-              ) async =>
-                  (endpoints['greeting'] as _il624ik7.GreetingEndpoint).hello(
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .createStudent(
                     session,
                     params['name'],
+                    params['university'],
                   ),
+        ),
+        'createShop': _is.MethodConnector(
+          name: 'createShop',
+          params: {
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<_iveqqcdz.ShopInput>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .createShop(
+                    session,
+                    params['input'],
+                  ),
+        ),
+        'updateShop': _is.MethodConnector(
+          name: 'updateShop',
+          params: {
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<_iveqqcdz.ShopInput>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .updateShop(
+                    session,
+                    params['input'],
+                  ),
+        ),
+      },
+    );
+    connectors['shopOffers'] = _is.EndpointConnector(
+      name: 'shopOffers',
+      endpoint: endpoints['shopOffers']!,
+      methodConnectors: {
+        'listMine': _is.MethodConnector(
+          name: 'listMine',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shopOffers'] as _ifm6c9vh.ShopOffersEndpoint)
+                      .listMine(session),
+        ),
+        'create': _is.MethodConnector(
+          name: 'create',
+          params: {
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<_ivcf9jef.OfferInput>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shopOffers'] as _ifm6c9vh.ShopOffersEndpoint)
+                      .create(
+                        session,
+                        params['input'],
+                      ),
+        ),
+        'update': _is.MethodConnector(
+          name: 'update',
+          params: {
+            'offerId': _is.ParameterDescription(
+              name: 'offerId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<_ivcf9jef.OfferInput>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shopOffers'] as _ifm6c9vh.ShopOffersEndpoint)
+                      .update(
+                        session,
+                        params['offerId'],
+                        params['input'],
+                      ),
+        ),
+        'setStatus': _is.MethodConnector(
+          name: 'setStatus',
+          params: {
+            'offerId': _is.ParameterDescription(
+              name: 'offerId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'status': _is.ParameterDescription(
+              name: 'status',
+              type: _is.getType<_ithrfobl.OfferStatus>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shopOffers'] as _ifm6c9vh.ShopOffersEndpoint)
+                      .setStatus(
+                        session,
+                        params['offerId'],
+                        params['status'],
+                      ),
         ),
       },
     );

@@ -1,0 +1,5 @@
+### Business-rule failure. `code` is stable and mapped to UI copy on the client.
+exception: TreatException
+fields:
+  code: String
+  message: String

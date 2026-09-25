@@ -1,0 +1,6 @@
+enum: ProofType
+values:
+  - igStory
+  - igPost
+  - googleReview
+  - tiktok

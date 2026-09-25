@@ -1,0 +1,37 @@
+### A student's claim on an offer. Caps and frequency locks are computed from
+### these rows (no counters), so an expired claim gives its slot back.
+class: Claim
+table: claim
+fields:
+  offer: Offer?, relation(onDelete=Cascade)
+  shopId: int, relation(parent=shop, onDelete=Cascade)
+  student: StudentProfile?, relation(onDelete=Cascade)
+  studentName: String
+  frequency: OfferFrequency
+  ### 6 chars; unique among the shop's active claims.
+  code: String
+  status: ClaimStatus
+  createdAt: DateTime, default=now
+  expiresAt: DateTime
+  redeemedAt: DateTime?
+  proofType: ProofType?
+  ### Path in private storage.
+  proofPath: String?, scope=serverOnly
+  proofSubmittedAt: DateTime?
+  ### When the proof was approved or rejected (streaks count approvals by this).
+  decidedAt: DateTime?
+  ### no_mention | not_a_post | unreadable
+  verdictReason: String?
+  appealed: bool, default=false
+  verifyAttempts: int, default=0
+  ### A claim can cost at most one strike; returned if an appeal is approved.
+  strikeGiven: bool, default=false
+indexes:
+  claim_student_idx:
+    fields: studentId
+  claim_shop_status_idx:
+    fields: shopId, status
+  claim_shop_code_idx:
+    fields: shopId, code
+  claim_offer_idx:
+    fields: offerId

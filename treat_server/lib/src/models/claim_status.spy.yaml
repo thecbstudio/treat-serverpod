@@ -1,0 +1,9 @@
+### active -> redeemed -> proofPending -> approved | rejected; active -> expired.
+enum: ClaimStatus
+values:
+  - active
+  - expired
+  - redeemed
+  - proofPending
+  - approved
+  - rejected

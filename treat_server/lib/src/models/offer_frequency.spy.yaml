@@ -1,0 +1,4 @@
+enum: OfferFrequency
+values:
+  - weekly
+  - monthly

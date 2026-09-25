@@ -17,7 +17,13 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
-import 'package:treat_client/src/protocol/greetings/greeting.dart' as _ihrr50vb;
+import 'package:treat_client/src/protocol/me.dart' as _iap2bcnj;
+import 'package:treat_client/src/protocol/offer.dart' as _ibnzpjkx;
+import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
+import 'package:treat_client/src/protocol/offer_input.dart' as _i8mx2n74;
+import 'package:treat_client/src/protocol/offer_status.dart' as _ipcd8cwl;
+import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
+import 'package:treat_client/src/protocol/shop_input.dart' as _inznu32h;
 import 'protocol.dart' as _il2as5qe;
 
 /// By extending [EmailIdpBaseEndpoint], the email identity provider endpoints
@@ -245,22 +251,119 @@ class EndpointJwtRefresh extends _iacc.EndpointRefreshJwtTokens {
       );
 }
 
-/// This is an example endpoint that returns a greeting message through
-/// its [hello] method.
+/// Browsing offers (Discover + offer detail). Students also get their
+/// eligibility for each offer, computed on the server.
 /// {@category Endpoint}
-class EndpointGreeting extends _isc.EndpointRef {
-  EndpointGreeting(_isc.EndpointCaller caller) : super(caller);
+class EndpointOffer extends _isc.EndpointRef {
+  EndpointOffer(_isc.EndpointCaller caller) : super(caller);
 
   @override
-  String get name => 'greeting';
+  String get name => 'offer';
 
-  /// Returns a personalized greeting message: "Hello {name}".
-  _ida.Future<_ihrr50vb.Greeting> hello(String name) =>
-      caller.callServerEndpoint<_ihrr50vb.Greeting>(
-        'greeting',
-        'hello',
-        {'name': name},
+  _ida.Future<List<_i1fp4eeg.OfferCard>> listActive() =>
+      caller.callServerEndpoint<List<_i1fp4eeg.OfferCard>>(
+        'offer',
+        'listActive',
+        {},
       );
+
+  _ida.Future<_i1fp4eeg.OfferCard> get(int offerId) =>
+      caller.callServerEndpoint<_i1fp4eeg.OfferCard>(
+        'offer',
+        'get',
+        {'offerId': offerId},
+      );
+}
+
+/// The signed-in user's own profile and onboarding (role choice).
+/// {@category Endpoint}
+class EndpointProfile extends _isc.EndpointRef {
+  EndpointProfile(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'profile';
+
+  _ida.Future<_iap2bcnj.Me> getMe() => caller.callServerEndpoint<_iap2bcnj.Me>(
+    'profile',
+    'getMe',
+    {},
+  );
+
+  _ida.Future<_iap2bcnj.Me> createStudent(
+    String name,
+    String university,
+  ) => caller.callServerEndpoint<_iap2bcnj.Me>(
+    'profile',
+    'createStudent',
+    {
+      'name': name,
+      'university': university,
+    },
+  );
+
+  _ida.Future<_iap2bcnj.Me> createShop(_inznu32h.ShopInput input) =>
+      caller.callServerEndpoint<_iap2bcnj.Me>(
+        'profile',
+        'createShop',
+        {'input': input},
+      );
+
+  _ida.Future<_ij1m347g.Shop> updateShop(_inznu32h.ShopInput input) =>
+      caller.callServerEndpoint<_ij1m347g.Shop>(
+        'profile',
+        'updateShop',
+        {'input': input},
+      );
+}
+
+/// A business managing its own offers.
+/// {@category Endpoint}
+class EndpointShopOffers extends _isc.EndpointRef {
+  EndpointShopOffers(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'shopOffers';
+
+  /// All non-ended offers, newest first, with usage.
+  _ida.Future<List<_i1fp4eeg.OfferCard>> listMine() =>
+      caller.callServerEndpoint<List<_i1fp4eeg.OfferCard>>(
+        'shopOffers',
+        'listMine',
+        {},
+      );
+
+  _ida.Future<_ibnzpjkx.Offer> create(_i8mx2n74.OfferInput input) =>
+      caller.callServerEndpoint<_ibnzpjkx.Offer>(
+        'shopOffers',
+        'create',
+        {'input': input},
+      );
+
+  _ida.Future<_ibnzpjkx.Offer> update(
+    int offerId,
+    _i8mx2n74.OfferInput input,
+  ) => caller.callServerEndpoint<_ibnzpjkx.Offer>(
+    'shopOffers',
+    'update',
+    {
+      'offerId': offerId,
+      'input': input,
+    },
+  );
+
+  /// active ⇄ paused, or ended (= deleted from the shop's point of view;
+  /// the row stays because claims reference it).
+  _ida.Future<_ibnzpjkx.Offer> setStatus(
+    int offerId,
+    _ipcd8cwl.OfferStatus status,
+  ) => caller.callServerEndpoint<_ibnzpjkx.Offer>(
+    'shopOffers',
+    'setStatus',
+    {
+      'offerId': offerId,
+      'status': status,
+    },
+  );
 }
 
 class Modules {
@@ -303,7 +406,9 @@ class Client extends _isc.ServerpodClientShared {
        ) {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
-    greeting = EndpointGreeting(this);
+    offer = EndpointOffer(this);
+    profile = EndpointProfile(this);
+    shopOffers = EndpointShopOffers(this);
     modules = Modules(this);
   }
 
@@ -311,7 +416,11 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointJwtRefresh jwtRefresh;
 
-  late final EndpointGreeting greeting;
+  late final EndpointOffer offer;
+
+  late final EndpointProfile profile;
+
+  late final EndpointShopOffers shopOffers;
 
   late final Modules modules;
 
@@ -319,7 +428,9 @@ class Client extends _isc.ServerpodClientShared {
   Map<String, _isc.EndpointRef> get endpointRefLookup => {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
-    'greeting': greeting,
+    'offer': offer,
+    'profile': profile,
+    'shopOffers': shopOffers,
   };
 
   @override

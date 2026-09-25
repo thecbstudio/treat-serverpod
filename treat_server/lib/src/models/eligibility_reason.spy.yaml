@@ -1,0 +1,12 @@
+### Checked in this order by `eligibilityOf` (see domain/rules.dart).
+enum: EligibilityReason
+values:
+  - ok
+  - offerInactive
+  - notVerified
+  - tooManyStrikes
+  - activeClaim
+  - frequency
+  - outsideHours
+  - totalCap
+  - dailyCap

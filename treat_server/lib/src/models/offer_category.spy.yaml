@@ -1,0 +1,8 @@
+enum: OfferCategory
+values:
+  - coffee
+  - food
+  - dessert
+  - beauty
+  - fitness
+  - activity

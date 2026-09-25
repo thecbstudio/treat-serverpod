@@ -9,5 +9,16 @@ emailIdp:
   - hasAccount:
 jwtRefresh:
   - refreshAccessToken:
-greeting:
-  - hello:
+offer:
+  - listActive:
+  - get:
+profile:
+  - getMe:
+  - createStudent:
+  - createShop:
+  - updateShop:
+shopOffers:
+  - listMine:
+  - create:
+  - update:
+  - setStatus:

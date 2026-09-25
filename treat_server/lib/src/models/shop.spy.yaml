@@ -1,0 +1,25 @@
+### A business account. `owner` is null only for seeded shops without a login.
+class: Shop
+table: shop
+fields:
+  owner: module:serverpod_auth_core:AuthUser?, relation(optional, onDelete=SetNull)
+  ### Stable key for idempotent seeding; null for real sign-ups.
+  seedKey: String?
+  name: String
+  category: OfferCategory
+  district: String
+  address: String
+  bio: String
+  ### Without "@". Used by the AI proof verifier.
+  instagramHandle: String?
+  verified: bool, default=false
+  totalRedeems: int, default=0
+  approvedProofs: int, default=0
+  createdAt: DateTime, default=now
+indexes:
+  shop_owner_idx:
+    fields: ownerId
+    unique: true
+  shop_seed_key_idx:
+    fields: seedKey
+    unique: true

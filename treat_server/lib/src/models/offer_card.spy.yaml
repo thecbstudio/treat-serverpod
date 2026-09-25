@@ -1,0 +1,8 @@
+### An offer with its shop, today's usage and (for students) eligibility.
+class: OfferCard
+fields:
+  offer: Offer
+  shop: Shop
+  claimedToday: int
+  claimedTotal: int
+  eligibility: Eligibility?

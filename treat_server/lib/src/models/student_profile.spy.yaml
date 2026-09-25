@@ -1,0 +1,21 @@
+### A student account. One per auth user.
+class: StudentProfile
+table: student_profile
+fields:
+  authUser: module:serverpod_auth_core:AuthUser?, relation(onDelete=Cascade)
+  name: String
+  ### Only ever returned to the student themselves.
+  email: String
+  university: String
+  verification: StudentVerification
+  strikes: int, default=0
+  ### Approved claims.
+  treats: int, default=0
+  categoriesTried: List<OfferCategory>
+  joinedAt: DateTime, default=now
+indexes:
+  student_profile_auth_user_idx:
+    fields: authUserId
+    unique: true
+  student_profile_treats_idx:
+    fields: treats

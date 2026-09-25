@@ -1,0 +1,8 @@
+class: ShopInput
+fields:
+  name: String
+  category: OfferCategory
+  district: String
+  address: String
+  bio: String
+  instagramHandle: String?

@@ -1,0 +1,9 @@
+### The signed-in user. `role` is null until onboarding picks one.
+class: Me
+fields:
+  email: String
+  role: UserRole?
+  student: StudentProfile?
+  shop: Shop?
+  badges: List<BadgeId>
+  streakWeeks: int

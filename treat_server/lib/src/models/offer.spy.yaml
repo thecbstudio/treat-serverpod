@@ -1,0 +1,29 @@
+### A free treat a shop gives in exchange for a social-media proof.
+class: Offer
+table: offer
+fields:
+  shop: Shop?, relation(onDelete=Cascade)
+  seedKey: String?
+  title: String
+  description: String
+  ### Copied from the shop at creation.
+  category: OfferCategory
+  frequency: OfferFrequency
+  ### Minutes after midnight, Europe/Istanbul. start < end.
+  activeStartMin: int
+  activeEndMin: int
+  dailyCap: int?
+  totalCap: int?
+  status: OfferStatus, default=active
+  featured: bool, default=false
+  ### At least one.
+  proofTypes: List<ProofType>
+  createdAt: DateTime, default=now
+indexes:
+  offer_shop_idx:
+    fields: shopId
+  offer_status_idx:
+    fields: status
+  offer_seed_key_idx:
+    fields: seedKey
+    unique: true

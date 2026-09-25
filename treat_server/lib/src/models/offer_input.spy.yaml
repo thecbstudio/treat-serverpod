@@ -1,0 +1,11 @@
+### What a shop sends when creating or editing an offer.
+class: OfferInput
+fields:
+  title: String
+  description: String
+  frequency: OfferFrequency
+  activeStartMin: int
+  activeEndMin: int
+  dailyCap: int?
+  totalCap: int?
+  proofTypes: List<ProofType>

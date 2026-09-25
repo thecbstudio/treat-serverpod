@@ -16,8 +16,45 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
-import 'greetings/greeting.dart' as _izw8z7ou;
-export 'greetings/greeting.dart';
+import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
+import 'badge_id.dart' as _i14xwlyb;
+import 'claim.dart' as _iywv5oz4;
+import 'claim_status.dart' as _i4cqplnc;
+import 'eligibility.dart' as _iapxm79h;
+import 'eligibility_reason.dart' as _ixt5yy28;
+import 'me.dart' as _i22ljs0z;
+import 'offer.dart' as _iqlmmtnc;
+import 'offer_card.dart' as _irfq3mof;
+import 'offer_category.dart' as _iqmyfspq;
+import 'offer_frequency.dart' as _ix7dcs2a;
+import 'offer_input.dart' as _in0575rn;
+import 'offer_status.dart' as _i40dfi1m;
+import 'proof_type.dart' as _i671eu65;
+import 'shop.dart' as _isgf2ncs;
+import 'shop_input.dart' as _i5vfstp6;
+import 'student_profile.dart' as _iovtxv26;
+import 'student_verification.dart' as _ipqqbskf;
+import 'treat_exception.dart' as _iawcmjml;
+import 'user_role.dart' as _ir0y0iu6;
+export 'badge_id.dart';
+export 'claim.dart';
+export 'claim_status.dart';
+export 'eligibility.dart';
+export 'eligibility_reason.dart';
+export 'me.dart';
+export 'offer.dart';
+export 'offer_card.dart';
+export 'offer_category.dart';
+export 'offer_frequency.dart';
+export 'offer_input.dart';
+export 'offer_status.dart';
+export 'proof_type.dart';
+export 'shop.dart';
+export 'shop_input.dart';
+export 'student_profile.dart';
+export 'student_verification.dart';
+export 'treat_exception.dart';
+export 'user_role.dart';
 export 'client.dart';
 
 class Protocol extends _isc.SerializationManager {
@@ -54,11 +91,151 @@ class Protocol extends _isc.SerializationManager {
       }
     }
 
-    if (t == _izw8z7ou.Greeting) {
-      return _izw8z7ou.Greeting.fromJson(data) as T;
+    if (t == _i14xwlyb.BadgeId) {
+      return _i14xwlyb.BadgeId.fromJson(data) as T;
     }
-    if (t == _isc.getType<_izw8z7ou.Greeting?>()) {
-      return (data != null ? _izw8z7ou.Greeting.fromJson(data) : null) as T;
+    if (t == _iywv5oz4.Claim) {
+      return _iywv5oz4.Claim.fromJson(data) as T;
+    }
+    if (t == _i4cqplnc.ClaimStatus) {
+      return _i4cqplnc.ClaimStatus.fromJson(data) as T;
+    }
+    if (t == _iapxm79h.Eligibility) {
+      return _iapxm79h.Eligibility.fromJson(data) as T;
+    }
+    if (t == _ixt5yy28.EligibilityReason) {
+      return _ixt5yy28.EligibilityReason.fromJson(data) as T;
+    }
+    if (t == _i22ljs0z.Me) {
+      return _i22ljs0z.Me.fromJson(data) as T;
+    }
+    if (t == _iqlmmtnc.Offer) {
+      return _iqlmmtnc.Offer.fromJson(data) as T;
+    }
+    if (t == _irfq3mof.OfferCard) {
+      return _irfq3mof.OfferCard.fromJson(data) as T;
+    }
+    if (t == _iqmyfspq.OfferCategory) {
+      return _iqmyfspq.OfferCategory.fromJson(data) as T;
+    }
+    if (t == _ix7dcs2a.OfferFrequency) {
+      return _ix7dcs2a.OfferFrequency.fromJson(data) as T;
+    }
+    if (t == _in0575rn.OfferInput) {
+      return _in0575rn.OfferInput.fromJson(data) as T;
+    }
+    if (t == _i40dfi1m.OfferStatus) {
+      return _i40dfi1m.OfferStatus.fromJson(data) as T;
+    }
+    if (t == _i671eu65.ProofType) {
+      return _i671eu65.ProofType.fromJson(data) as T;
+    }
+    if (t == _isgf2ncs.Shop) {
+      return _isgf2ncs.Shop.fromJson(data) as T;
+    }
+    if (t == _i5vfstp6.ShopInput) {
+      return _i5vfstp6.ShopInput.fromJson(data) as T;
+    }
+    if (t == _iovtxv26.StudentProfile) {
+      return _iovtxv26.StudentProfile.fromJson(data) as T;
+    }
+    if (t == _ipqqbskf.StudentVerification) {
+      return _ipqqbskf.StudentVerification.fromJson(data) as T;
+    }
+    if (t == _iawcmjml.TreatException) {
+      return _iawcmjml.TreatException.fromJson(data) as T;
+    }
+    if (t == _ir0y0iu6.UserRole) {
+      return _ir0y0iu6.UserRole.fromJson(data) as T;
+    }
+    if (t == _isc.getType<_i14xwlyb.BadgeId?>()) {
+      return (data != null ? _i14xwlyb.BadgeId.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iywv5oz4.Claim?>()) {
+      return (data != null ? _iywv5oz4.Claim.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i4cqplnc.ClaimStatus?>()) {
+      return (data != null ? _i4cqplnc.ClaimStatus.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iapxm79h.Eligibility?>()) {
+      return (data != null ? _iapxm79h.Eligibility.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ixt5yy28.EligibilityReason?>()) {
+      return (data != null ? _ixt5yy28.EligibilityReason.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_i22ljs0z.Me?>()) {
+      return (data != null ? _i22ljs0z.Me.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iqlmmtnc.Offer?>()) {
+      return (data != null ? _iqlmmtnc.Offer.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_irfq3mof.OfferCard?>()) {
+      return (data != null ? _irfq3mof.OfferCard.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iqmyfspq.OfferCategory?>()) {
+      return (data != null ? _iqmyfspq.OfferCategory.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ix7dcs2a.OfferFrequency?>()) {
+      return (data != null ? _ix7dcs2a.OfferFrequency.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_in0575rn.OfferInput?>()) {
+      return (data != null ? _in0575rn.OfferInput.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i40dfi1m.OfferStatus?>()) {
+      return (data != null ? _i40dfi1m.OfferStatus.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i671eu65.ProofType?>()) {
+      return (data != null ? _i671eu65.ProofType.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_isgf2ncs.Shop?>()) {
+      return (data != null ? _isgf2ncs.Shop.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i5vfstp6.ShopInput?>()) {
+      return (data != null ? _i5vfstp6.ShopInput.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iovtxv26.StudentProfile?>()) {
+      return (data != null ? _iovtxv26.StudentProfile.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ipqqbskf.StudentVerification?>()) {
+      return (data != null
+              ? _ipqqbskf.StudentVerification.fromJson(data)
+              : null)
+          as T;
+    }
+    if (t == _isc.getType<_iawcmjml.TreatException?>()) {
+      return (data != null ? _iawcmjml.TreatException.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ir0y0iu6.UserRole?>()) {
+      return (data != null ? _ir0y0iu6.UserRole.fromJson(data) : null) as T;
+    }
+    if (t == List<_i14xwlyb.BadgeId>) {
+      return (data as List)
+              .map((e) => deserialize<_i14xwlyb.BadgeId>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i671eu65.ProofType>) {
+      return (data as List)
+              .map((e) => deserialize<_i671eu65.ProofType>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iqmyfspq.OfferCategory>) {
+      return (data as List)
+              .map((e) => deserialize<_iqmyfspq.OfferCategory>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_i1fp4eeg.OfferCard>) {
+      return (data as List)
+              .map((e) => deserialize<_i1fp4eeg.OfferCard>(e))
+              .toList()
+          as T;
     }
     try {
       return _iaic.Protocol().deserialize<T>(data, t);
@@ -71,7 +248,25 @@ class Protocol extends _isc.SerializationManager {
 
   static String? getClassNameForType(Type type) {
     return switch (type) {
-      _izw8z7ou.Greeting => 'Greeting',
+      _i14xwlyb.BadgeId => 'BadgeId',
+      _iywv5oz4.Claim => 'Claim',
+      _i4cqplnc.ClaimStatus => 'ClaimStatus',
+      _iapxm79h.Eligibility => 'Eligibility',
+      _ixt5yy28.EligibilityReason => 'EligibilityReason',
+      _i22ljs0z.Me => 'Me',
+      _iqlmmtnc.Offer => 'Offer',
+      _irfq3mof.OfferCard => 'OfferCard',
+      _iqmyfspq.OfferCategory => 'OfferCategory',
+      _ix7dcs2a.OfferFrequency => 'OfferFrequency',
+      _in0575rn.OfferInput => 'OfferInput',
+      _i40dfi1m.OfferStatus => 'OfferStatus',
+      _i671eu65.ProofType => 'ProofType',
+      _isgf2ncs.Shop => 'Shop',
+      _i5vfstp6.ShopInput => 'ShopInput',
+      _iovtxv26.StudentProfile => 'StudentProfile',
+      _ipqqbskf.StudentVerification => 'StudentVerification',
+      _iawcmjml.TreatException => 'TreatException',
+      _ir0y0iu6.UserRole => 'UserRole',
       _ => null,
     };
   }
@@ -86,8 +281,44 @@ class Protocol extends _isc.SerializationManager {
     }
 
     switch (data) {
-      case _izw8z7ou.Greeting():
-        return 'Greeting';
+      case _i14xwlyb.BadgeId():
+        return 'BadgeId';
+      case _iywv5oz4.Claim():
+        return 'Claim';
+      case _i4cqplnc.ClaimStatus():
+        return 'ClaimStatus';
+      case _iapxm79h.Eligibility():
+        return 'Eligibility';
+      case _ixt5yy28.EligibilityReason():
+        return 'EligibilityReason';
+      case _i22ljs0z.Me():
+        return 'Me';
+      case _iqlmmtnc.Offer():
+        return 'Offer';
+      case _irfq3mof.OfferCard():
+        return 'OfferCard';
+      case _iqmyfspq.OfferCategory():
+        return 'OfferCategory';
+      case _ix7dcs2a.OfferFrequency():
+        return 'OfferFrequency';
+      case _in0575rn.OfferInput():
+        return 'OfferInput';
+      case _i40dfi1m.OfferStatus():
+        return 'OfferStatus';
+      case _i671eu65.ProofType():
+        return 'ProofType';
+      case _isgf2ncs.Shop():
+        return 'Shop';
+      case _i5vfstp6.ShopInput():
+        return 'ShopInput';
+      case _iovtxv26.StudentProfile():
+        return 'StudentProfile';
+      case _ipqqbskf.StudentVerification():
+        return 'StudentVerification';
+      case _iawcmjml.TreatException():
+        return 'TreatException';
+      case _ir0y0iu6.UserRole():
+        return 'UserRole';
     }
     className = _iaic.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -110,8 +341,62 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName is! String) {
       return super.deserializeByClassName(data);
     }
-    if (dataClassName == 'Greeting') {
-      return deserialize<_izw8z7ou.Greeting>(data['data']);
+    if (dataClassName == 'BadgeId') {
+      return deserialize<_i14xwlyb.BadgeId>(data['data']);
+    }
+    if (dataClassName == 'Claim') {
+      return deserialize<_iywv5oz4.Claim>(data['data']);
+    }
+    if (dataClassName == 'ClaimStatus') {
+      return deserialize<_i4cqplnc.ClaimStatus>(data['data']);
+    }
+    if (dataClassName == 'Eligibility') {
+      return deserialize<_iapxm79h.Eligibility>(data['data']);
+    }
+    if (dataClassName == 'EligibilityReason') {
+      return deserialize<_ixt5yy28.EligibilityReason>(data['data']);
+    }
+    if (dataClassName == 'Me') {
+      return deserialize<_i22ljs0z.Me>(data['data']);
+    }
+    if (dataClassName == 'Offer') {
+      return deserialize<_iqlmmtnc.Offer>(data['data']);
+    }
+    if (dataClassName == 'OfferCard') {
+      return deserialize<_irfq3mof.OfferCard>(data['data']);
+    }
+    if (dataClassName == 'OfferCategory') {
+      return deserialize<_iqmyfspq.OfferCategory>(data['data']);
+    }
+    if (dataClassName == 'OfferFrequency') {
+      return deserialize<_ix7dcs2a.OfferFrequency>(data['data']);
+    }
+    if (dataClassName == 'OfferInput') {
+      return deserialize<_in0575rn.OfferInput>(data['data']);
+    }
+    if (dataClassName == 'OfferStatus') {
+      return deserialize<_i40dfi1m.OfferStatus>(data['data']);
+    }
+    if (dataClassName == 'ProofType') {
+      return deserialize<_i671eu65.ProofType>(data['data']);
+    }
+    if (dataClassName == 'Shop') {
+      return deserialize<_isgf2ncs.Shop>(data['data']);
+    }
+    if (dataClassName == 'ShopInput') {
+      return deserialize<_i5vfstp6.ShopInput>(data['data']);
+    }
+    if (dataClassName == 'StudentProfile') {
+      return deserialize<_iovtxv26.StudentProfile>(data['data']);
+    }
+    if (dataClassName == 'StudentVerification') {
+      return deserialize<_ipqqbskf.StudentVerification>(data['data']);
+    }
+    if (dataClassName == 'TreatException') {
+      return deserialize<_iawcmjml.TreatException>(data['data']);
+    }
+    if (dataClassName == 'UserRole') {
+      return deserialize<_ir0y0iu6.UserRole>(data['data']);
     }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);

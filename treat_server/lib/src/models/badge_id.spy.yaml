@@ -1,0 +1,8 @@
+enum: BadgeId
+values:
+  - firstTreat
+  - tenTreats
+  - twentyfiveTreats
+  - streak4
+  - explorer3
+  - verifiedStudent

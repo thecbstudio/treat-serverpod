@@ -1,0 +1,10 @@
+### Result of `eligibilityOf`. Extra fields depend on [reason].
+class: Eligibility
+fields:
+  reason: EligibilityReason
+  ### reason == activeClaim
+  claimId: int?
+  ### reason == frequency
+  availableAt: DateTime?
+  ### reason == outsideHours (Istanbul minutes)
+  opensAtMin: int?
