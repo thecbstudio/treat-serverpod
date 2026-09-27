@@ -1,0 +1,5 @@
+### Where to upload a proof screenshot; pass `path` back to submitProof.
+class: ProofUpload
+fields:
+  path: String
+  uploadDescription: String

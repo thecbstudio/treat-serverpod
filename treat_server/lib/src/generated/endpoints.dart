@@ -18,10 +18,12 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
 import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
+import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/claim_endpoint.dart' as _i0cek2rs;
+import '../endpoints/leaderboard_endpoint.dart' as _iy80ldha;
 import '../endpoints/offer_endpoint.dart' as _i96ujqr4;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
 import '../endpoints/shop_endpoint.dart' as _i4fqeydl;
@@ -48,6 +50,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'claim',
+          null,
+        ),
+      'leaderboard': _iy80ldha.LeaderboardEndpoint()
+        ..initialize(
+          server,
+          'leaderboard',
           null,
         ),
       'offer': _i96ujqr4.OfferEndpoint()
@@ -303,6 +311,56 @@ class Endpoints extends _is.EndpointDispatch {
                 params['offerId'],
               ),
         ),
+        'proofUpload': _is.MethodConnector(
+          name: 'proofUpload',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).proofUpload(
+                    session,
+                    params['claimId'],
+                  ),
+        ),
+        'submitProof': _is.MethodConnector(
+          name: 'submitProof',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'proofType': _is.ParameterDescription(
+              name: 'proofType',
+              type: _is.getType<_ifhr8s8c.ProofType>(),
+              nullable: false,
+            ),
+            'path': _is.ParameterDescription(
+              name: 'path',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).submitProof(
+                    session,
+                    params['claimId'],
+                    params['proofType'],
+                    params['path'],
+                  ),
+        ),
         'listMine': _is.MethodConnector(
           name: 'listMine',
           params: {},
@@ -351,6 +409,23 @@ class Endpoints extends _is.EndpointDispatch {
                 session,
                 params['claimId'],
               ),
+        ),
+      },
+    );
+    connectors['leaderboard'] = _is.EndpointConnector(
+      name: 'leaderboard',
+      endpoint: endpoints['leaderboard']!,
+      methodConnectors: {
+        'top': _is.MethodConnector(
+          name: 'top',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['leaderboard'] as _iy80ldha.LeaderboardEndpoint)
+                      .top(session),
         ),
       },
     );
@@ -487,6 +562,49 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['shop'] as _i4fqeydl.ShopEndpoint).redeem(
                 session,
                 params['input'],
+              ),
+        ),
+        'dashboard': _is.MethodConnector(
+          name: 'dashboard',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['shop'] as _i4fqeydl.ShopEndpoint)
+                  .dashboard(session),
+        ),
+        'proofLink': _is.MethodConnector(
+          name: 'proofLink',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shop'] as _i4fqeydl.ShopEndpoint).proofLink(
+                    session,
+                    params['claimId'],
+                  ),
+        ),
+        'watchFeed': _is.MethodStreamConnector(
+          name: 'watchFeed',
+          params: {},
+          streamParams: {},
+          returnType: _is.MethodStreamReturnType.streamType,
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['shop'] as _i4fqeydl.ShopEndpoint).watchFeed(
+                session,
               ),
         ),
       },

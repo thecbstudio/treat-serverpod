@@ -27,3 +27,12 @@ Environment: Windows 11 Home (26200), Flutter 3.47.5, Dart 3.13.4, serverpod_cli
 - **What:** `categoriesTried: List<OfferCategory>, default=[]` fails generation with `The "default" key is not supported for "List" types`.
 - **Impact:** Every constructor call has to pass an empty list by hand.
 - **Suggestion:** Support `default=[]` (empty collection) for `List`/`Set`/`Map`, at least as `defaultModel`.
+
+## 6. Parallel integration test files time out on the shared embedded Postgres
+- **What:** With 4 test files using `withServerpod`, `dart test` (default concurrency) made two files fail in `setUpAll` after 2 minutes ("Serverpod did not start within the timeout"). Each file passes on its own.
+- **Workaround:** `concurrency: 1` in `dart_test.yaml`.
+- **Suggestion:** Serialize embedded-Postgres startup across test isolates (the launch lock exists but startup still races/times out), or generate `dart_test.yaml` with a safe default and document it.
+
+## 7. `serverpod create` ships GitHub Actions workflows
+- **What:** The generated `.github/workflows/*.yml` make the first `git push` fail for anyone whose GitHub token lacks the `workflow` scope (common for `gh` default logins / fine-grained tokens), and rewriting history to drop them is awkward.
+- **Suggestion:** Ask before adding CI workflows, or mention the `workflow` scope requirement in the create output.

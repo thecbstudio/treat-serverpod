@@ -11,9 +11,13 @@ jwtRefresh:
   - refreshAccessToken:
 claim:
   - create:
+  - proofUpload:
+  - submitProof:
   - listMine:
   - get:
   - watch:
+leaderboard:
+  - top:
 offer:
   - listActive:
   - get:
@@ -24,6 +28,9 @@ profile:
   - updateShop:
 shop:
   - redeem:
+  - dashboard:
+  - watchFeed:
+  - proofLink:
 shopOffers:
   - listMine:
   - create:

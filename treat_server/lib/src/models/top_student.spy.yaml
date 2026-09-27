@@ -1,0 +1,5 @@
+class: TopStudent
+fields:
+  name: String
+  university: String
+  approved: int

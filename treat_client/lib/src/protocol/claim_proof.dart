@@ -1,0 +1,92 @@
+/* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
+/*   To generate run: "serverpod generate"    */
+
+// ignore_for_file: implementation_imports
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
+// ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
+// ignore_for_file: invalid_use_of_internal_member
+
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:serverpod_client/serverpod_client.dart' as _isc;
+
+/// A short-lived link to a claim's proof screenshot (shop panel).
+abstract class ProofLink
+    implements _isc.SerializableModel, _isc.ProtocolSerialization {
+  ProofLink._({
+    required this.claimId,
+    required this.url,
+  });
+
+  factory ProofLink({
+    required int claimId,
+    required String url,
+  }) = _ProofLinkImpl;
+
+  factory ProofLink.fromJson(Map<String, dynamic> jsonSerialization) {
+    return ProofLink(
+      claimId: jsonSerialization['claimId'] as int,
+      url: jsonSerialization['url'] as String,
+    );
+  }
+
+  int claimId;
+
+  String url;
+
+  /// Returns a shallow copy of this [ProofLink]
+  /// with some or all fields replaced by the given arguments.
+  @_isc.useResult
+  ProofLink copyWith({
+    int? claimId,
+    String? url,
+  });
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      '__className__': 'ProofLink',
+      'claimId': claimId,
+      'url': url,
+    };
+  }
+
+  @override
+  Map<String, dynamic> toJsonForProtocol() {
+    return {
+      '__className__': 'ProofLink',
+      'claimId': claimId,
+      'url': url,
+    };
+  }
+
+  @override
+  String toString() {
+    return _isc.SerializationManager.encode(this);
+  }
+}
+
+class _ProofLinkImpl extends ProofLink {
+  _ProofLinkImpl({
+    required int claimId,
+    required String url,
+  }) : super._(
+         claimId: claimId,
+         url: url,
+       );
+
+  /// Returns a shallow copy of this [ProofLink]
+  /// with some or all fields replaced by the given arguments.
+  @_isc.useResult
+  @override
+  ProofLink copyWith({
+    int? claimId,
+    String? url,
+  }) {
+    return ProofLink(
+      claimId: claimId ?? this.claimId,
+      url: url ?? this.url,
+    );
+  }
+}

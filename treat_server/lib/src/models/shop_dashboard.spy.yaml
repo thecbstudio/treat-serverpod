@@ -1,0 +1,10 @@
+### Business panel: totals, ROI estimate, recent activity, top students.
+class: ShopDashboard
+fields:
+  shop: Shop
+  activeOffers: int
+  claimsThisWeek: int
+  estimatedReach: int
+  estimatedValueTl: int
+  recent: List<ClaimView>
+  topStudents: List<TopStudent>

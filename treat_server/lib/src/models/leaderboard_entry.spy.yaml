@@ -1,0 +1,8 @@
+### Public leaderboard row — never includes email.
+class: LeaderboardEntry
+fields:
+  rank: int
+  name: String
+  university: String
+  treats: int
+  isMe: bool

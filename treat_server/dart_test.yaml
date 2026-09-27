@@ -1,2 +1,6 @@
 tags:
   integration: {}
+
+# Integration test files each boot a Serverpod against the same embedded
+# Postgres; running them in parallel made setUpAll time out on Windows.
+concurrency: 1

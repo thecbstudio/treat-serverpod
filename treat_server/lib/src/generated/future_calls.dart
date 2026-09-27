@@ -15,8 +15,11 @@ import 'dart:async' as _ida;
 import 'package:clock/clock.dart' as _io0w16m8;
 import 'package:serverpod/serverpod.dart' as _is;
 import '../future_calls/expire_claim_call.dart' as _ilqcuh3m;
+import '../future_calls/verify_proof_call.dart' as _ipj1b90x;
 import 'future_calls_generated_models/expire_claim_call_expire_model.dart'
     as _iizahf83;
+import 'future_calls_generated_models/verify_proof_call_verify_model.dart'
+    as _idz7zgl8;
 
 /// Invokes a future call.
 typedef _InvokeFutureCall =
@@ -61,6 +64,7 @@ class FutureCalls extends _is.FutureCallDispatch<_FutureCallRef> {
   ) {
     var registeredFutureCalls = <String, _is.InvokableFutureCall>{
       'ExpireClaimCallExpireFutureCall': ExpireClaimCallExpireFutureCall(),
+      'VerifyProofCallVerifyFutureCall': VerifyProofCallVerifyFutureCall(),
     };
     _futureCallManager = futureCallManager;
     _serverId = serverId;
@@ -184,6 +188,10 @@ class _FutureCallRef {
   late final expireClaimCall = _ExpireClaimCallFutureCallDispatcher(
     _invokeFutureCall,
   );
+
+  late final verifyProofCall = _VerifyProofCallFutureCallDispatcher(
+    _invokeFutureCall,
+  );
 }
 
 class _ExpireClaimCallFutureCallDispatcher {
@@ -200,6 +208,20 @@ class _ExpireClaimCallFutureCallDispatcher {
   }
 }
 
+class _VerifyProofCallFutureCallDispatcher {
+  _VerifyProofCallFutureCallDispatcher(this._invokeFutureCall);
+
+  final _InvokeFutureCall _invokeFutureCall;
+
+  Future<void> verify(int claimId) {
+    var object = _idz7zgl8.VerifyProofCallVerifyModel(claimId: claimId);
+    return _invokeFutureCall(
+      'VerifyProofCallVerifyFutureCall',
+      object,
+    );
+  }
+}
+
 class ExpireClaimCallExpireFutureCall
     extends _is.FutureCall<_iizahf83.ExpireClaimCallExpireModel>
     implements _is.InvokableFutureCall<_iizahf83.ExpireClaimCallExpireModel> {
@@ -210,6 +232,23 @@ class ExpireClaimCallExpireFutureCall
   ) async {
     if (object != null) {
       await _ilqcuh3m.ExpireClaimCall().expire(
+        session,
+        object.claimId,
+      );
+    }
+  }
+}
+
+class VerifyProofCallVerifyFutureCall
+    extends _is.FutureCall<_idz7zgl8.VerifyProofCallVerifyModel>
+    implements _is.InvokableFutureCall<_idz7zgl8.VerifyProofCallVerifyModel> {
+  @override
+  _ida.Future<void> invoke(
+    _is.Session session,
+    _idz7zgl8.VerifyProofCallVerifyModel? object,
+  ) async {
+    if (object != null) {
+      await _ipj1b90x.VerifyProofCall().verify(
         session,
         object.claimId,
       );

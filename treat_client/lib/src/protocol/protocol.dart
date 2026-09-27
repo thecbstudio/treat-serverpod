@@ -17,13 +17,16 @@ import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
+import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
 import 'badge_id.dart' as _i14xwlyb;
 import 'claim.dart' as _iywv5oz4;
+import 'claim_proof.dart' as _iiz71frh;
 import 'claim_status.dart' as _i4cqplnc;
 import 'claim_view.dart' as _i48lh927;
 import 'eligibility.dart' as _iapxm79h;
 import 'eligibility_reason.dart' as _ixt5yy28;
+import 'leaderboard_entry.dart' as _ikawkn1p;
 import 'me.dart' as _i22ljs0z;
 import 'offer.dart' as _iqlmmtnc;
 import 'offer_card.dart' as _irfq3mof;
@@ -32,19 +35,24 @@ import 'offer_frequency.dart' as _ix7dcs2a;
 import 'offer_input.dart' as _in0575rn;
 import 'offer_status.dart' as _i40dfi1m;
 import 'proof_type.dart' as _i671eu65;
+import 'proof_upload.dart' as _idi75cqx;
 import 'redeem_result.dart' as _iggnnz44;
 import 'shop.dart' as _isgf2ncs;
+import 'shop_dashboard.dart' as _iqgdamt7;
 import 'shop_input.dart' as _i5vfstp6;
 import 'student_profile.dart' as _iovtxv26;
 import 'student_verification.dart' as _ipqqbskf;
+import 'top_student.dart' as _iub4wqas;
 import 'treat_exception.dart' as _iawcmjml;
 import 'user_role.dart' as _ir0y0iu6;
 export 'badge_id.dart';
 export 'claim.dart';
+export 'claim_proof.dart';
 export 'claim_status.dart';
 export 'claim_view.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
+export 'leaderboard_entry.dart';
 export 'me.dart';
 export 'offer.dart';
 export 'offer_card.dart';
@@ -53,11 +61,14 @@ export 'offer_frequency.dart';
 export 'offer_input.dart';
 export 'offer_status.dart';
 export 'proof_type.dart';
+export 'proof_upload.dart';
 export 'redeem_result.dart';
 export 'shop.dart';
+export 'shop_dashboard.dart';
 export 'shop_input.dart';
 export 'student_profile.dart';
 export 'student_verification.dart';
+export 'top_student.dart';
 export 'treat_exception.dart';
 export 'user_role.dart';
 export 'client.dart';
@@ -102,6 +113,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _iywv5oz4.Claim) {
       return _iywv5oz4.Claim.fromJson(data) as T;
     }
+    if (t == _iiz71frh.ProofLink) {
+      return _iiz71frh.ProofLink.fromJson(data) as T;
+    }
     if (t == _i4cqplnc.ClaimStatus) {
       return _i4cqplnc.ClaimStatus.fromJson(data) as T;
     }
@@ -113,6 +127,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ixt5yy28.EligibilityReason) {
       return _ixt5yy28.EligibilityReason.fromJson(data) as T;
+    }
+    if (t == _ikawkn1p.LeaderboardEntry) {
+      return _ikawkn1p.LeaderboardEntry.fromJson(data) as T;
     }
     if (t == _i22ljs0z.Me) {
       return _i22ljs0z.Me.fromJson(data) as T;
@@ -138,11 +155,17 @@ class Protocol extends _isc.SerializationManager {
     if (t == _i671eu65.ProofType) {
       return _i671eu65.ProofType.fromJson(data) as T;
     }
+    if (t == _idi75cqx.ProofUpload) {
+      return _idi75cqx.ProofUpload.fromJson(data) as T;
+    }
     if (t == _iggnnz44.RedeemResult) {
       return _iggnnz44.RedeemResult.fromJson(data) as T;
     }
     if (t == _isgf2ncs.Shop) {
       return _isgf2ncs.Shop.fromJson(data) as T;
+    }
+    if (t == _iqgdamt7.ShopDashboard) {
+      return _iqgdamt7.ShopDashboard.fromJson(data) as T;
     }
     if (t == _i5vfstp6.ShopInput) {
       return _i5vfstp6.ShopInput.fromJson(data) as T;
@@ -152,6 +175,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ipqqbskf.StudentVerification) {
       return _ipqqbskf.StudentVerification.fromJson(data) as T;
+    }
+    if (t == _iub4wqas.TopStudent) {
+      return _iub4wqas.TopStudent.fromJson(data) as T;
     }
     if (t == _iawcmjml.TreatException) {
       return _iawcmjml.TreatException.fromJson(data) as T;
@@ -165,6 +191,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_iywv5oz4.Claim?>()) {
       return (data != null ? _iywv5oz4.Claim.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_iiz71frh.ProofLink?>()) {
+      return (data != null ? _iiz71frh.ProofLink.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_i4cqplnc.ClaimStatus?>()) {
       return (data != null ? _i4cqplnc.ClaimStatus.fromJson(data) : null) as T;
     }
@@ -176,6 +205,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_ixt5yy28.EligibilityReason?>()) {
       return (data != null ? _ixt5yy28.EligibilityReason.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ikawkn1p.LeaderboardEntry?>()) {
+      return (data != null ? _ikawkn1p.LeaderboardEntry.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_i22ljs0z.Me?>()) {
@@ -204,11 +237,18 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_i671eu65.ProofType?>()) {
       return (data != null ? _i671eu65.ProofType.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_idi75cqx.ProofUpload?>()) {
+      return (data != null ? _idi75cqx.ProofUpload.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_iggnnz44.RedeemResult?>()) {
       return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_isgf2ncs.Shop?>()) {
       return (data != null ? _isgf2ncs.Shop.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iqgdamt7.ShopDashboard?>()) {
+      return (data != null ? _iqgdamt7.ShopDashboard.fromJson(data) : null)
+          as T;
     }
     if (t == _isc.getType<_i5vfstp6.ShopInput?>()) {
       return (data != null ? _i5vfstp6.ShopInput.fromJson(data) : null) as T;
@@ -222,6 +262,9 @@ class Protocol extends _isc.SerializationManager {
               ? _ipqqbskf.StudentVerification.fromJson(data)
               : null)
           as T;
+    }
+    if (t == _isc.getType<_iub4wqas.TopStudent?>()) {
+      return (data != null ? _iub4wqas.TopStudent.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_iawcmjml.TreatException?>()) {
       return (data != null ? _iawcmjml.TreatException.fromJson(data) : null)
@@ -242,6 +285,18 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_i48lh927.ClaimView>) {
+      return (data as List)
+              .map((e) => deserialize<_i48lh927.ClaimView>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_iub4wqas.TopStudent>) {
+      return (data as List)
+              .map((e) => deserialize<_iub4wqas.TopStudent>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_iqmyfspq.OfferCategory>) {
       return (data as List)
               .map((e) => deserialize<_iqmyfspq.OfferCategory>(e))
@@ -251,6 +306,12 @@ class Protocol extends _isc.SerializationManager {
     if (t == List<_iq1pcdgl.ClaimView>) {
       return (data as List)
               .map((e) => deserialize<_iq1pcdgl.ClaimView>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_inztnej7.LeaderboardEntry>) {
+      return (data as List)
+              .map((e) => deserialize<_inztnej7.LeaderboardEntry>(e))
               .toList()
           as T;
     }
@@ -273,10 +334,12 @@ class Protocol extends _isc.SerializationManager {
     return switch (type) {
       _i14xwlyb.BadgeId => 'BadgeId',
       _iywv5oz4.Claim => 'Claim',
+      _iiz71frh.ProofLink => 'ProofLink',
       _i4cqplnc.ClaimStatus => 'ClaimStatus',
       _i48lh927.ClaimView => 'ClaimView',
       _iapxm79h.Eligibility => 'Eligibility',
       _ixt5yy28.EligibilityReason => 'EligibilityReason',
+      _ikawkn1p.LeaderboardEntry => 'LeaderboardEntry',
       _i22ljs0z.Me => 'Me',
       _iqlmmtnc.Offer => 'Offer',
       _irfq3mof.OfferCard => 'OfferCard',
@@ -285,11 +348,14 @@ class Protocol extends _isc.SerializationManager {
       _in0575rn.OfferInput => 'OfferInput',
       _i40dfi1m.OfferStatus => 'OfferStatus',
       _i671eu65.ProofType => 'ProofType',
+      _idi75cqx.ProofUpload => 'ProofUpload',
       _iggnnz44.RedeemResult => 'RedeemResult',
       _isgf2ncs.Shop => 'Shop',
+      _iqgdamt7.ShopDashboard => 'ShopDashboard',
       _i5vfstp6.ShopInput => 'ShopInput',
       _iovtxv26.StudentProfile => 'StudentProfile',
       _ipqqbskf.StudentVerification => 'StudentVerification',
+      _iub4wqas.TopStudent => 'TopStudent',
       _iawcmjml.TreatException => 'TreatException',
       _ir0y0iu6.UserRole => 'UserRole',
       _ => null,
@@ -310,6 +376,8 @@ class Protocol extends _isc.SerializationManager {
         return 'BadgeId';
       case _iywv5oz4.Claim():
         return 'Claim';
+      case _iiz71frh.ProofLink():
+        return 'ProofLink';
       case _i4cqplnc.ClaimStatus():
         return 'ClaimStatus';
       case _i48lh927.ClaimView():
@@ -318,6 +386,8 @@ class Protocol extends _isc.SerializationManager {
         return 'Eligibility';
       case _ixt5yy28.EligibilityReason():
         return 'EligibilityReason';
+      case _ikawkn1p.LeaderboardEntry():
+        return 'LeaderboardEntry';
       case _i22ljs0z.Me():
         return 'Me';
       case _iqlmmtnc.Offer():
@@ -334,16 +404,22 @@ class Protocol extends _isc.SerializationManager {
         return 'OfferStatus';
       case _i671eu65.ProofType():
         return 'ProofType';
+      case _idi75cqx.ProofUpload():
+        return 'ProofUpload';
       case _iggnnz44.RedeemResult():
         return 'RedeemResult';
       case _isgf2ncs.Shop():
         return 'Shop';
+      case _iqgdamt7.ShopDashboard():
+        return 'ShopDashboard';
       case _i5vfstp6.ShopInput():
         return 'ShopInput';
       case _iovtxv26.StudentProfile():
         return 'StudentProfile';
       case _ipqqbskf.StudentVerification():
         return 'StudentVerification';
+      case _iub4wqas.TopStudent():
+        return 'TopStudent';
       case _iawcmjml.TreatException():
         return 'TreatException';
       case _ir0y0iu6.UserRole():
@@ -376,6 +452,9 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'Claim') {
       return deserialize<_iywv5oz4.Claim>(data['data']);
     }
+    if (dataClassName == 'ProofLink') {
+      return deserialize<_iiz71frh.ProofLink>(data['data']);
+    }
     if (dataClassName == 'ClaimStatus') {
       return deserialize<_i4cqplnc.ClaimStatus>(data['data']);
     }
@@ -387,6 +466,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'EligibilityReason') {
       return deserialize<_ixt5yy28.EligibilityReason>(data['data']);
+    }
+    if (dataClassName == 'LeaderboardEntry') {
+      return deserialize<_ikawkn1p.LeaderboardEntry>(data['data']);
     }
     if (dataClassName == 'Me') {
       return deserialize<_i22ljs0z.Me>(data['data']);
@@ -412,11 +494,17 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'ProofType') {
       return deserialize<_i671eu65.ProofType>(data['data']);
     }
+    if (dataClassName == 'ProofUpload') {
+      return deserialize<_idi75cqx.ProofUpload>(data['data']);
+    }
     if (dataClassName == 'RedeemResult') {
       return deserialize<_iggnnz44.RedeemResult>(data['data']);
     }
     if (dataClassName == 'Shop') {
       return deserialize<_isgf2ncs.Shop>(data['data']);
+    }
+    if (dataClassName == 'ShopDashboard') {
+      return deserialize<_iqgdamt7.ShopDashboard>(data['data']);
     }
     if (dataClassName == 'ShopInput') {
       return deserialize<_i5vfstp6.ShopInput>(data['data']);
@@ -426,6 +514,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'StudentVerification') {
       return deserialize<_ipqqbskf.StudentVerification>(data['data']);
+    }
+    if (dataClassName == 'TopStudent') {
+      return deserialize<_iub4wqas.TopStudent>(data['data']);
     }
     if (dataClassName == 'TreatException') {
       return deserialize<_iawcmjml.TreatException>(data['data']);

@@ -17,17 +17,24 @@ import 'package:serverpod/serverpod.dart' as _is;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_test/serverpod_test.dart' as _ist;
+import 'package:treat_server/src/generated/claim_proof.dart' as _inds3c7u;
 import 'package:treat_server/src/generated/claim_view.dart' as _iuhj4d1o;
 import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/future_calls_generated_models/expire_claim_call_expire_model.dart'
     as _i0ubflsj;
+import 'package:treat_server/src/generated/future_calls_generated_models/verify_proof_call_verify_model.dart'
+    as _ijb16y0z;
+import 'package:treat_server/src/generated/leaderboard_entry.dart' as _ikcio32l;
 import 'package:treat_server/src/generated/me.dart' as _ietetfc8;
 import 'package:treat_server/src/generated/offer.dart' as _i1s2ys04;
 import 'package:treat_server/src/generated/offer_card.dart' as _ipkteuk5;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
+import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
+import 'package:treat_server/src/generated/proof_upload.dart' as _i4s0n1ka;
 import 'package:treat_server/src/generated/redeem_result.dart' as _itbz5dhb;
 import 'package:treat_server/src/generated/shop.dart' as _it3lip7k;
+import 'package:treat_server/src/generated/shop_dashboard.dart' as _io00ljue;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import 'package:treat_server/src/generated/protocol.dart';
 import 'package:treat_server/src/generated/endpoints.dart';
@@ -165,6 +172,8 @@ class TestEndpoints {
 
   late final _ClaimEndpoint claim;
 
+  late final _LeaderboardEndpoint leaderboard;
+
   late final _OfferEndpoint offer;
 
   late final _ProfileEndpoint profile;
@@ -193,6 +202,10 @@ class _InternalTestEndpoints extends TestEndpoints
       endpoints,
       serializationManager,
     );
+    leaderboard = _LeaderboardEndpoint(
+      endpoints,
+      serializationManager,
+    );
     offer = _OfferEndpoint(
       endpoints,
       serializationManager,
@@ -214,6 +227,8 @@ class _InternalTestEndpoints extends TestEndpoints
 
 class _FutureCalls {
   late final expireClaimCall = _ExpireClaimCallFutureCall();
+
+  late final verifyProofCall = _VerifyProofCallFutureCall();
 }
 
 class _EmailIdpEndpoint {
@@ -575,6 +590,74 @@ class _ClaimEndpoint {
     });
   }
 
+  _ida.Future<_i4s0n1ka.ProofUpload> proofUpload(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'claim',
+            method: 'proofUpload',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'claim',
+          methodName: 'proofUpload',
+          parameters: _ist.testObjectToJson({'claimId': claimId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i4s0n1ka.ProofUpload>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iuhj4d1o.ClaimView> submitProof(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+    _ifhr8s8c.ProofType proofType,
+    String path,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'claim',
+            method: 'submitProof',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'claim',
+          methodName: 'submitProof',
+          parameters: _ist.testObjectToJson({
+            'claimId': claimId,
+            'proofType': proofType,
+            'path': path,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iuhj4d1o.ClaimView>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<List<_iuhj4d1o.ClaimView>> listMine(
     _ist.TestSessionBuilder sessionBuilder,
   ) async {
@@ -666,6 +749,47 @@ class _ClaimEndpoint {
       _localTestStreamManager.outputStreamController,
     );
     return _localTestStreamManager.outputStreamController.stream;
+  }
+}
+
+class _LeaderboardEndpoint {
+  _LeaderboardEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<List<_ikcio32l.LeaderboardEntry>> top(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'leaderboard',
+            method: 'top',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'leaderboard',
+          methodName: 'top',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ikcio32l.LeaderboardEntry>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
   }
 }
 
@@ -919,6 +1043,98 @@ class _ShopEndpoint {
       }
     });
   }
+
+  _ida.Future<_io00ljue.ShopDashboard> dashboard(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'shop',
+            method: 'dashboard',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'shop',
+          methodName: 'dashboard',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_io00ljue.ShopDashboard>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Stream<_iuhj4d1o.ClaimView> watchFeed(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) {
+    var _localTestStreamManager = _ist.TestStreamManager<_iuhj4d1o.ClaimView>();
+    _ist.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'shop',
+              method: 'watchFeed',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'shop',
+              methodName: 'watchFeed',
+              arguments: {},
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
+  }
+
+  _ida.Future<_inds3c7u.ProofLink> proofLink(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'shop',
+            method: 'proofLink',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'shop',
+          methodName: 'proofLink',
+          parameters: _ist.testObjectToJson({'claimId': claimId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_inds3c7u.ProofLink>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
 }
 
 class _ShopOffersEndpoint {
@@ -1073,6 +1289,25 @@ class _ExpireClaimCallFutureCall {
         (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild();
     try {
       await _ipmzuoh2.ExpireClaimCallExpireFutureCall().invoke(
+        _localUniqueSession,
+        object,
+      );
+    } finally {
+      await _localUniqueSession.close();
+    }
+  }
+}
+
+class _VerifyProofCallFutureCall {
+  Future<void> verify(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) async {
+    var object = _ijb16y0z.VerifyProofCallVerifyModel(claimId: claimId);
+    var _localUniqueSession =
+        (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild();
+    try {
+      await _ipmzuoh2.VerifyProofCallVerifyFutureCall().invoke(
         _localUniqueSession,
         object,
       );

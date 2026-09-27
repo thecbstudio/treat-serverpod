@@ -17,14 +17,19 @@ import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
+import 'package:treat_client/src/protocol/claim_proof.dart' as _islgq58o;
 import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
+import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/me.dart' as _iap2bcnj;
 import 'package:treat_client/src/protocol/offer.dart' as _ibnzpjkx;
 import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
 import 'package:treat_client/src/protocol/offer_input.dart' as _i8mx2n74;
 import 'package:treat_client/src/protocol/offer_status.dart' as _ipcd8cwl;
+import 'package:treat_client/src/protocol/proof_type.dart' as _i99q6qgz;
+import 'package:treat_client/src/protocol/proof_upload.dart' as _iu72foho;
 import 'package:treat_client/src/protocol/redeem_result.dart' as _i8ej1owz;
 import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
+import 'package:treat_client/src/protocol/shop_dashboard.dart' as _iqqmplla;
 import 'package:treat_client/src/protocol/shop_input.dart' as _inznu32h;
 import 'protocol.dart' as _il2as5qe;
 
@@ -268,6 +273,30 @@ class EndpointClaim extends _isc.EndpointRef {
         {'offerId': offerId},
       );
 
+  /// Where to upload the proof screenshot for [claimId].
+  _ida.Future<_iu72foho.ProofUpload> proofUpload(int claimId) =>
+      caller.callServerEndpoint<_iu72foho.ProofUpload>(
+        'claim',
+        'proofUpload',
+        {'claimId': claimId},
+      );
+
+  /// Submits the uploaded screenshot (first proof, or the one appeal after a
+  /// rejection). Verification runs in the background; watch the claim.
+  _ida.Future<_iq1pcdgl.ClaimView> submitProof(
+    int claimId,
+    _i99q6qgz.ProofType proofType,
+    String path,
+  ) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+    'claim',
+    'submitProof',
+    {
+      'claimId': claimId,
+      'proofType': proofType,
+      'path': path,
+    },
+  );
+
   /// Newest first.
   _ida.Future<List<_iq1pcdgl.ClaimView>> listMine() =>
       caller.callServerEndpoint<List<_iq1pcdgl.ClaimView>>(
@@ -292,6 +321,22 @@ class EndpointClaim extends _isc.EndpointRef {
         'claim',
         'watch',
         {'claimId': claimId},
+        {},
+      );
+}
+
+/// Top students by approved treats. Name + university only, never email.
+/// {@category Endpoint}
+class EndpointLeaderboard extends _isc.EndpointRef {
+  EndpointLeaderboard(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'leaderboard';
+
+  _ida.Future<List<_inztnej7.LeaderboardEntry>> top() =>
+      caller.callServerEndpoint<List<_inztnej7.LeaderboardEntry>>(
+        'leaderboard',
+        'top',
         {},
       );
 }
@@ -361,7 +406,7 @@ class EndpointProfile extends _isc.EndpointRef {
       );
 }
 
-/// Business-side actions at the counter.
+/// Business-side actions at the counter and the live panel.
 /// {@category Endpoint}
 class EndpointShop extends _isc.EndpointRef {
   EndpointShop(_isc.EndpointCaller caller) : super(caller);
@@ -375,6 +420,34 @@ class EndpointShop extends _isc.EndpointRef {
         'shop',
         'redeem',
         {'input': input},
+      );
+
+  _ida.Future<_iqqmplla.ShopDashboard> dashboard() =>
+      caller.callServerEndpoint<_iqqmplla.ShopDashboard>(
+        'shop',
+        'dashboard',
+        {},
+      );
+
+  /// Every change to this shop's claims (new claim, redeem, proof, verdict),
+  /// as it happens.
+  _ida.Stream<_iq1pcdgl.ClaimView> watchFeed() =>
+      caller.callStreamingServerEndpoint<
+        _ida.Stream<_iq1pcdgl.ClaimView>,
+        _iq1pcdgl.ClaimView
+      >(
+        'shop',
+        'watchFeed',
+        {},
+        {},
+      );
+
+  /// Short-lived link to a claim's proof screenshot, for this shop only.
+  _ida.Future<_islgq58o.ProofLink> proofLink(int claimId) =>
+      caller.callServerEndpoint<_islgq58o.ProofLink>(
+        'shop',
+        'proofLink',
+        {'claimId': claimId},
       );
 }
 
@@ -469,6 +542,7 @@ class Client extends _isc.ServerpodClientShared {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
     claim = EndpointClaim(this);
+    leaderboard = EndpointLeaderboard(this);
     offer = EndpointOffer(this);
     profile = EndpointProfile(this);
     shop = EndpointShop(this);
@@ -481,6 +555,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointJwtRefresh jwtRefresh;
 
   late final EndpointClaim claim;
+
+  late final EndpointLeaderboard leaderboard;
 
   late final EndpointOffer offer;
 
@@ -497,6 +573,7 @@ class Client extends _isc.ServerpodClientShared {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
     'claim': claim,
+    'leaderboard': leaderboard,
     'offer': offer,
     'profile': profile,
     'shop': shop,

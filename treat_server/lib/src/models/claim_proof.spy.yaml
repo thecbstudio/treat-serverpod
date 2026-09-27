@@ -1,0 +1,5 @@
+### A short-lived link to a claim's proof screenshot (shop panel).
+class: ProofLink
+fields:
+  claimId: int
+  url: String

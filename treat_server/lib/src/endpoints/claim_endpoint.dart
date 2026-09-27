@@ -6,6 +6,7 @@ import '../domain/clock.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
 import '../services/claims.dart';
+import '../services/proofs.dart';
 
 /// A student's claims: create, list, open, and watch one live.
 class ClaimEndpoint extends Endpoint {
@@ -18,6 +19,19 @@ class ClaimEndpoint extends Endpoint {
 
   Future<ClaimView> create(Session session, int offerId) =>
       createClaim(session, offerId);
+
+  /// Where to upload the proof screenshot for [claimId].
+  Future<ProofUpload> proofUpload(Session session, int claimId) =>
+      startProofUpload(session, claimId);
+
+  /// Submits the uploaded screenshot (first proof, or the one appeal after a
+  /// rejection). Verification runs in the background; watch the claim.
+  Future<ClaimView> submitProof(
+    Session session,
+    int claimId,
+    ProofType proofType,
+    String path,
+  ) => submitProofFor(session, claimId, proofType, path);
 
   /// Newest first.
   Future<List<ClaimView>> listMine(Session session) async {
