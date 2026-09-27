@@ -1005,6 +1005,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This account has no email address.'**
   String get err_no_email;
+
+  /// No description provided for @navMyTreats.
+  ///
+  /// In en, this message translates to:
+  /// **'My treats'**
+  String get navMyTreats;
+
+  /// No description provided for @navScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get navScan;
+
+  /// No description provided for @offerGoToQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to your QR'**
+  String get offerGoToQr;
+
+  /// No description provided for @lockFrequencyGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already claimed from this place recently.'**
+  String get lockFrequencyGeneric;
+
+  /// No description provided for @claimTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your QR code'**
+  String get claimTitle;
+
+  /// No description provided for @claimShowThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this screen at the counter — once scanned, your treat counts as used.'**
+  String get claimShowThis;
+
+  /// No description provided for @claimManualCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup code if scanning fails'**
+  String get claimManualCode;
+
+  /// No description provided for @claimExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Time left'**
+  String get claimExpiresIn;
+
+  /// No description provided for @claimExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get claimExpired;
+
+  /// No description provided for @claimExpiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This QR is no longer valid. No worries — claim again if the offer allows.'**
+  String get claimExpiredBody;
+
+  /// No description provided for @claimRedeemed.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeemed'**
+  String get claimRedeemed;
+
+  /// No description provided for @claimRedeemedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeemed at {time}'**
+  String claimRedeemedAt(String time);
+
+  /// No description provided for @claimNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Next step: your post'**
+  String get claimNextStep;
+
+  /// No description provided for @claimProofExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Share one of the posts below tagging the place, then upload a screenshot here. Once approved, it counts toward your treats.'**
+  String get claimProofExplain;
+
+  /// No description provided for @claimProofSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Proof upload arrives in the next build.'**
+  String get claimProofSoon;
+
+  /// No description provided for @claimLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get claimLive;
+
+  /// No description provided for @claimReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting…'**
+  String get claimReconnecting;
+
+  /// No description provided for @statusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'QR active'**
+  String get statusActive;
+
+  /// No description provided for @statusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get statusExpired;
+
+  /// No description provided for @statusRedeemed.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting post'**
+  String get statusRedeemed;
+
+  /// No description provided for @statusProofPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get statusProofPending;
+
+  /// No description provided for @statusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get statusApproved;
+
+  /// No description provided for @statusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get statusRejected;
+
+  /// No description provided for @claimsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My treats'**
+  String get claimsTitle;
+
+  /// No description provided for @claimsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t claimed any treats yet.'**
+  String get claimsEmpty;
+
+  /// No description provided for @claimsEmptyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Head to Discover and grab your first one — a badge is waiting.'**
+  String get claimsEmptyHint;
+
+  /// No description provided for @claimsGoDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'See offers'**
+  String get claimsGoDiscover;
+
+  /// No description provided for @claimsActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get claimsActive;
+
+  /// No description provided for @claimsPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Past'**
+  String get claimsPast;
+
+  /// No description provided for @scanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR'**
+  String get scanTitle;
+
+  /// No description provided for @scanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at the student\'s QR, or type the 6-character code.'**
+  String get scanHint;
+
+  /// No description provided for @scanCameraStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start camera'**
+  String get scanCameraStart;
+
+  /// No description provided for @scanCameraStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop camera'**
+  String get scanCameraStop;
+
+  /// No description provided for @scanCameraFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera scanning isn\'t available here — enter the code instead.'**
+  String get scanCameraFail;
+
+  /// No description provided for @scanManualLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'6-character code'**
+  String get scanManualLabel;
+
+  /// No description provided for @scanCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify code'**
+  String get scanCheck;
+
+  /// No description provided for @scanSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid — treat redeemed'**
+  String get scanSuccess;
+
+  /// No description provided for @scanAlready.
+  ///
+  /// In en, this message translates to:
+  /// **'Already redeemed — counted once'**
+  String get scanAlready;
+
+  /// No description provided for @scanNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan next'**
+  String get scanNext;
+
+  /// No description provided for @err_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No such code.'**
+  String get err_not_found;
+
+  /// No description provided for @err_expired.
+  ///
+  /// In en, this message translates to:
+  /// **'This code has expired.'**
+  String get err_expired;
+
+  /// No description provided for @err_wrong_shop.
+  ///
+  /// In en, this message translates to:
+  /// **'This code belongs to another business\'s offer.'**
+  String get err_wrong_shop;
+
+  /// No description provided for @err_claim_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'This claim doesn\'t exist.'**
+  String get err_claim_not_found;
 }
 
 class _AppLocalizationsDelegate

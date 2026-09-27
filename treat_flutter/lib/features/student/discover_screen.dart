@@ -159,7 +159,8 @@ class OfferTile extends StatelessWidget {
     final offer = card.offer;
     final dailyCap = offer.dailyCap;
     final left = dailyCap == null ? null : dailyCap - card.claimedToday;
-    final locked = card.eligibility != null &&
+    final locked =
+        card.eligibility != null &&
         card.eligibility!.reason != EligibilityReason.ok;
 
     return TreatCard(
@@ -172,7 +173,10 @@ class OfferTile extends StatelessWidget {
             children: [
               AspectRatio(
                 aspectRatio: 16 / 8,
-                child: Image.asset(offer.category.imageAsset, fit: BoxFit.cover),
+                child: Image.asset(
+                  offer.category.imageAsset,
+                  fit: BoxFit.cover,
+                ),
               ),
               Positioned(
                 left: 12,

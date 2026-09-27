@@ -19,8 +19,7 @@ class OfferDetailScreen extends StatefulWidget {
 class _OfferDetailScreenState extends State<OfferDetailScreen> {
   late Future<OfferCard> _future = client.offer.get(widget.offerId);
 
-  void _reload() =>
-      setState(() => _future = client.offer.get(widget.offerId));
+  void _reload() => setState(() => _future = client.offer.get(widget.offerId));
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -135,18 +134,10 @@ class _Detail extends StatelessWidget {
                     const SizedBox(height: 12),
                   ],
                   if (eligibility != null) ...[
-                    FilledButton.icon(
-                      // Claiming is wired up in M2.
-                      onPressed: null,
-                      icon: const Icon(Icons.qr_code_2_rounded),
-                      label: Text(l.offerClaim),
-                      style: FilledButton.styleFrom(
-                        minimumSize: const Size.fromHeight(52),
-                      ),
-                    ),
+                    _ClaimButton(offerId: offer.id!, eligibility: eligibility),
                     const SizedBox(height: 8),
                     Text(
-                      lock == null ? l.offerClaimSoon : l.offerClaimHint,
+                      l.offerClaimHint,
                       textAlign: TextAlign.center,
                       style: context.text.bodySmall?.copyWith(
                         color: T.inkSecondary,
@@ -261,4 +252,55 @@ class _Row extends StatelessWidget {
       ],
     ),
   );
+}
+
+class _ClaimButton extends StatefulWidget {
+  const _ClaimButton({required this.offerId, required this.eligibility});
+  final int offerId;
+  final Eligibility eligibility;
+
+  @override
+  State<_ClaimButton> createState() => _ClaimButtonState();
+}
+
+class _ClaimButtonState extends State<_ClaimButton> {
+  bool _busy = false;
+
+  Future<void> _claim() async {
+    setState(() => _busy = true);
+    try {
+      final view = await client.claim.create(widget.offerId);
+      if (mounted) context.pushReplacement('/claim/${view.claim.id}');
+    } catch (e) {
+      if (mounted) context.toast(errorMessage(e, context.l));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l;
+    final e = widget.eligibility;
+    const size = Size.fromHeight(52);
+    if (e.reason == EligibilityReason.activeClaim && e.claimId != null) {
+      return OutlinedButton.icon(
+        onPressed: () => context.push('/claim/${e.claimId}'),
+        icon: const Icon(Icons.qr_code_2_rounded),
+        label: Text(l.offerGoToQr),
+        style: OutlinedButton.styleFrom(minimumSize: size),
+      );
+    }
+    return FilledButton.icon(
+      onPressed: e.reason == EligibilityReason.ok && !_busy ? _claim : null,
+      icon: _busy
+          ? const SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2.5),
+            )
+          : const Icon(Icons.qr_code_2_rounded),
+      label: Text(l.offerClaim),
+      style: FilledButton.styleFrom(minimumSize: size),
+    );
+  }
 }

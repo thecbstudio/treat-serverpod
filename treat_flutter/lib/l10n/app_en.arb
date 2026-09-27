@@ -10,7 +10,6 @@
   "errorTitle": "Something went wrong",
   "errorNetwork": "Couldn't reach the server. Check your connection and try again.",
   "errorGeneric": "Something went wrong — please try again.",
-
   "welcomeTagline": "The sweetest way to get treated.",
   "welcomeIntro": "Get free products and services from places around campus — in return, give them a shout-out on social media. Everybody wins.",
   "welcomeHow1": "Browse open offers, grab one.",
@@ -20,11 +19,9 @@
   "welcomeRegister": "Create account",
   "welcomeForShops": "Are you a business? Sign up the same way and pick “Business”.",
   "welcomeDemoHint": "Judging? Demo logins are in the project README.",
-
   "authLoginTitle": "Welcome back",
   "authRegisterTitle": "Create account",
   "authEduHint": "Students: sign up with your university email (.edu / .edu.tr) to get verified instantly.",
-
   "onboardingTitle": "One last thing",
   "onboardingBody": "How will you use treat?",
   "onboardingStudent": "I'm a student",
@@ -32,7 +29,13 @@
   "onboardingShop": "I run a business",
   "onboardingShopHint": "Give treats, get local visibility.",
   "onboardingSignedInAs": "Signed in as {email}",
-  "@onboardingSignedInAs": {"placeholders": {"email": {"type": "String"}}},
+  "@onboardingSignedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "studentFormTitle": "Your student profile",
   "fieldName": "Full name",
   "fieldUniversity": "University",
@@ -51,12 +54,10 @@
   "fieldInstagramHint": "Used to check that posts really mention you.",
   "fieldRequired": "This field is required.",
   "saved": "Saved",
-
   "navDiscover": "Discover",
   "navProfile": "Profile",
   "navOffers": "Offers",
   "navBusiness": "Business",
-
   "discoverTitle": "Discover",
   "discoverSearch": "Search places or offers…",
   "discoverAll": "All",
@@ -64,53 +65,87 @@
   "discoverEmpty": "No offers match that right now.",
   "discoverEmptyHint": "Try clearing the filters.",
   "leftToday": "{n} left today",
-  "@leftToday": {"placeholders": {"n": {"type": "int"}}},
+  "@leftToday": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "soldOutToday": "done for today",
   "freeTag": "free",
-
   "categoryCoffee": "Coffee",
   "categoryFood": "Food",
   "categoryDessert": "Dessert",
   "categoryBeauty": "Beauty",
   "categoryFitness": "Fitness",
   "categoryActivity": "Activity",
-
   "frequencyWeekly": "Once a week",
   "frequencyMonthly": "Once a month",
   "frequencyWeeklyLong": "You can claim from this place once a week.",
   "frequencyMonthlyLong": "You can claim from this place once a month.",
-
   "proofIgStory": "Instagram story",
   "proofIgPost": "Instagram post",
   "proofGoogleReview": "Google review",
   "proofTiktok": "TikTok video",
-
   "offerAboutShop": "About the place",
   "offerRules": "Rules",
   "offerHours": "Active hours",
   "offerHoursValue": "Every day {start}–{end}",
-  "@offerHoursValue": {"placeholders": {"start": {"type": "String"}, "end": {"type": "String"}}},
+  "@offerHoursValue": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "offerInReturn": "In return, post one of",
   "offerClaim": "Claim treat",
   "offerClaimHint": "Your QR stays valid for 2 hours — claim it when you can actually go.",
   "offerClaimSoon": "Claiming opens in the next build.",
   "offerVerifiedShop": "Verified business",
   "offerDailyCap": "Up to {n} a day",
-  "@offerDailyCap": {"placeholders": {"n": {"type": "int"}}},
+  "@offerDailyCap": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "offerTotalCap": "{n} in total",
-  "@offerTotalCap": {"placeholders": {"n": {"type": "int"}}},
+  "@offerTotalCap": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "lockActiveClaim": "You already have an active QR for this offer.",
   "lockFrequency": "You can claim from this place again on {date}.",
-  "@lockFrequency": {"placeholders": {"date": {"type": "String"}}},
+  "@lockFrequency": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "lockDailyCap": "Today's slots are gone — try again tomorrow.",
   "lockTotalCap": "This offer's quota is used up.",
   "lockOutsideHours": "Not active right now — opens at {time}.",
-  "@lockOutsideHours": {"placeholders": {"time": {"type": "String"}}},
+  "@lockOutsideHours": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "lockOfferInactive": "This offer is currently paused.",
   "lockTooManyStrikes": "Your account has too many strikes; claiming is disabled.",
   "lockNotVerified": "Only verified students can claim. Sign up with a university email.",
   "lockShopView": "You're signed in as a business — students claim offers.",
-
   "profileTitle": "Profile",
   "profileVerified": "Verified student",
   "profilePending": "Not verified",
@@ -120,18 +155,31 @@
   "profileNoBadges": "Your first approved treat earns your first badge.",
   "profileStrikes": "Strikes",
   "profileStrikesNote": "{n}/{max} — claiming is disabled at {max}.",
-  "@profileStrikesNote": {"placeholders": {"n": {"type": "int"}, "max": {"type": "int"}}},
+  "@profileStrikesNote": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "profileNoStrikes": "No strikes. Keep it up.",
   "profileMemberSince": "Member since {date}",
-  "@profileMemberSince": {"placeholders": {"date": {"type": "String"}}},
-
+  "@profileMemberSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "badgeFirstTreat": "First treat",
   "badgeTenTreats": "Club of 10",
   "badgeTwentyfiveTreats": "Regular",
   "badgeStreak4": "Habit",
   "badgeExplorer3": "Explorer",
   "badgeVerifiedStudent": "Enrolled",
-
   "shopOffersTitle": "Offers",
   "shopNewOffer": "New offer",
   "shopOffersEmpty": "No offers yet",
@@ -139,15 +187,26 @@
   "shopOfferLive": "Live",
   "shopOfferPaused": "Paused",
   "shopOfferClaimedTotal": "Claimed {n} times",
-  "@shopOfferClaimedTotal": {"placeholders": {"n": {"type": "int"}}},
+  "@shopOfferClaimedTotal": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "shopOfferClaimedToday": "{n} today",
-  "@shopOfferClaimedToday": {"placeholders": {"n": {"type": "int"}}},
+  "@shopOfferClaimedToday": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "shopPause": "Pause",
   "shopActivate": "Activate",
   "shopEdit": "Edit",
   "shopDelete": "Delete",
   "shopDeleteConfirm": "Delete this offer? Students won't see it anymore.",
-
   "formNewOffer": "New offer",
   "formEditOffer": "Edit offer",
   "formWhat": "What are you giving?",
@@ -167,7 +226,6 @@
   "formProofTypesHint": "The student does one of these and uploads a screenshot. A Google review boosts you in local search.",
   "formProofTypesError": "Pick at least one.",
   "formPublish": "Publish",
-
   "err_not_signed_in": "Please sign in again.",
   "err_role_already_set": "This account already has a role.",
   "err_not_a_shop": "Only businesses can do this.",
@@ -176,5 +234,55 @@
   "err_offer_ended": "This offer was deleted.",
   "err_invalid_instagram": "That doesn't look like an Instagram handle.",
   "err_invalid_hours": "The end time must be after the start time.",
-  "err_no_email": "This account has no email address."
+  "err_no_email": "This account has no email address.",
+  "navMyTreats": "My treats",
+  "navScan": "Scan",
+  "offerGoToQr": "Go to your QR",
+  "lockFrequencyGeneric": "You've already claimed from this place recently.",
+  "claimTitle": "Your QR code",
+  "claimShowThis": "Show this screen at the counter — once scanned, your treat counts as used.",
+  "claimManualCode": "Backup code if scanning fails",
+  "claimExpiresIn": "Time left",
+  "claimExpired": "Expired",
+  "claimExpiredBody": "This QR is no longer valid. No worries — claim again if the offer allows.",
+  "claimRedeemed": "Redeemed",
+  "claimRedeemedAt": "Redeemed at {time}",
+  "@claimRedeemedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "claimNextStep": "Next step: your post",
+  "claimProofExplain": "Share one of the posts below tagging the place, then upload a screenshot here. Once approved, it counts toward your treats.",
+  "claimProofSoon": "Proof upload arrives in the next build.",
+  "claimLive": "Live",
+  "claimReconnecting": "Reconnecting…",
+  "statusActive": "QR active",
+  "statusExpired": "Expired",
+  "statusRedeemed": "Awaiting post",
+  "statusProofPending": "Under review",
+  "statusApproved": "Approved",
+  "statusRejected": "Rejected",
+  "claimsTitle": "My treats",
+  "claimsEmpty": "You haven't claimed any treats yet.",
+  "claimsEmptyHint": "Head to Discover and grab your first one — a badge is waiting.",
+  "claimsGoDiscover": "See offers",
+  "claimsActive": "Active",
+  "claimsPast": "Past",
+  "scanTitle": "Scan QR",
+  "scanHint": "Point the camera at the student's QR, or type the 6-character code.",
+  "scanCameraStart": "Start camera",
+  "scanCameraStop": "Stop camera",
+  "scanCameraFail": "Camera scanning isn't available here — enter the code instead.",
+  "scanManualLabel": "6-character code",
+  "scanCheck": "Verify code",
+  "scanSuccess": "Valid — treat redeemed",
+  "scanAlready": "Already redeemed — counted once",
+  "scanNext": "Scan next",
+  "err_not_found": "No such code.",
+  "err_expired": "This code has expired.",
+  "err_wrong_shop": "This code belongs to another business's offer.",
+  "err_claim_not_found": "This claim doesn't exist."
 }

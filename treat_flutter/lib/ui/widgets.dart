@@ -135,7 +135,11 @@ class EmptyView extends StatelessWidget {
           child: Icon(icon, color: T.accent, size: 30),
         ),
         const SizedBox(height: 14),
-        Text(title, style: context.text.titleMedium, textAlign: TextAlign.center),
+        Text(
+          title,
+          style: context.text.titleMedium,
+          textAlign: TextAlign.center,
+        ),
         if (hint != null) ...[
           const SizedBox(height: 6),
           Text(

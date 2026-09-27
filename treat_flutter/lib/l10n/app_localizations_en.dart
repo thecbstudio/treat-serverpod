@@ -504,4 +504,143 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_no_email => 'This account has no email address.';
+
+  @override
+  String get navMyTreats => 'My treats';
+
+  @override
+  String get navScan => 'Scan';
+
+  @override
+  String get offerGoToQr => 'Go to your QR';
+
+  @override
+  String get lockFrequencyGeneric =>
+      'You\'ve already claimed from this place recently.';
+
+  @override
+  String get claimTitle => 'Your QR code';
+
+  @override
+  String get claimShowThis =>
+      'Show this screen at the counter — once scanned, your treat counts as used.';
+
+  @override
+  String get claimManualCode => 'Backup code if scanning fails';
+
+  @override
+  String get claimExpiresIn => 'Time left';
+
+  @override
+  String get claimExpired => 'Expired';
+
+  @override
+  String get claimExpiredBody =>
+      'This QR is no longer valid. No worries — claim again if the offer allows.';
+
+  @override
+  String get claimRedeemed => 'Redeemed';
+
+  @override
+  String claimRedeemedAt(String time) {
+    return 'Redeemed at $time';
+  }
+
+  @override
+  String get claimNextStep => 'Next step: your post';
+
+  @override
+  String get claimProofExplain =>
+      'Share one of the posts below tagging the place, then upload a screenshot here. Once approved, it counts toward your treats.';
+
+  @override
+  String get claimProofSoon => 'Proof upload arrives in the next build.';
+
+  @override
+  String get claimLive => 'Live';
+
+  @override
+  String get claimReconnecting => 'Reconnecting…';
+
+  @override
+  String get statusActive => 'QR active';
+
+  @override
+  String get statusExpired => 'Expired';
+
+  @override
+  String get statusRedeemed => 'Awaiting post';
+
+  @override
+  String get statusProofPending => 'Under review';
+
+  @override
+  String get statusApproved => 'Approved';
+
+  @override
+  String get statusRejected => 'Rejected';
+
+  @override
+  String get claimsTitle => 'My treats';
+
+  @override
+  String get claimsEmpty => 'You haven\'t claimed any treats yet.';
+
+  @override
+  String get claimsEmptyHint =>
+      'Head to Discover and grab your first one — a badge is waiting.';
+
+  @override
+  String get claimsGoDiscover => 'See offers';
+
+  @override
+  String get claimsActive => 'Active';
+
+  @override
+  String get claimsPast => 'Past';
+
+  @override
+  String get scanTitle => 'Scan QR';
+
+  @override
+  String get scanHint =>
+      'Point the camera at the student\'s QR, or type the 6-character code.';
+
+  @override
+  String get scanCameraStart => 'Start camera';
+
+  @override
+  String get scanCameraStop => 'Stop camera';
+
+  @override
+  String get scanCameraFail =>
+      'Camera scanning isn\'t available here — enter the code instead.';
+
+  @override
+  String get scanManualLabel => '6-character code';
+
+  @override
+  String get scanCheck => 'Verify code';
+
+  @override
+  String get scanSuccess => 'Valid — treat redeemed';
+
+  @override
+  String get scanAlready => 'Already redeemed — counted once';
+
+  @override
+  String get scanNext => 'Scan next';
+
+  @override
+  String get err_not_found => 'No such code.';
+
+  @override
+  String get err_expired => 'This code has expired.';
+
+  @override
+  String get err_wrong_shop =>
+      'This code belongs to another business\'s offer.';
+
+  @override
+  String get err_claim_not_found => 'This claim doesn\'t exist.';
 }

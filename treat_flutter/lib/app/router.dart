@@ -7,9 +7,12 @@ import '../features/auth/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
 import '../features/auth/welcome_screen.dart';
 import '../features/shop/offer_form_screen.dart';
+import '../features/shop/scan_screen.dart';
 import '../features/shop/shop_offers_screen.dart';
 import '../features/shop/shop_profile_screen.dart';
+import '../features/student/claim_screen.dart';
 import '../features/student/discover_screen.dart';
+import '../features/student/my_claims_screen.dart';
 import '../features/student/offer_detail_screen.dart';
 import '../features/student/profile_screen.dart';
 import '../ui/widgets.dart';
@@ -23,24 +26,44 @@ final router = GoRouter(
   redirect: (context, state) {
     final path = state.uri.path;
     final isPublic = _publicPaths.contains(path);
+    // Where the user was heading before a gate screen (deep links, refresh).
+    final from = state.uri.queryParameters['from'];
+    String gate(String to) => Uri(
+      path: to,
+      queryParameters: {'from': from ?? state.uri.toString()},
+    ).toString();
+    String? resume(String fallback, bool Function(String) allowed) {
+      if (from != null) {
+        final target = Uri.parse(from).path;
+        if (!_isGate(target) &&
+            !_publicPaths.contains(target) &&
+            allowed(target)) {
+          return from;
+        }
+      }
+      return fallback;
+    }
+
     switch (appSession.status) {
       case SessionStatus.loading:
-        return path == '/loading' ? null : '/loading';
+        return path == '/loading' ? null : gate('/loading');
       case SessionStatus.error:
-        return path == '/session-error' ? null : '/session-error';
+        return path == '/session-error' ? null : gate('/session-error');
       case SessionStatus.signedOut:
         return isPublic ? null : '/welcome';
       case SessionStatus.needsRole:
         return path == '/onboarding' ? null : '/onboarding';
       case SessionStatus.student:
-        if (isPublic || _isShopPath(path) || _isGate(path)) return '/discover';
-        return null;
+        if (isPublic || _isGate(path)) {
+          return resume('/discover', (p) => !_isShopPath(p));
+        }
+        return _isShopPath(path) ? '/discover' : null;
       case SessionStatus.shop:
         // Shops can still open offer pages (e.g. to preview their own).
-        if (isPublic || _isStudentOnly(path) || _isGate(path)) {
-          return '/shop/offers';
+        if (isPublic || _isGate(path)) {
+          return resume('/shop/scan', (p) => !_isStudentOnly(p));
         }
-        return null;
+        return _isStudentOnly(path) ? '/shop/scan' : null;
     }
   },
   routes: [
@@ -67,14 +90,25 @@ final router = GoRouter(
         location: state.uri.path,
         tabs: const [
           _Tab('/discover', Icons.explore_outlined, Icons.explore),
+          _Tab(
+            '/claims',
+            Icons.confirmation_number_outlined,
+            Icons.confirmation_number,
+          ),
           _Tab('/me', Icons.person_outline_rounded, Icons.person_rounded),
         ],
         child: child,
       ),
       routes: [
         GoRoute(path: '/discover', builder: (_, _) => const DiscoverScreen()),
+        GoRoute(path: '/claims', builder: (_, _) => const MyClaimsScreen()),
         GoRoute(path: '/me', builder: (_, _) => const ProfileScreen()),
       ],
+    ),
+    GoRoute(
+      path: '/claim/:id',
+      builder: (_, state) =>
+          ClaimScreen(claimId: int.parse(state.pathParameters['id']!)),
     ),
     GoRoute(
       path: '/offer/:id',
@@ -85,12 +119,18 @@ final router = GoRouter(
       builder: (context, state, child) => _NavShell(
         location: state.uri.path,
         tabs: const [
+          _Tab(
+            '/shop/scan',
+            Icons.qr_code_scanner_rounded,
+            Icons.qr_code_scanner_rounded,
+          ),
           _Tab('/shop/offers', Icons.local_offer_outlined, Icons.local_offer),
           _Tab('/shop/profile', Icons.storefront_outlined, Icons.storefront),
         ],
         child: child,
       ),
       routes: [
+        GoRoute(path: '/shop/scan', builder: (_, _) => const ScanScreen()),
         GoRoute(
           path: '/shop/offers',
           builder: (_, _) => const ShopOffersScreen(),
@@ -115,7 +155,8 @@ final router = GoRouter(
 );
 
 bool _isShopPath(String p) => p.startsWith('/shop');
-bool _isStudentOnly(String p) => p == '/discover' || p == '/me';
+bool _isStudentOnly(String p) =>
+    p == '/discover' || p == '/me' || p == '/claims' || p.startsWith('/claim/');
 bool _isGate(String p) =>
     p == '/loading' || p == '/session-error' || p == '/onboarding';
 
@@ -140,6 +181,8 @@ class _NavShell extends StatelessWidget {
   String _label(BuildContext context, String path) => switch (path) {
     '/discover' => context.l.navDiscover,
     '/me' => context.l.navProfile,
+    '/claims' => context.l.navMyTreats,
+    '/shop/scan' => context.l.navScan,
     '/shop/offers' => context.l.navOffers,
     _ => context.l.navBusiness,
   };

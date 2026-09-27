@@ -148,7 +148,9 @@ ThemeData buildTheme() {
       ),
       iconTheme: WidgetStateProperty.resolveWith(
         (s) => IconThemeData(
-          color: s.contains(WidgetState.selected) ? T.accentInk : T.inkSecondary,
+          color: s.contains(WidgetState.selected)
+              ? T.accentInk
+              : T.inkSecondary,
         ),
       ),
     ),

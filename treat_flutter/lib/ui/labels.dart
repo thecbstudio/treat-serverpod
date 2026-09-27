@@ -62,6 +62,17 @@ extension BadgeLabel on BadgeId {
   };
 }
 
+extension ClaimStatusLabel on ClaimStatus {
+  String label(AppLocalizations l) => switch (this) {
+    ClaimStatus.active => l.statusActive,
+    ClaimStatus.expired => l.statusExpired,
+    ClaimStatus.redeemed => l.statusRedeemed,
+    ClaimStatus.proofPending => l.statusProofPending,
+    ClaimStatus.approved => l.statusApproved,
+    ClaimStatus.rejected => l.statusRejected,
+  };
+}
+
 /// Why the student can't claim, or null when they can.
 String? lockMessage(Eligibility e, AppLocalizations l) => switch (e.reason) {
   EligibilityReason.ok => null,
@@ -69,10 +80,14 @@ String? lockMessage(Eligibility e, AppLocalizations l) => switch (e.reason) {
   EligibilityReason.notVerified => l.lockNotVerified,
   EligibilityReason.tooManyStrikes => l.lockTooManyStrikes,
   EligibilityReason.activeClaim => l.lockActiveClaim,
-  EligibilityReason.frequency => l.lockFrequency(
-    istanbulDateTime(e.availableAt!),
-  ),
-  EligibilityReason.outsideHours => l.lockOutsideHours(hhmm(e.opensAtMin!)),
+  EligibilityReason.frequency =>
+    e.availableAt == null
+        ? l.lockFrequencyGeneric
+        : l.lockFrequency(istanbulDateTime(e.availableAt!)),
+  EligibilityReason.outsideHours =>
+    e.opensAtMin == null
+        ? l.lockOfferInactive
+        : l.lockOutsideHours(hhmm(e.opensAtMin!)),
   EligibilityReason.totalCap => l.lockTotalCap,
   EligibilityReason.dailyCap => l.lockDailyCap,
 };
@@ -90,6 +105,22 @@ String errorMessage(Object error, AppLocalizations l) {
       'invalid_instagram' => l.err_invalid_instagram,
       'invalid_hours' => l.err_invalid_hours,
       'no_email' => l.err_no_email,
+      'not_found' => l.err_not_found,
+      'expired' => l.err_expired,
+      'wrong_shop' => l.err_wrong_shop,
+      'claim_not_found' => l.err_claim_not_found,
+      // The server sends the eligibility reason as the message.
+      'ineligible' =>
+        lockMessage(
+              Eligibility(
+                reason: EligibilityReason.values.firstWhere(
+                  (r) => r.name == error.message,
+                  orElse: () => EligibilityReason.offerInactive,
+                ),
+              ),
+              l,
+            ) ??
+            l.errorGeneric,
       _ => l.errorGeneric,
     };
   }
