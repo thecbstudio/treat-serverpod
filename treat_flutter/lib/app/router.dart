@@ -6,12 +6,14 @@ import '../client.dart';
 import '../features/auth/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
 import '../features/auth/welcome_screen.dart';
+import '../features/shop/dashboard_screen.dart';
 import '../features/shop/offer_form_screen.dart';
 import '../features/shop/scan_screen.dart';
 import '../features/shop/shop_offers_screen.dart';
 import '../features/shop/shop_profile_screen.dart';
 import '../features/student/claim_screen.dart';
 import '../features/student/discover_screen.dart';
+import '../features/student/leaderboard_screen.dart';
 import '../features/student/my_claims_screen.dart';
 import '../features/student/offer_detail_screen.dart';
 import '../features/student/profile_screen.dart';
@@ -95,6 +97,11 @@ final router = GoRouter(
             Icons.confirmation_number_outlined,
             Icons.confirmation_number,
           ),
+          _Tab(
+            '/leaderboard',
+            Icons.emoji_events_outlined,
+            Icons.emoji_events,
+          ),
           _Tab('/me', Icons.person_outline_rounded, Icons.person_rounded),
         ],
         child: child,
@@ -102,6 +109,10 @@ final router = GoRouter(
       routes: [
         GoRoute(path: '/discover', builder: (_, _) => const DiscoverScreen()),
         GoRoute(path: '/claims', builder: (_, _) => const MyClaimsScreen()),
+        GoRoute(
+          path: '/leaderboard',
+          builder: (_, _) => const LeaderboardScreen(),
+        ),
         GoRoute(path: '/me', builder: (_, _) => const ProfileScreen()),
       ],
     ),
@@ -124,6 +135,7 @@ final router = GoRouter(
             Icons.qr_code_scanner_rounded,
             Icons.qr_code_scanner_rounded,
           ),
+          _Tab('/shop/panel', Icons.insights_outlined, Icons.insights),
           _Tab('/shop/offers', Icons.local_offer_outlined, Icons.local_offer),
           _Tab('/shop/profile', Icons.storefront_outlined, Icons.storefront),
         ],
@@ -131,6 +143,10 @@ final router = GoRouter(
       ),
       routes: [
         GoRoute(path: '/shop/scan', builder: (_, _) => const ScanScreen()),
+        GoRoute(
+          path: '/shop/panel',
+          builder: (_, _) => const DashboardScreen(),
+        ),
         GoRoute(
           path: '/shop/offers',
           builder: (_, _) => const ShopOffersScreen(),
@@ -156,7 +172,11 @@ final router = GoRouter(
 
 bool _isShopPath(String p) => p.startsWith('/shop');
 bool _isStudentOnly(String p) =>
-    p == '/discover' || p == '/me' || p == '/claims' || p.startsWith('/claim/');
+    p == '/discover' ||
+    p == '/me' ||
+    p == '/claims' ||
+    p == '/leaderboard' ||
+    p.startsWith('/claim/');
 bool _isGate(String p) =>
     p == '/loading' || p == '/session-error' || p == '/onboarding';
 
@@ -183,6 +203,8 @@ class _NavShell extends StatelessWidget {
     '/me' => context.l.navProfile,
     '/claims' => context.l.navMyTreats,
     '/shop/scan' => context.l.navScan,
+    '/shop/panel' => context.l.navPanel,
+    '/leaderboard' => context.l.navLeaderboard,
     '/shop/offers' => context.l.navOffers,
     _ => context.l.navBusiness,
   };

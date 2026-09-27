@@ -284,5 +284,77 @@
   "err_not_found": "No such code.",
   "err_expired": "This code has expired.",
   "err_wrong_shop": "This code belongs to another business's offer.",
-  "err_claim_not_found": "This claim doesn't exist."
+  "err_claim_not_found": "This claim doesn't exist.",
+  "navLeaderboard": "Leaderboard",
+  "navPanel": "Panel",
+  "proofPickOne": "Which one did you post?",
+  "proofTodoIgStory": "Share an Instagram story tagging the place, then upload a screenshot.",
+  "proofTodoIgPost": "Share an Instagram post tagging the place, then upload a screenshot.",
+  "proofTodoGoogleReview": "Leave the business a Google review, then upload a screenshot.",
+  "proofTodoTiktok": "Post a TikTok mentioning the place, then upload a screenshot.",
+  "proofChoose": "Choose screenshot",
+  "proofChange": "Change image",
+  "proofSubmit": "Submit proof",
+  "proofUploading": "Uploading…",
+  "proofVerifyFailed": "We couldn't check your screenshot this time — nothing counted against you. Please send it again.",
+  "claimProofPending": "Under review",
+  "claimProofPendingBody": "Our AI is checking your post. It usually takes a few seconds — the result appears here by itself.",
+  "claimApproved": "Approved",
+  "claimApprovedBody": "Your post was approved and your treat count went up. Enjoy!",
+  "claimRejected": "Rejected",
+  "claimRejectedBody": "The post didn't meet the requirements. One strike was added to your account ({strikes}/{max}).",
+  "@claimRejectedBody": {
+    "placeholders": {
+      "strikes": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "rejectNoMention": "Couldn't find the business tag or name in the post.",
+  "rejectNotAPost": "The image doesn't look like that kind of post.",
+  "rejectUnreadable": "Couldn't read the image — try a clearer screenshot.",
+  "appealExplain": "If your post genuinely qualifies, you can appeal once with the same or a clearer screenshot. If the appeal is approved, the strike is removed.",
+  "appealTitle": "Appeal",
+  "appealSubmit": "Send appeal",
+  "appealUsed": "You've already used your appeal for this claim.",
+  "leaderboardTitle": "Leaderboard",
+  "leaderboardSubtitle": "Top treat collectors",
+  "leaderboardEmpty": "No approved treats yet — be the first on the board.",
+  "leaderboardYou": "you",
+  "leaderboardTreats": "{n, plural, =1{1 treat} other{{n} treats}}",
+  "@leaderboardTreats": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "dashTitle": "Panel",
+  "dashTotalRedeems": "Total redeems",
+  "dashApprovedProofs": "Approved posts",
+  "dashActiveOffers": "Active offers",
+  "dashWeekClaims": "Claims this week",
+  "dashEstReach": "Estimated reach",
+  "dashEstReachNote": "approved posts × ~180 avg. views",
+  "dashEstValue": "Estimated marketing value",
+  "dashEstValueNote": "rough benchmark: ₺0.15 per view",
+  "dashLive": "Live activity",
+  "dashTopStudents": "Most active students",
+  "dashEmpty": "No activity yet — create an offer and students will show up here.",
+  "dashApprovedCount": "{n} approved",
+  "@dashApprovedCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "dashViewProof": "View post",
+  "err_proof_not_allowed": "This claim doesn't take a screenshot right now.",
+  "err_proof_type_not_accepted": "Pick one of the posts this place asks for.",
+  "err_invalid_proof": "Upload a JPEG, PNG or WebP screenshot (max 5 MB).",
+  "claimTitleTreat": "Your treat"
 }

@@ -37,7 +37,7 @@ class _MyClaimsScreenState extends State<MyClaimsScreen> {
               future: _future,
               builder: (context, snap) {
                 final header = Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  padding: const EdgeInsets.only(top: 16, bottom: 8),
                   child: Text(
                     l.claimsTitle,
                     style: context.text.headlineMedium,
@@ -45,6 +45,7 @@ class _MyClaimsScreenState extends State<MyClaimsScreen> {
                 );
                 if (snap.hasError) {
                   return ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     children: [
                       header,
                       ErrorView(error: snap.error!, onRetry: _reload),
@@ -53,12 +54,15 @@ class _MyClaimsScreenState extends State<MyClaimsScreen> {
                 }
                 if (!snap.hasData) return const LoadingView();
                 final all = snap.data!;
-                final active = all
-                    .where((v) => v.claim.status == ClaimStatus.active)
-                    .toList();
-                final past = all
-                    .where((v) => v.claim.status != ClaimStatus.active)
-                    .toList();
+                // "Active" = still needs the student: QR to show, post to
+                // upload, or a verdict to wait for.
+                bool open(ClaimView v) => const {
+                  ClaimStatus.active,
+                  ClaimStatus.redeemed,
+                  ClaimStatus.proofPending,
+                }.contains(v.claim.status);
+                final active = all.where(open).toList();
+                final past = all.where((v) => !open(v)).toList();
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                   children: [

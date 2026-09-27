@@ -1263,6 +1263,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This claim doesn\'t exist.'**
   String get err_claim_not_found;
+
+  /// No description provided for @navLeaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get navLeaderboard;
+
+  /// No description provided for @navPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Panel'**
+  String get navPanel;
+
+  /// No description provided for @proofPickOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Which one did you post?'**
+  String get proofPickOne;
+
+  /// No description provided for @proofTodoIgStory.
+  ///
+  /// In en, this message translates to:
+  /// **'Share an Instagram story tagging the place, then upload a screenshot.'**
+  String get proofTodoIgStory;
+
+  /// No description provided for @proofTodoIgPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Share an Instagram post tagging the place, then upload a screenshot.'**
+  String get proofTodoIgPost;
+
+  /// No description provided for @proofTodoGoogleReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the business a Google review, then upload a screenshot.'**
+  String get proofTodoGoogleReview;
+
+  /// No description provided for @proofTodoTiktok.
+  ///
+  /// In en, this message translates to:
+  /// **'Post a TikTok mentioning the place, then upload a screenshot.'**
+  String get proofTodoTiktok;
+
+  /// No description provided for @proofChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose screenshot'**
+  String get proofChoose;
+
+  /// No description provided for @proofChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change image'**
+  String get proofChange;
+
+  /// No description provided for @proofSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit proof'**
+  String get proofSubmit;
+
+  /// No description provided for @proofUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading…'**
+  String get proofUploading;
+
+  /// No description provided for @proofVerifyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t check your screenshot this time — nothing counted against you. Please send it again.'**
+  String get proofVerifyFailed;
+
+  /// No description provided for @claimProofPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get claimProofPending;
+
+  /// No description provided for @claimProofPendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Our AI is checking your post. It usually takes a few seconds — the result appears here by itself.'**
+  String get claimProofPendingBody;
+
+  /// No description provided for @claimApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get claimApproved;
+
+  /// No description provided for @claimApprovedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your post was approved and your treat count went up. Enjoy!'**
+  String get claimApprovedBody;
+
+  /// No description provided for @claimRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get claimRejected;
+
+  /// No description provided for @claimRejectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The post didn\'t meet the requirements. One strike was added to your account ({strikes}/{max}).'**
+  String claimRejectedBody(int strikes, int max);
+
+  /// No description provided for @rejectNoMention.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t find the business tag or name in the post.'**
+  String get rejectNoMention;
+
+  /// No description provided for @rejectNotAPost.
+  ///
+  /// In en, this message translates to:
+  /// **'The image doesn\'t look like that kind of post.'**
+  String get rejectNotAPost;
+
+  /// No description provided for @rejectUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read the image — try a clearer screenshot.'**
+  String get rejectUnreadable;
+
+  /// No description provided for @appealExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'If your post genuinely qualifies, you can appeal once with the same or a clearer screenshot. If the appeal is approved, the strike is removed.'**
+  String get appealExplain;
+
+  /// No description provided for @appealTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appeal'**
+  String get appealTitle;
+
+  /// No description provided for @appealSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Send appeal'**
+  String get appealSubmit;
+
+  /// No description provided for @appealUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already used your appeal for this claim.'**
+  String get appealUsed;
+
+  /// No description provided for @leaderboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboardTitle;
+
+  /// No description provided for @leaderboardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top treat collectors'**
+  String get leaderboardSubtitle;
+
+  /// No description provided for @leaderboardEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No approved treats yet — be the first on the board.'**
+  String get leaderboardEmpty;
+
+  /// No description provided for @leaderboardYou.
+  ///
+  /// In en, this message translates to:
+  /// **'you'**
+  String get leaderboardYou;
+
+  /// No description provided for @leaderboardTreats.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 treat} other{{n} treats}}'**
+  String leaderboardTreats(int n);
+
+  /// No description provided for @dashTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Panel'**
+  String get dashTitle;
+
+  /// No description provided for @dashTotalRedeems.
+  ///
+  /// In en, this message translates to:
+  /// **'Total redeems'**
+  String get dashTotalRedeems;
+
+  /// No description provided for @dashApprovedProofs.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved posts'**
+  String get dashApprovedProofs;
+
+  /// No description provided for @dashActiveOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Active offers'**
+  String get dashActiveOffers;
+
+  /// No description provided for @dashWeekClaims.
+  ///
+  /// In en, this message translates to:
+  /// **'Claims this week'**
+  String get dashWeekClaims;
+
+  /// No description provided for @dashEstReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated reach'**
+  String get dashEstReach;
+
+  /// No description provided for @dashEstReachNote.
+  ///
+  /// In en, this message translates to:
+  /// **'approved posts × ~180 avg. views'**
+  String get dashEstReachNote;
+
+  /// No description provided for @dashEstValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated marketing value'**
+  String get dashEstValue;
+
+  /// No description provided for @dashEstValueNote.
+  ///
+  /// In en, this message translates to:
+  /// **'rough benchmark: ₺0.15 per view'**
+  String get dashEstValueNote;
+
+  /// No description provided for @dashLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live activity'**
+  String get dashLive;
+
+  /// No description provided for @dashTopStudents.
+  ///
+  /// In en, this message translates to:
+  /// **'Most active students'**
+  String get dashTopStudents;
+
+  /// No description provided for @dashEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity yet — create an offer and students will show up here.'**
+  String get dashEmpty;
+
+  /// No description provided for @dashApprovedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} approved'**
+  String dashApprovedCount(int n);
+
+  /// No description provided for @dashViewProof.
+  ///
+  /// In en, this message translates to:
+  /// **'View post'**
+  String get dashViewProof;
+
+  /// No description provided for @err_proof_not_allowed.
+  ///
+  /// In en, this message translates to:
+  /// **'This claim doesn\'t take a screenshot right now.'**
+  String get err_proof_not_allowed;
+
+  /// No description provided for @err_proof_type_not_accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one of the posts this place asks for.'**
+  String get err_proof_type_not_accepted;
+
+  /// No description provided for @err_invalid_proof.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a JPEG, PNG or WebP screenshot (max 5 MB).'**
+  String get err_invalid_proof;
+
+  /// No description provided for @claimTitleTreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Your treat'**
+  String get claimTitleTreat;
 }
 
 class _AppLocalizationsDelegate

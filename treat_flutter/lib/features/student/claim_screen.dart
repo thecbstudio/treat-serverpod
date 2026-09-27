@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:treat_client/treat_client.dart';
 
+import '../../app/session.dart';
 import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import 'proof_form.dart';
 
 PillTone claimTone(ClaimStatus s) => switch (s) {
   ClaimStatus.active => PillTone.accent,
@@ -47,6 +49,14 @@ class _ClaimScreenState extends State<ClaimScreen> {
         .watch(widget.claimId)
         .listen(
           (view) => setState(() {
+            final before = _view?.claim.status;
+            final after = view.claim.status;
+            if (before != null &&
+                before != after &&
+                (after == ClaimStatus.approved ||
+                    after == ClaimStatus.rejected)) {
+              appSession.refresh();
+            }
             _view = view;
             _error = null;
             _reconnecting = false;
@@ -84,7 +94,11 @@ class _ClaimScreenState extends State<ClaimScreen> {
     final view = _view;
     return Scaffold(
       appBar: AppBar(
-        title: Text(l.claimTitle),
+        title: Text(
+          view == null || view.claim.status == ClaimStatus.active
+              ? l.claimTitle
+              : l.claimTitleTreat,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           tooltip: l.back,
@@ -152,7 +166,21 @@ class _ClaimBody extends StatelessWidget {
                 title: l.claimExpired,
                 hint: l.claimExpiredBody,
               ),
-              _ => _Redeemed(view: view),
+              ClaimStatus.redeemed => _Redeemed(view: view),
+              ClaimStatus.proofPending => _Verdict(
+                icon: Icons.hourglass_top_rounded,
+                tone: PillTone.amber,
+                title: l.claimProofPending,
+                body: l.claimProofPendingBody,
+                busy: true,
+              ),
+              ClaimStatus.approved => _Verdict(
+                icon: Icons.celebration_outlined,
+                tone: PillTone.green,
+                title: l.claimApproved,
+                body: l.claimApprovedBody,
+              ),
+              ClaimStatus.rejected => _Rejected(view: view),
             },
           ),
         ),
@@ -328,8 +356,110 @@ class _Redeemed extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 14),
-        // Proof upload + AI verification land in M3.
-        Notice(l.claimProofSoon),
+        if (claim.verdictReason == 'verify_failed') ...[
+          Notice(l.proofVerifyFailed),
+          const SizedBox(height: 12),
+        ],
+        ProofForm(
+          claimId: claim.id!,
+          proofTypes: view.offer.proofTypes,
+          submitLabel: l.proofSubmit,
+        ),
+      ],
+    );
+  }
+}
+
+class _Verdict extends StatelessWidget {
+  const _Verdict({
+    required this.icon,
+    required this.tone,
+    required this.title,
+    required this.body,
+    this.busy = false,
+  });
+
+  final IconData icon;
+  final PillTone tone;
+  final String title;
+  final String body;
+  final bool busy;
+
+  @override
+  Widget build(BuildContext context) {
+    final (bg, fg) = switch (tone) {
+      PillTone.green => (T.greenSoft, T.green),
+      PillTone.red => (T.redSoft, T.red),
+      _ => (T.amberSoft, T.amber),
+    };
+    return TreatCard(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
+            child: busy
+                ? Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: CircularProgressIndicator(color: fg, strokeWidth: 3),
+                  )
+                : Icon(icon, color: fg, size: 42),
+          ),
+          const SizedBox(height: 14),
+          Text(title, style: context.text.titleLarge),
+          const SizedBox(height: 6),
+          Text(
+            body,
+            textAlign: TextAlign.center,
+            style: context.text.bodyMedium?.copyWith(color: T.inkSecondary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Rejected extends StatelessWidget {
+  const _Rejected({required this.view});
+  final ClaimView view;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l;
+    final claim = view.claim;
+    final strikes = appSession.me?.student?.strikes ?? 1;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _Verdict(
+          icon: Icons.close_rounded,
+          tone: PillTone.red,
+          title: l.claimRejected,
+          body: l.claimRejectedBody(strikes, 3),
+        ),
+        const SizedBox(height: 12),
+        if (claim.verdictReason == 'verify_failed')
+          Notice(l.proofVerifyFailed)
+        else
+          Notice(
+            rejectReasonText(claim.verdictReason, l),
+            tone: PillTone.red,
+            icon: Icons.error_outline,
+          ),
+        SectionTitle(l.appealTitle),
+        if (claim.appealed)
+          Text(l.appealUsed, style: context.text.bodyMedium)
+        else ...[
+          Text(l.appealExplain, style: context.text.bodyMedium),
+          const SizedBox(height: 12),
+          ProofForm(
+            claimId: claim.id!,
+            proofTypes: view.offer.proofTypes,
+            submitLabel: l.appealSubmit,
+          ),
+        ],
       ],
     );
   }

@@ -643,4 +643,176 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_claim_not_found => 'This claim doesn\'t exist.';
+
+  @override
+  String get navLeaderboard => 'Leaderboard';
+
+  @override
+  String get navPanel => 'Panel';
+
+  @override
+  String get proofPickOne => 'Which one did you post?';
+
+  @override
+  String get proofTodoIgStory =>
+      'Share an Instagram story tagging the place, then upload a screenshot.';
+
+  @override
+  String get proofTodoIgPost =>
+      'Share an Instagram post tagging the place, then upload a screenshot.';
+
+  @override
+  String get proofTodoGoogleReview =>
+      'Leave the business a Google review, then upload a screenshot.';
+
+  @override
+  String get proofTodoTiktok =>
+      'Post a TikTok mentioning the place, then upload a screenshot.';
+
+  @override
+  String get proofChoose => 'Choose screenshot';
+
+  @override
+  String get proofChange => 'Change image';
+
+  @override
+  String get proofSubmit => 'Submit proof';
+
+  @override
+  String get proofUploading => 'Uploading…';
+
+  @override
+  String get proofVerifyFailed =>
+      'We couldn\'t check your screenshot this time — nothing counted against you. Please send it again.';
+
+  @override
+  String get claimProofPending => 'Under review';
+
+  @override
+  String get claimProofPendingBody =>
+      'Our AI is checking your post. It usually takes a few seconds — the result appears here by itself.';
+
+  @override
+  String get claimApproved => 'Approved';
+
+  @override
+  String get claimApprovedBody =>
+      'Your post was approved and your treat count went up. Enjoy!';
+
+  @override
+  String get claimRejected => 'Rejected';
+
+  @override
+  String claimRejectedBody(int strikes, int max) {
+    return 'The post didn\'t meet the requirements. One strike was added to your account ($strikes/$max).';
+  }
+
+  @override
+  String get rejectNoMention =>
+      'Couldn\'t find the business tag or name in the post.';
+
+  @override
+  String get rejectNotAPost =>
+      'The image doesn\'t look like that kind of post.';
+
+  @override
+  String get rejectUnreadable =>
+      'Couldn\'t read the image — try a clearer screenshot.';
+
+  @override
+  String get appealExplain =>
+      'If your post genuinely qualifies, you can appeal once with the same or a clearer screenshot. If the appeal is approved, the strike is removed.';
+
+  @override
+  String get appealTitle => 'Appeal';
+
+  @override
+  String get appealSubmit => 'Send appeal';
+
+  @override
+  String get appealUsed => 'You\'ve already used your appeal for this claim.';
+
+  @override
+  String get leaderboardTitle => 'Leaderboard';
+
+  @override
+  String get leaderboardSubtitle => 'Top treat collectors';
+
+  @override
+  String get leaderboardEmpty =>
+      'No approved treats yet — be the first on the board.';
+
+  @override
+  String get leaderboardYou => 'you';
+
+  @override
+  String leaderboardTreats(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n treats',
+      one: '1 treat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashTitle => 'Panel';
+
+  @override
+  String get dashTotalRedeems => 'Total redeems';
+
+  @override
+  String get dashApprovedProofs => 'Approved posts';
+
+  @override
+  String get dashActiveOffers => 'Active offers';
+
+  @override
+  String get dashWeekClaims => 'Claims this week';
+
+  @override
+  String get dashEstReach => 'Estimated reach';
+
+  @override
+  String get dashEstReachNote => 'approved posts × ~180 avg. views';
+
+  @override
+  String get dashEstValue => 'Estimated marketing value';
+
+  @override
+  String get dashEstValueNote => 'rough benchmark: ₺0.15 per view';
+
+  @override
+  String get dashLive => 'Live activity';
+
+  @override
+  String get dashTopStudents => 'Most active students';
+
+  @override
+  String get dashEmpty =>
+      'No activity yet — create an offer and students will show up here.';
+
+  @override
+  String dashApprovedCount(int n) {
+    return '$n approved';
+  }
+
+  @override
+  String get dashViewProof => 'View post';
+
+  @override
+  String get err_proof_not_allowed =>
+      'This claim doesn\'t take a screenshot right now.';
+
+  @override
+  String get err_proof_type_not_accepted =>
+      'Pick one of the posts this place asks for.';
+
+  @override
+  String get err_invalid_proof =>
+      'Upload a JPEG, PNG or WebP screenshot (max 5 MB).';
+
+  @override
+  String get claimTitleTreat => 'Your treat';
 }

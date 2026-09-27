@@ -51,6 +51,21 @@ extension ProofLabel on ProofType {
   };
 }
 
+extension ProofTodo on ProofType {
+  String todo(AppLocalizations l) => switch (this) {
+    ProofType.igStory => l.proofTodoIgStory,
+    ProofType.igPost => l.proofTodoIgPost,
+    ProofType.googleReview => l.proofTodoGoogleReview,
+    ProofType.tiktok => l.proofTodoTiktok,
+  };
+}
+
+String rejectReasonText(String? key, AppLocalizations l) => switch (key) {
+  'no_mention' => l.rejectNoMention,
+  'not_a_post' => l.rejectNotAPost,
+  _ => l.rejectUnreadable,
+};
+
 extension BadgeLabel on BadgeId {
   String label(AppLocalizations l) => switch (this) {
     BadgeId.firstTreat => l.badgeFirstTreat,
@@ -109,6 +124,9 @@ String errorMessage(Object error, AppLocalizations l) {
       'expired' => l.err_expired,
       'wrong_shop' => l.err_wrong_shop,
       'claim_not_found' => l.err_claim_not_found,
+      'proof_not_allowed' => l.err_proof_not_allowed,
+      'proof_type_not_accepted' => l.err_proof_type_not_accepted,
+      'invalid_proof' => l.err_invalid_proof,
       // The server sends the eligibility reason as the message.
       'ineligible' =>
         lockMessage(
