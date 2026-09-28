@@ -1,0 +1,41 @@
+# HANDOFF — TREAT × Serverpod Hackathon (read this first)
+
+Last updated: 28 Sep 2026. Talk to the user (Çınar) in **Turkish**; code, UI and repo text in **English**.
+
+## What this is
+- **Hackathon:** "Build Something Real: The Serverpod Hackathon" (builderbase.com). **Deadline 14 Oct 2026 23:59 CEST, we submit on 13 Oct.** Judging: works 30% (nothing critical fake) · Serverpod stack usage 25% · craft 25% · usefulness 20%. Extra prizes: Most Valuable Feedback (FEEDBACK.md), Best Hackathon Post.
+- **Product "treat.":** students get free treats from local places; in return they post about the place (IG story/post, Google review, TikTok) and upload a screenshot; **Claude verifies it** (AI). Businesses get measurable local reach. Barter, no payments (unlike "Ismarlıyo", which is pure charity).
+- **Stack:** Flutter **web** + **Serverpod 4.0.2**. Code: `C:\Users\cinar\dev\treat` (`treat_server/`, `treat_client/` generated, `treat_flutter/`). Repo: **github.com/thecbstudio/treat-serverpod (private)**, pushed, branch `main`.
+- Old React/Firebase TREAT in `C:\Users\cinar\Downloads\treat` = reference only, never copy code.
+- Original plan: `C:\Users\cinar\.claude\plans\evet-nas-l-devam-ed-yoruz-stateless-peach.md`. Project rules: `AGENTS.md` (CLAUDE.md includes it). Serverpod notes: `docs/serverpod-notes.md`. Submission kit (description, AI/prior-work disclosure, video script, social post): `docs/SUBMISSION.md`. Judges' README: `README.md`.
+
+## Environment gotchas (Windows, Claude desktop app)
+- PowerShell 5.1 (no `&&`); Git Bash also works. Tools on PATH, or: `$env:Path += ";C:\Users\cinar\flutter\bin;C:\Users\cinar\AppData\Local\Pub\Cache\bin"`. From Bash use `/c/Users/cinar/AppData/Local/Pub/Cache/bin/serverpod.bat` and `/c/Users/cinar/flutter/bin/dart`.
+- **Always set `SERVERPOD_PG_CACHE_DIR=C:\Users\cinar\dev\.pg-cache`** before `dart test` / `serverpod start` (MSIX virtualization breaks embedded Postgres otherwise).
+- Orphan Postgres: `& "C:\Users\cinar\dev\.pg-cache\16.13.0-r1\windows-x64\bin\pg_ctl.exe" stop -D <treat_server>\.serverpod\<development|test>\pgdata -m fast`.
+- **Don't run `serverpod generate` while `serverpod start` is running** (test tools got half-generated once). Stop the server first.
+- Web testing that works: build release (`serverpod run flutter_build` in treat_server) + `serverpod start --no-tui --no-flutter` → app at **http://localhost:8082**. A page reload does NOT pick up Dart changes in the dev web server — rebuild. Playwright MCP (390×844 viewport, click coordinates on the Flutter canvas) is the reliable way to click through; the built-in browser pane often won't render when the window is hidden.
+- Locally no e-mails: sign-up codes are printed in the server log (`Registration code for …`) — read them from the log for the user.
+- Secrets: `treat_server/config/passwords.yaml` (git-ignored) holds `shared.anthropicApiKey` (user pasted it in chat → suggest rotating after the hackathon) and `development.demoAccountPassword: treat-demo-2026`. `config/passwords.example.yaml` is the committed template. Never print keys.
+- Git: commit messages end with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. `gh` is authed as thecbstudio (workflow scope granted). Auto-mode blocked history rewrites — don't try.
+
+## Demo logins (local; seeded on every boot, idempotent)
+- Student: `student@demo.treat` / `treat-demo-2026` (verified, has some history)
+- Business: `pixel@demo.treat` (Pixel Oyun Kafe 13–23 + always-on demo drop), `kirlangic@`, `tostcu@`, `duman@`, `form@`, `yirmi7@`, `firin@`, `mavikitap@`, `ferah@`, `bowling@`, `glow@demo.treat` — same password.
+
+## What's built (all committed, 84 server tests green, flutter analyze clean)
+- **Server** (`treat_server/lib/src`): models `*.spy.yaml` (student_profile, shop, offer [kind regular|drop, endsAt], claim [fromDrop, shareOnWall, thanksNote, …]); `domain/rules.dart` (eligibility incl. drops, Istanbul time, streaks, badges, claim codes, caps from claims table); endpoints `profile`, `offer` (+ `watchDrops` stream), `shopOffers` (CRUD + `startDrop`), `claim` (create, watch stream, proofUpload, submitProof(shareOnWall), thank), `shop` (redeem, dashboard, watchFeed stream, proofLink), `leaderboard`, `social` (shopPage, student, recentPosts); `ai/proof_verifier.dart` (Claude Messages API, tool-use forced JSON, model `claude-sonnet-5` default); `services/jobs.dart` (future calls if enabled, else in-process verification — **Serverpod Cloud Starter has future calls disabled**); seed `seed/demo_seed.dart` + `seed/demo_history.dart` (+ `seed_assets/proofs/*.jpg`).
+- **Flutter** (`treat_flutter/lib`): go_router with role redirects + deep-link `?from=`; welcome asks **"Who are you?" student/business before sign-up**; Serverpod email sign-in in our hero card; student tabs Discover (live drops strip, "Fresh on the wall", offers) / My treats / Leaderboard / Profile; claim screen (QR, code, countdown, live status, proof upload + share-on-wall, AI verdict, appeal, confetti + thank-you); business tabs Scan (camera + code) / Panel (live feed, ROI, proofs, thanks) / Offers (start drop, drop tiles, CRUD) / Business profile; place page `/place/:id`; student profile `/student/:id`.
+- Verified end-to-end with real Claude (reject → strike → appeal → approve → strike returned; panel live).
+
+## Open items / next steps (in order)
+1. **Small fixes:** drop detail shows "Your QR stays valid for 2 hours…" hint → for drops show the pickup rule instead (`offer_detail_screen.dart`). Click-check place page, leaderboard→student profile, business Offers with drop tile, Start-a-drop form, thank-you card (not yet visually verified).
+2. **Deploy (blocked):** Serverpod Cloud CLI is logged in (cinarbey007). `serverpod cloud project create treat-app --plan=starter --enable-db --non-interactive --yes` fails: "payment method is required" ($5/mo; user doesn't want to pay). Hackathon PDF promises "one month of Serverpod Cloud hosting" but BuilderBase Resources → Codes is empty. **Asked user to ask on Discord** (https://discord.gg/wJ4pQeHhVc) for a code. Fallback **plan B**: Render (Docker, free) + Neon/Supabase free Postgres (+ Resend for sign-up e-mails; Cloud email won't exist there). After deploy: set passwords (`serverpod cloud password set` for anthropicApiKey, demoAccountPassword), deploy, test on two phones, fill `docs/SUBMISSION.md` TODOs, update README live link (`https://treat-app.serverpod.space` if Cloud).
+3. **Polish (D, remaining):** more per-shop cover photos (activity/beauty reuse same category image), maybe skeleton loaders.
+4. **M5 submission (13 Oct):** user records <2 min video from the script in `docs/SUBMISSION.md`; share private repo with viktor@serverpod.dev, alexander@serverpod.dev, isak@serverpod.dev (ask before sending); BuilderBase submission form (user submits); Most Valuable Feedback form from `FEEDBACK.md` (8 items); social post.
+5. Rules e-mail to nate@builderbase.com ("new idea" question) — no answer yet; keep the honest prior-prototype disclosure.
+
+## Decisions already made (don't re-ask)
+- Scope: core loop + **A) Drops (free, Too Good To Go style)** + **C) social wall/place page/profiles/thanks** + **D) lived-in demo data**. **No chat (B), no payments/gifts/donations/discounts** (fake payments would hurt the "works" score).
+- Non-.edu students stay unverified (can browse, can't claim); judges use demo accounts.
+- Student picks role before sign-up.
