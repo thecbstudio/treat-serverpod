@@ -1,0 +1,10 @@
+### What a shop sends to start a drop.
+class: DropInput
+fields:
+  title: String
+  description: String
+  ### Stock, 1..50.
+  quantity: int
+  ### How long the drop stays open, 10..180 minutes.
+  durationMinutes: int
+  proofTypes: List<ProofType>

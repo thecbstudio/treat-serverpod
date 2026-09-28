@@ -4,6 +4,7 @@ import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
+import '../services/claims.dart';
 import '../services/offer_cards.dart';
 
 /// A business managing its own offers.
@@ -45,8 +46,40 @@ class ShopOffersEndpoint extends Endpoint {
     );
   }
 
+  /// Starts a drop: a short, stock-limited offer everyone sees live.
+  Future<Offer> startDrop(Session session, DropInput input) async {
+    final shop = await requireShop(session);
+    final error = validateDropInput(input);
+    if (error != null) throw treatError(error);
+    final now = clock();
+    final drop = await Offer.db.insertRow(
+      session,
+      Offer(
+        shopId: shop.id!,
+        kind: OfferKind.drop,
+        title: input.title.trim(),
+        description: input.description.trim(),
+        category: shop.category,
+        // Not used for drops (one item per student per drop, no hours).
+        frequency: OfferFrequency.weekly,
+        activeStartMin: 0,
+        activeEndMin: 24 * 60,
+        totalCap: input.quantity,
+        proofTypes: input.proofTypes.toSet().toList(),
+        featured: true,
+        createdAt: now,
+        endsAt: now.add(Duration(minutes: input.durationMinutes)),
+      ),
+    );
+    await notifyDropChanged(session, drop.id!);
+    return drop;
+  }
+
   Future<Offer> update(Session session, int offerId, OfferInput input) async {
     final offer = await _requireOwnOffer(session, offerId);
+    if (offer.kind == OfferKind.drop) {
+      throw treatError('drop_not_editable', 'Drops cannot be edited.');
+    }
     _validate(input);
     return Offer.db.updateRow(
       session,
@@ -74,7 +107,14 @@ class ShopOffersEndpoint extends Endpoint {
     if (offer.status == OfferStatus.ended) {
       throw treatError('offer_ended', 'This offer was deleted.');
     }
-    return Offer.db.updateRow(session, offer.copyWith(status: status));
+    final updated = await Offer.db.updateRow(
+      session,
+      offer.copyWith(status: status),
+    );
+    if (updated.kind == OfferKind.drop) {
+      await notifyDropChanged(session, updated.id!);
+    }
+    return updated;
   }
 
   Future<Offer> _requireOwnOffer(Session session, int offerId) async {

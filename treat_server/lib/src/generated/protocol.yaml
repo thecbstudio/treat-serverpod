@@ -13,6 +13,7 @@ claim:
   - create:
   - proofUpload:
   - submitProof:
+  - thank:
   - listMine:
   - get:
   - watch:
@@ -21,6 +22,7 @@ leaderboard:
 offer:
   - listActive:
   - get:
+  - watchDrops:
 profile:
   - getMe:
   - createStudent:
@@ -34,5 +36,10 @@ shop:
 shopOffers:
   - listMine:
   - create:
+  - startDrop:
   - update:
   - setStatus:
+social:
+  - shopPage:
+  - student:
+  - recentPosts:

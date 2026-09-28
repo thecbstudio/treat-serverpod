@@ -1,0 +1,7 @@
+### A place's public page.
+class: ShopPage
+fields:
+  shop: Shop
+  offers: List<OfferCard>
+  studentsTreated: int
+  wall: List<WallPost>

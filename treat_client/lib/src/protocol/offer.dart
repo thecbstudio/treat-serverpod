@@ -14,6 +14,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:treat_client/src/protocol/protocol.dart' as _iu07tsrf;
 import 'offer_category.dart' as _iqmyfspq;
 import 'offer_frequency.dart' as _ix7dcs2a;
+import 'offer_kind.dart' as _ijq1l2tf;
 import 'offer_status.dart' as _i40dfi1m;
 import 'proof_type.dart' as _i671eu65;
 import 'shop.dart' as _isgf2ncs;
@@ -38,9 +39,12 @@ abstract class Offer
     bool? featured,
     required this.proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    this.endsAt,
   }) : status = status ?? _i40dfi1m.OfferStatus.active,
        featured = featured ?? false,
-       createdAt = createdAt ?? DateTime.now();
+       createdAt = createdAt ?? DateTime.now(),
+       kind = kind ?? _ijq1l2tf.OfferKind.regular;
 
   factory Offer({
     int? id,
@@ -59,6 +63,8 @@ abstract class Offer
     bool? featured,
     required List<_i671eu65.ProofType> proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    DateTime? endsAt,
   }) = _OfferImpl;
 
   factory Offer.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -97,6 +103,12 @@ abstract class Offer
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      kind: jsonSerialization['kind'] == null
+          ? null
+          : _ijq1l2tf.OfferKind.fromJson((jsonSerialization['kind'] as String)),
+      endsAt: jsonSerialization['endsAt'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['endsAt']),
     );
   }
 
@@ -138,6 +150,11 @@ abstract class Offer
 
   DateTime createdAt;
 
+  _ijq1l2tf.OfferKind kind;
+
+  /// Drops only: when the drop closes. Stock is `totalCap`.
+  DateTime? endsAt;
+
   /// Returns a shallow copy of this [Offer]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -158,6 +175,8 @@ abstract class Offer
     bool? featured,
     List<_i671eu65.ProofType>? proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    DateTime? endsAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -179,6 +198,8 @@ abstract class Offer
       'featured': featured,
       'proofTypes': proofTypes.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
+      'kind': kind.toJson(),
+      if (endsAt != null) 'endsAt': endsAt?.toJson(),
     };
   }
 
@@ -202,6 +223,8 @@ abstract class Offer
       'featured': featured,
       'proofTypes': proofTypes.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
+      'kind': kind.toJson(),
+      if (endsAt != null) 'endsAt': endsAt?.toJson(),
     };
   }
 
@@ -231,6 +254,8 @@ class _OfferImpl extends Offer {
     bool? featured,
     required List<_i671eu65.ProofType> proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    DateTime? endsAt,
   }) : super._(
          id: id,
          shopId: shopId,
@@ -248,6 +273,8 @@ class _OfferImpl extends Offer {
          featured: featured,
          proofTypes: proofTypes,
          createdAt: createdAt,
+         kind: kind,
+         endsAt: endsAt,
        );
 
   /// Returns a shallow copy of this [Offer]
@@ -271,6 +298,8 @@ class _OfferImpl extends Offer {
     bool? featured,
     List<_i671eu65.ProofType>? proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    Object? endsAt = _Undefined,
   }) {
     return Offer(
       id: id is int? ? id : this.id,
@@ -289,6 +318,8 @@ class _OfferImpl extends Offer {
       featured: featured ?? this.featured,
       proofTypes: proofTypes ?? this.proofTypes.map((e0) => e0).toList(),
       createdAt: createdAt ?? this.createdAt,
+      kind: kind ?? this.kind,
+      endsAt: endsAt is DateTime? ? endsAt : this.endsAt,
     );
   }
 }

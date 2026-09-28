@@ -84,8 +84,9 @@ Future<ClaimView> submitProofFor(
   Session session,
   int claimId,
   ProofType proofType,
-  String path,
-) async {
+  String path, {
+  bool shareOnWall = false,
+}) async {
   if (!path.startsWith('proofs/$claimId/') || path.contains('..')) {
     throw treatError('invalid_proof', 'Upload the screenshot again.');
   }
@@ -145,6 +146,7 @@ Future<ClaimView> submitProofFor(
         verdictReason: null,
         verifyAttempts: 0,
         appealed: claim.appealed || isAppeal,
+        shareOnWall: shareOnWall,
       ),
       transaction: tx,
     );

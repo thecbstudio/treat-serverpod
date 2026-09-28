@@ -1,0 +1,6 @@
+### regular: standing offer with hours and caps. drop: last-minute surplus,
+### live for a short window with a fixed stock (Too Good To Go style, free).
+enum: OfferKind
+values:
+  - regular
+  - drop

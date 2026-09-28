@@ -36,3 +36,9 @@ Environment: Windows 11 Home (26200), Flutter 3.47.5, Dart 3.13.4, serverpod_cli
 ## 7. `serverpod create` ships GitHub Actions workflows
 - **What:** The generated `.github/workflows/*.yml` make the first `git push` fail for anyone whose GitHub token lacks the `workflow` scope (common for `gh` default logins / fine-grained tokens), and rewriting history to drop them is awkward.
 - **Suggestion:** Ask before adding CI workflows, or mention the `workflow` scope requirement in the create output.
+
+## 8. A defaulted named endpoint parameter becomes `required` in the client
+- **What:** `Future<ClaimView> submitProof(Session s, int id, ProofType t, String path, {bool shareOnWall = false})` generates `submitProof(int id, ProofType t, String path, {required bool shareOnWall})` in the client and in the test tools. The default is dropped and every caller breaks.
+- **Impact:** Contradicts the backward-compatibility advice ("add new optional named parameters") — adding a parameter this way breaks old clients' code and all existing tests.
+- **Workaround:** Declare it nullable (`{bool? shareOnWall}`) and apply the default inside the method.
+- **Suggestion:** Carry the default value over to the generated client (it's a constant), or at least generate it as nullable/optional.

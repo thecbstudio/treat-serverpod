@@ -414,4 +414,101 @@ void main() {
       expect(validateOfferInput(input(proofs: [])), 'proof_types_required');
     });
   });
+
+  group('drops', () {
+    final now = istanbul(22); // after regular hours: drops ignore them
+    Offer drop({int stock = 3, Duration left = const Duration(minutes: 30)}) =>
+        makeOffer(totalCap: stock).copyWith(
+          kind: OfferKind.drop,
+          endsAt: now.add(left),
+        );
+
+    test('when live then ok even outside regular hours', () {
+      expect(
+        check(offer: drop(), student: makeStudent(), now: now).reason,
+        EligibilityReason.ok,
+      );
+    });
+
+    test('when the window has passed then dropEnded', () {
+      expect(
+        check(
+          offer: drop(left: const Duration(minutes: -1)),
+          student: makeStudent(),
+          now: now,
+        ).reason,
+        EligibilityReason.dropEnded,
+      );
+    });
+
+    test('when the stock is gone then totalCap', () {
+      expect(
+        check(
+          offer: drop(stock: 2),
+          student: makeStudent(),
+          claimedTotal: 2,
+          now: now,
+        ).reason,
+        EligibilityReason.totalCap,
+      );
+    });
+
+    test('when the student already got one then alreadyClaimed', () {
+      final claimed = makeClaim(
+        createdAt: now.subtract(const Duration(minutes: 5)),
+        status: ClaimStatus.redeemed,
+      ).copyWith(fromDrop: true);
+      expect(
+        check(
+          offer: drop(),
+          student: makeStudent(),
+          claims: [claimed],
+          now: now,
+        ).reason,
+        EligibilityReason.alreadyClaimed,
+      );
+    });
+
+    test('when a drop was claimed then the weekly limit on regular offers '
+        'is not used up', () {
+      final fromDrop = makeClaim(
+        offerId: 99,
+        createdAt: istanbul(12).subtract(const Duration(days: 1)),
+      ).copyWith(fromDrop: true);
+      expect(
+        check(
+          offer: makeOffer(),
+          student: makeStudent(),
+          claims: [fromDrop],
+          now: istanbul(12),
+        ).reason,
+        EligibilityReason.ok,
+      );
+    });
+
+    test('then a drop claim expires at the pickup deadline or the TTL, '
+        'whichever is first', () {
+      final soon = drop(left: const Duration(minutes: 20));
+      expect(
+        claimExpiry(soon, now),
+        now.add(const Duration(minutes: 20)).add(dropPickupGrace),
+      );
+      final long = drop(left: const Duration(hours: 3));
+      expect(claimExpiry(long, now), now.add(claimTtl));
+      expect(claimExpiry(makeOffer(), now), now.add(claimTtl));
+    });
+
+    test('then the drop form is validated', () {
+      DropInput input({int q = 5, int m = 30}) => DropInput(
+        title: 'Croissants',
+        description: '',
+        quantity: q,
+        durationMinutes: m,
+        proofTypes: [ProofType.igStory],
+      );
+      expect(validateDropInput(input()), isNull);
+      expect(validateDropInput(input(q: 0)), 'invalid_quantity');
+      expect(validateDropInput(input(m: 5)), 'invalid_duration');
+    });
+  });
 }

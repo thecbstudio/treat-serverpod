@@ -10,6 +10,12 @@ String claimChannel(int claimId) => 'claim:$claimId';
 String shopChannel(int shopId) => 'shop:$shopId';
 String expireCallId(int claimId) => 'expire-claim-$claimId';
 
+/// Everyone watching live drops listens here.
+const dropsChannel = 'drops';
+
+Future<void> notifyDropChanged(Session session, int offerId) =>
+    session.messages.postMessage(dropsChannel, DropSignal(offerId: offerId));
+
 /// QR payload: `treat:<claimId>:<code>`. Shops may also type the bare code.
 String qrPayloadOf(Claim c) => 'treat:${c.id}:${c.code}';
 
@@ -19,6 +25,10 @@ String qrPayloadOf(Claim c) => 'treat:${c.id}:${c.code}';
 Future<void> notifyClaimChanged(Session session, Claim claim) async {
   await session.messages.postMessage(claimChannel(claim.id!), claim);
   await session.messages.postMessage(shopChannel(claim.shopId), claim);
+  // Stock on a drop changed (claimed, or an unpicked item expired).
+  if (claim.fromDrop) {
+    await notifyDropChanged(session, claim.offerId);
+  }
 }
 
 Future<ClaimView> claimViewOf(
@@ -102,10 +112,11 @@ Future<ClaimView> createClaim(Session session, int offerId) async {
         studentId: student.id!,
         studentName: student.name,
         frequency: offer.frequency,
+        fromDrop: offer.kind == OfferKind.drop,
         code: await _uniqueCode(session, offer.shopId, now, tx),
         status: ClaimStatus.active,
         createdAt: now,
-        expiresAt: now.add(claimTtl),
+        expiresAt: claimExpiry(offer, now),
       ),
       transaction: tx,
     );

@@ -10,3 +10,5 @@ values:
   - outsideHours
   - totalCap
   - dailyCap
+  - dropEnded
+  - alreadyClaimed

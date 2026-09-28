@@ -15,6 +15,7 @@ import 'package:serverpod/serverpod.dart' as _is;
 import 'package:treat_server/src/generated/protocol.dart' as _iegszk5h;
 import 'offer_category.dart' as _iqmyfspq;
 import 'offer_frequency.dart' as _ix7dcs2a;
+import 'offer_kind.dart' as _ijq1l2tf;
 import 'offer_status.dart' as _i40dfi1m;
 import 'proof_type.dart' as _i671eu65;
 import 'shop.dart' as _isgf2ncs;
@@ -38,9 +39,12 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? featured,
     required this.proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    this.endsAt,
   }) : status = status ?? _i40dfi1m.OfferStatus.active,
        featured = featured ?? false,
-       createdAt = createdAt ?? DateTime.now();
+       createdAt = createdAt ?? DateTime.now(),
+       kind = kind ?? _ijq1l2tf.OfferKind.regular;
 
   factory Offer({
     int? id,
@@ -59,6 +63,8 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? featured,
     required List<_i671eu65.ProofType> proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    DateTime? endsAt,
   }) = _OfferImpl;
 
   factory Offer.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -97,6 +103,12 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
       createdAt: jsonSerialization['createdAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['createdAt']),
+      kind: jsonSerialization['kind'] == null
+          ? null
+          : _ijq1l2tf.OfferKind.fromJson((jsonSerialization['kind'] as String)),
+      endsAt: jsonSerialization['endsAt'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(jsonSerialization['endsAt']),
     );
   }
 
@@ -140,6 +152,11 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
 
   DateTime createdAt;
 
+  _ijq1l2tf.OfferKind kind;
+
+  /// Drops only: when the drop closes. Stock is `totalCap`.
+  DateTime? endsAt;
+
   @override
   _is.Table<int?> get table => t;
 
@@ -163,6 +180,8 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? featured,
     List<_i671eu65.ProofType>? proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    DateTime? endsAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -184,6 +203,8 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'featured': featured,
       'proofTypes': proofTypes.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
+      'kind': kind.toJson(),
+      if (endsAt != null) 'endsAt': endsAt?.toJson(),
     };
   }
 
@@ -207,6 +228,8 @@ abstract class Offer implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'featured': featured,
       'proofTypes': proofTypes.toJson(valueToJson: (v) => v.toJson()),
       'createdAt': createdAt.toJson(),
+      'kind': kind.toJson(),
+      if (endsAt != null) 'endsAt': endsAt?.toJson(),
     };
   }
 
@@ -258,6 +281,8 @@ class _OfferImpl extends Offer {
     bool? featured,
     required List<_i671eu65.ProofType> proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    DateTime? endsAt,
   }) : super._(
          id: id,
          shopId: shopId,
@@ -275,6 +300,8 @@ class _OfferImpl extends Offer {
          featured: featured,
          proofTypes: proofTypes,
          createdAt: createdAt,
+         kind: kind,
+         endsAt: endsAt,
        );
 
   /// Returns a shallow copy of this [Offer]
@@ -298,6 +325,8 @@ class _OfferImpl extends Offer {
     bool? featured,
     List<_i671eu65.ProofType>? proofTypes,
     DateTime? createdAt,
+    _ijq1l2tf.OfferKind? kind,
+    Object? endsAt = _Undefined,
   }) {
     return Offer(
       id: id is int? ? id : this.id,
@@ -316,6 +345,8 @@ class _OfferImpl extends Offer {
       featured: featured ?? this.featured,
       proofTypes: proofTypes ?? this.proofTypes.map((e0) => e0).toList(),
       createdAt: createdAt ?? this.createdAt,
+      kind: kind ?? this.kind,
+      endsAt: endsAt is DateTime? ? endsAt : this.endsAt,
     );
   }
 }
@@ -400,6 +431,19 @@ class OfferUpdateTable extends _is.UpdateTable<OfferTable> {
         table.createdAt,
         value,
       );
+
+  _is.ColumnValue<_ijq1l2tf.OfferKind, _ijq1l2tf.OfferKind> kind(
+    _ijq1l2tf.OfferKind value,
+  ) => _is.ColumnValue(
+    table.kind,
+    value,
+  );
+
+  _is.ColumnValue<DateTime, DateTime> endsAt(DateTime? value) =>
+      _is.ColumnValue(
+        table.endsAt,
+        value,
+      );
 }
 
 class OfferTable extends _is.Table<int?> {
@@ -467,6 +511,16 @@ class OfferTable extends _is.Table<int?> {
       this,
       hasDefault: true,
     );
+    kind = _is.ColumnEnum(
+      'kind',
+      this,
+      _is.EnumSerialization.byName,
+      hasDefault: true,
+    );
+    endsAt = _is.ColumnDateTime(
+      'endsAt',
+      this,
+    );
   }
 
   late final OfferUpdateTable updateTable;
@@ -504,6 +558,11 @@ class OfferTable extends _is.Table<int?> {
 
   late final _is.ColumnDateTime createdAt;
 
+  late final _is.ColumnEnum<_ijq1l2tf.OfferKind> kind;
+
+  /// Drops only: when the drop closes. Stock is `totalCap`.
+  late final _is.ColumnDateTime endsAt;
+
   _isgf2ncs.ShopTable get shop {
     if (_shop != null) return _shop!;
     _shop = _is.createRelationTable(
@@ -534,6 +593,8 @@ class OfferTable extends _is.Table<int?> {
     featured,
     proofTypes,
     createdAt,
+    kind,
+    endsAt,
   ];
 
   @override

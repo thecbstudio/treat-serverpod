@@ -19,6 +19,7 @@ import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:treat_client/src/protocol/claim_proof.dart' as _islgq58o;
 import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
+import 'package:treat_client/src/protocol/drop_input.dart' as _id0be9cq;
 import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/me.dart' as _iap2bcnj;
 import 'package:treat_client/src/protocol/offer.dart' as _ibnzpjkx;
@@ -27,10 +28,13 @@ import 'package:treat_client/src/protocol/offer_input.dart' as _i8mx2n74;
 import 'package:treat_client/src/protocol/offer_status.dart' as _ipcd8cwl;
 import 'package:treat_client/src/protocol/proof_type.dart' as _i99q6qgz;
 import 'package:treat_client/src/protocol/proof_upload.dart' as _iu72foho;
+import 'package:treat_client/src/protocol/public_student.dart' as _ihfjemru;
 import 'package:treat_client/src/protocol/redeem_result.dart' as _i8ej1owz;
 import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
 import 'package:treat_client/src/protocol/shop_dashboard.dart' as _iqqmplla;
 import 'package:treat_client/src/protocol/shop_input.dart' as _inznu32h;
+import 'package:treat_client/src/protocol/shop_page.dart' as _izsk3a1k;
+import 'package:treat_client/src/protocol/wall_post.dart' as _ie03ixnw;
 import 'protocol.dart' as _il2as5qe;
 
 /// By extending [EmailIdpBaseEndpoint], the email identity provider endpoints
@@ -286,14 +290,32 @@ class EndpointClaim extends _isc.EndpointRef {
   _ida.Future<_iq1pcdgl.ClaimView> submitProof(
     int claimId,
     _i99q6qgz.ProofType proofType,
-    String path,
-  ) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+    String path, {
+    bool? shareOnWall,
+  }) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
     'claim',
     'submitProof',
     {
       'claimId': claimId,
       'proofType': proofType,
       'path': path,
+      'shareOnWall': shareOnWall,
+    },
+  );
+
+  /// After approval: a short thank-you note to the place (shown on its page
+  /// and in its panel) and whether the post may appear on its public wall.
+  _ida.Future<_iq1pcdgl.ClaimView> thank(
+    int claimId,
+    String? note,
+    bool shareOnWall,
+  ) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+    'claim',
+    'thank',
+    {
+      'claimId': claimId,
+      'note': note,
+      'shareOnWall': shareOnWall,
     },
   );
 
@@ -350,6 +372,7 @@ class EndpointOffer extends _isc.EndpointRef {
   @override
   String get name => 'offer';
 
+  /// Regular (standing) offers. Drops come from [watchDrops].
   _ida.Future<List<_i1fp4eeg.OfferCard>> listActive() =>
       caller.callServerEndpoint<List<_i1fp4eeg.OfferCard>>(
         'offer',
@@ -362,6 +385,19 @@ class EndpointOffer extends _isc.EndpointRef {
         'offer',
         'get',
         {'offerId': offerId},
+      );
+
+  /// Live drops, soonest-ending first: the current list, then a new list
+  /// whenever one starts, ends, or its stock changes.
+  _ida.Stream<List<_i1fp4eeg.OfferCard>> watchDrops() =>
+      caller.callStreamingServerEndpoint<
+        _ida.Stream<List<_i1fp4eeg.OfferCard>>,
+        List<_i1fp4eeg.OfferCard>
+      >(
+        'offer',
+        'watchDrops',
+        {},
+        {},
       );
 }
 
@@ -474,6 +510,14 @@ class EndpointShopOffers extends _isc.EndpointRef {
         {'input': input},
       );
 
+  /// Starts a drop: a short, stock-limited offer everyone sees live.
+  _ida.Future<_ibnzpjkx.Offer> startDrop(_id0be9cq.DropInput input) =>
+      caller.callServerEndpoint<_ibnzpjkx.Offer>(
+        'shopOffers',
+        'startDrop',
+        {'input': input},
+      );
+
   _ida.Future<_ibnzpjkx.Offer> update(
     int offerId,
     _i8mx2n74.OfferInput input,
@@ -499,6 +543,38 @@ class EndpointShopOffers extends _isc.EndpointRef {
       'status': status,
     },
   );
+}
+
+/// Public pages: a place's page with its wall, a student's profile, and the
+/// latest shared posts. Never exposes emails or strikes.
+/// {@category Endpoint}
+class EndpointSocial extends _isc.EndpointRef {
+  EndpointSocial(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'social';
+
+  _ida.Future<_izsk3a1k.ShopPage> shopPage(int shopId) =>
+      caller.callServerEndpoint<_izsk3a1k.ShopPage>(
+        'social',
+        'shopPage',
+        {'shopId': shopId},
+      );
+
+  _ida.Future<_ihfjemru.PublicStudent> student(int studentId) =>
+      caller.callServerEndpoint<_ihfjemru.PublicStudent>(
+        'social',
+        'student',
+        {'studentId': studentId},
+      );
+
+  /// Latest shared posts across all places (Discover strip).
+  _ida.Future<List<_ie03ixnw.WallPost>> recentPosts() =>
+      caller.callServerEndpoint<List<_ie03ixnw.WallPost>>(
+        'social',
+        'recentPosts',
+        {},
+      );
 }
 
 class Modules {
@@ -547,6 +623,7 @@ class Client extends _isc.ServerpodClientShared {
     profile = EndpointProfile(this);
     shop = EndpointShop(this);
     shopOffers = EndpointShopOffers(this);
+    social = EndpointSocial(this);
     modules = Modules(this);
   }
 
@@ -566,6 +643,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointShopOffers shopOffers;
 
+  late final EndpointSocial social;
+
   late final Modules modules;
 
   @override
@@ -578,6 +657,7 @@ class Client extends _isc.ServerpodClientShared {
     'profile': profile,
     'shop': shop,
     'shopOffers': shopOffers,
+    'social': social,
   };
 
   @override

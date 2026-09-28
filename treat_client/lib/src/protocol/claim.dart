@@ -31,6 +31,7 @@ abstract class Claim
     this.student,
     required this.studentName,
     required this.frequency,
+    bool? fromDrop,
     required this.code,
     required this.status,
     DateTime? createdAt,
@@ -43,10 +44,14 @@ abstract class Claim
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
-  }) : createdAt = createdAt ?? DateTime.now(),
+    bool? shareOnWall,
+    this.thanksNote,
+  }) : fromDrop = fromDrop ?? false,
+       createdAt = createdAt ?? DateTime.now(),
        appealed = appealed ?? false,
        verifyAttempts = verifyAttempts ?? 0,
-       strikeGiven = strikeGiven ?? false;
+       strikeGiven = strikeGiven ?? false,
+       shareOnWall = shareOnWall ?? false;
 
   factory Claim({
     int? id,
@@ -57,6 +62,7 @@ abstract class Claim
     _iovtxv26.StudentProfile? student,
     required String studentName,
     required _ix7dcs2a.OfferFrequency frequency,
+    bool? fromDrop,
     required String code,
     required _i4cqplnc.ClaimStatus status,
     DateTime? createdAt,
@@ -69,6 +75,8 @@ abstract class Claim
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    String? thanksNote,
   }) = _ClaimImpl;
 
   factory Claim.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -91,6 +99,9 @@ abstract class Claim
       frequency: _ix7dcs2a.OfferFrequency.fromJson(
         (jsonSerialization['frequency'] as String),
       ),
+      fromDrop: jsonSerialization['fromDrop'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(jsonSerialization['fromDrop']),
       code: jsonSerialization['code'] as String,
       status: _i4cqplnc.ClaimStatus.fromJson(
         (jsonSerialization['status'] as String),
@@ -127,6 +138,10 @@ abstract class Claim
       strikeGiven: jsonSerialization['strikeGiven'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['strikeGiven']),
+      shareOnWall: jsonSerialization['shareOnWall'] == null
+          ? null
+          : _isc.BoolJsonExtension.fromJson(jsonSerialization['shareOnWall']),
+      thanksNote: jsonSerialization['thanksNote'] as String?,
     );
   }
 
@@ -148,6 +163,10 @@ abstract class Claim
   String studentName;
 
   _ix7dcs2a.OfferFrequency frequency;
+
+  /// Claimed from a drop: doesn't count toward the place's weekly/monthly
+  /// limit on regular offers.
+  bool fromDrop;
 
   /// 6 chars; unique among the shop's active claims.
   String code;
@@ -177,6 +196,12 @@ abstract class Claim
   /// A claim can cost at most one strike; returned if an appeal is approved.
   bool strikeGiven;
 
+  /// Student agreed to show the approved post on the place's public page.
+  bool shareOnWall;
+
+  /// Optional thank-you note to the place, written after approval.
+  String? thanksNote;
+
   /// Returns a shallow copy of this [Claim]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -189,6 +214,7 @@ abstract class Claim
     _iovtxv26.StudentProfile? student,
     String? studentName,
     _ix7dcs2a.OfferFrequency? frequency,
+    bool? fromDrop,
     String? code,
     _i4cqplnc.ClaimStatus? status,
     DateTime? createdAt,
@@ -201,6 +227,8 @@ abstract class Claim
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    String? thanksNote,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -214,6 +242,7 @@ abstract class Claim
       if (student != null) 'student': student?.toJson(),
       'studentName': studentName,
       'frequency': frequency.toJson(),
+      'fromDrop': fromDrop,
       'code': code,
       'status': status.toJson(),
       'createdAt': createdAt.toJson(),
@@ -227,6 +256,8 @@ abstract class Claim
       'appealed': appealed,
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
+      'shareOnWall': shareOnWall,
+      if (thanksNote != null) 'thanksNote': thanksNote,
     };
   }
 
@@ -242,6 +273,7 @@ abstract class Claim
       if (student != null) 'student': student?.toJsonForProtocol(),
       'studentName': studentName,
       'frequency': frequency.toJson(),
+      'fromDrop': fromDrop,
       'code': code,
       'status': status.toJson(),
       'createdAt': createdAt.toJson(),
@@ -255,6 +287,8 @@ abstract class Claim
       'appealed': appealed,
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
+      'shareOnWall': shareOnWall,
+      if (thanksNote != null) 'thanksNote': thanksNote,
     };
   }
 
@@ -276,6 +310,7 @@ class _ClaimImpl extends Claim {
     _iovtxv26.StudentProfile? student,
     required String studentName,
     required _ix7dcs2a.OfferFrequency frequency,
+    bool? fromDrop,
     required String code,
     required _i4cqplnc.ClaimStatus status,
     DateTime? createdAt,
@@ -288,6 +323,8 @@ class _ClaimImpl extends Claim {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    String? thanksNote,
   }) : super._(
          id: id,
          offerId: offerId,
@@ -297,6 +334,7 @@ class _ClaimImpl extends Claim {
          student: student,
          studentName: studentName,
          frequency: frequency,
+         fromDrop: fromDrop,
          code: code,
          status: status,
          createdAt: createdAt,
@@ -309,6 +347,8 @@ class _ClaimImpl extends Claim {
          appealed: appealed,
          verifyAttempts: verifyAttempts,
          strikeGiven: strikeGiven,
+         shareOnWall: shareOnWall,
+         thanksNote: thanksNote,
        );
 
   /// Returns a shallow copy of this [Claim]
@@ -324,6 +364,7 @@ class _ClaimImpl extends Claim {
     Object? student = _Undefined,
     String? studentName,
     _ix7dcs2a.OfferFrequency? frequency,
+    bool? fromDrop,
     String? code,
     _i4cqplnc.ClaimStatus? status,
     DateTime? createdAt,
@@ -336,6 +377,8 @@ class _ClaimImpl extends Claim {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    Object? thanksNote = _Undefined,
   }) {
     return Claim(
       id: id is int? ? id : this.id,
@@ -348,6 +391,7 @@ class _ClaimImpl extends Claim {
           : this.student?.copyWith(),
       studentName: studentName ?? this.studentName,
       frequency: frequency ?? this.frequency,
+      fromDrop: fromDrop ?? this.fromDrop,
       code: code ?? this.code,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
@@ -364,6 +408,8 @@ class _ClaimImpl extends Claim {
       appealed: appealed ?? this.appealed,
       verifyAttempts: verifyAttempts ?? this.verifyAttempts,
       strikeGiven: strikeGiven ?? this.strikeGiven,
+      shareOnWall: shareOnWall ?? this.shareOnWall,
+      thanksNote: thanksNote is String? ? thanksNote : this.thanksNote,
     );
   }
 }

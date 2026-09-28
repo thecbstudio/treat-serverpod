@@ -24,6 +24,15 @@ const avgViewsPerApprovedPost = 180;
 /// Placeholder benchmark: marketing value (TRY) of one view.
 const valuePerViewTl = 0.15;
 
+/// A claimed drop item must be picked up within this time after the drop
+/// closes (and never later than [claimTtl] after claiming).
+const dropPickupGrace = Duration(minutes: 30);
+
+const dropMinQuantity = 1;
+const dropMaxQuantity = 50;
+const dropMinMinutes = 10;
+const dropMaxMinutes = 180;
+
 /// Europe/Istanbul has been fixed at UTC+3 (no DST) since 2016.
 const istanbulOffset = Duration(hours: 3);
 
@@ -145,6 +154,10 @@ Eligibility eligibilityOf({
   if (offer == null || offer.status != OfferStatus.active) {
     return Eligibility(reason: EligibilityReason.offerInactive);
   }
+  final isDrop = offer.kind == OfferKind.drop;
+  if (isDrop && !isDropLive(offer, now)) {
+    return Eligibility(reason: EligibilityReason.dropEnded);
+  }
   if (student == null || student.verification != StudentVerification.verified) {
     return Eligibility(reason: EligibilityReason.notVerified);
   }
@@ -159,9 +172,23 @@ Eligibility eligibilityOf({
     }
   }
 
+  if (isDrop) {
+    // One item per student per drop; no weekly limit, no opening hours.
+    if (shopClaims.any((c) => c.offerId == offer.id && consumesSlot(c, now))) {
+      return Eligibility(reason: EligibilityReason.alreadyClaimed);
+    }
+    final stock = offer.totalCap;
+    if (stock != null && claimedTotal >= stock) {
+      return Eligibility(reason: EligibilityReason.totalCap);
+    }
+    return Eligibility(reason: EligibilityReason.ok);
+  }
+
   DateTime? latest;
   for (final c in shopClaims) {
-    if (c.frequency != offer.frequency || !consumesSlot(c, now)) continue;
+    if (c.fromDrop || c.frequency != offer.frequency || !consumesSlot(c, now)) {
+      continue;
+    }
     if (latest == null || c.createdAt.isAfter(latest)) latest = c.createdAt;
   }
   if (latest != null) {
@@ -192,6 +219,37 @@ Eligibility eligibilityOf({
   }
 
   return Eligibility(reason: EligibilityReason.ok);
+}
+
+bool isDropLive(Offer o, DateTime now) =>
+    o.kind == OfferKind.drop &&
+    o.status == OfferStatus.active &&
+    o.endsAt != null &&
+    now.isBefore(o.endsAt!);
+
+/// When a new claim on [offer] made at [now] expires.
+DateTime claimExpiry(Offer offer, DateTime now) {
+  final regular = now.add(claimTtl);
+  if (offer.kind != OfferKind.drop || offer.endsAt == null) return regular;
+  final pickupBy = offer.endsAt!.add(dropPickupGrace);
+  return pickupBy.isBefore(regular) ? pickupBy : regular;
+}
+
+/// Validates a shop's drop form. Returns a [TreatException] code or null.
+String? validateDropInput(DropInput input) {
+  if (input.title.trim().isEmpty || input.title.length > 80) {
+    return 'invalid_title';
+  }
+  if (input.description.length > 500) return 'invalid_description';
+  if (input.quantity < dropMinQuantity || input.quantity > dropMaxQuantity) {
+    return 'invalid_quantity';
+  }
+  if (input.durationMinutes < dropMinMinutes ||
+      input.durationMinutes > dropMaxMinutes) {
+    return 'invalid_duration';
+  }
+  if (input.proofTypes.isEmpty) return 'proof_types_required';
+  return null;
 }
 
 /// Validates a shop's offer form. Returns a [TreatException] code or null.

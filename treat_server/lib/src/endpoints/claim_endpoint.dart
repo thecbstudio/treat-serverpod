@@ -30,8 +30,45 @@ class ClaimEndpoint extends Endpoint {
     Session session,
     int claimId,
     ProofType proofType,
-    String path,
-  ) => submitProofFor(session, claimId, proofType, path);
+    String path, {
+    // Nullable instead of `= false`: the generator turns a defaulted named
+    // parameter into `required` on the client (FEEDBACK.md #8).
+    bool? shareOnWall,
+  }) => submitProofFor(
+    session,
+    claimId,
+    proofType,
+    path,
+    shareOnWall: shareOnWall ?? false,
+  );
+
+  /// After approval: a short thank-you note to the place (shown on its page
+  /// and in its panel) and whether the post may appear on its public wall.
+  Future<ClaimView> thank(
+    Session session,
+    int claimId,
+    String? note,
+    bool shareOnWall,
+  ) async {
+    final claim = await _requireOwnClaim(session, claimId);
+    if (claim.status != ClaimStatus.approved) {
+      throw treatError(
+        'not_approved',
+        'You can thank the place after approval.',
+      );
+    }
+    final text = note?.trim();
+    if (text != null && text.length > 280) throw treatError('note_too_long');
+    final updated = await Claim.db.updateRow(
+      session,
+      claim.copyWith(
+        thanksNote: (text == null || text.isEmpty) ? null : text,
+        shareOnWall: shareOnWall,
+      ),
+    );
+    await notifyClaimChanged(session, updated);
+    return claimViewOf(session, updated);
+  }
 
   /// Newest first.
   Future<List<ClaimView>> listMine(Session session) async {
@@ -91,7 +128,9 @@ class ClaimEndpoint extends Endpoint {
       a.redeemedAt == b.redeemedAt &&
       a.proofSubmittedAt == b.proofSubmittedAt &&
       a.verdictReason == b.verdictReason &&
-      a.appealed == b.appealed;
+      a.appealed == b.appealed &&
+      a.thanksNote == b.thanksNote &&
+      a.shareOnWall == b.shareOnWall;
 
   Future<Claim> _requireOwnClaim(Session session, int claimId) async {
     final student = await requireStudent(session);

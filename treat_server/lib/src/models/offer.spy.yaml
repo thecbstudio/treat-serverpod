@@ -19,6 +19,9 @@ fields:
   ### At least one.
   proofTypes: List<ProofType>
   createdAt: DateTime, default=now
+  kind: OfferKind, default=regular
+  ### Drops only: when the drop closes. Stock is `totalCap`.
+  endsAt: DateTime?
 indexes:
   offer_shop_idx:
     fields: shopId

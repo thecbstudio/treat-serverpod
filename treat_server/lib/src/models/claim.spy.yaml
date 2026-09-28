@@ -8,6 +8,9 @@ fields:
   student: StudentProfile?, relation(onDelete=Cascade)
   studentName: String
   frequency: OfferFrequency
+  ### Claimed from a drop: doesn't count toward the place's weekly/monthly
+  ### limit on regular offers.
+  fromDrop: bool, default=false
   ### 6 chars; unique among the shop's active claims.
   code: String
   status: ClaimStatus
@@ -26,6 +29,10 @@ fields:
   verifyAttempts: int, default=0
   ### A claim can cost at most one strike; returned if an appeal is approved.
   strikeGiven: bool, default=false
+  ### Student agreed to show the approved post on the place's public page.
+  shareOnWall: bool, default=false
+  ### Optional thank-you note to the place, written after approval.
+  thanksNote: String?
 indexes:
   claim_student_idx:
     fields: studentId

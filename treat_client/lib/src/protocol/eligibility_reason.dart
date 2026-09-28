@@ -22,7 +22,9 @@ enum EligibilityReason implements _isc.SerializableModel {
   frequency,
   outsideHours,
   totalCap,
-  dailyCap;
+  dailyCap,
+  dropEnded,
+  alreadyClaimed;
 
   static EligibilityReason fromJson(String name) {
     switch (name) {
@@ -44,6 +46,10 @@ enum EligibilityReason implements _isc.SerializableModel {
         return EligibilityReason.totalCap;
       case 'dailyCap':
         return EligibilityReason.dailyCap;
+      case 'dropEnded':
+        return EligibilityReason.dropEnded;
+      case 'alreadyClaimed':
+        return EligibilityReason.alreadyClaimed;
       default:
         throw ArgumentError(
           'Value "$name" cannot be converted to "EligibilityReason"',

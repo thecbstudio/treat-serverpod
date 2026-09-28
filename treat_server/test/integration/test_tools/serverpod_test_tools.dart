@@ -19,6 +19,7 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
 import 'package:serverpod_test/serverpod_test.dart' as _ist;
 import 'package:treat_server/src/generated/claim_proof.dart' as _inds3c7u;
 import 'package:treat_server/src/generated/claim_view.dart' as _iuhj4d1o;
+import 'package:treat_server/src/generated/drop_input.dart' as _io47mjlk;
 import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/future_calls_generated_models/expire_claim_call_expire_model.dart'
     as _i0ubflsj;
@@ -32,10 +33,13 @@ import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
 import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
 import 'package:treat_server/src/generated/proof_upload.dart' as _i4s0n1ka;
+import 'package:treat_server/src/generated/public_student.dart' as _ijyz5z8h;
 import 'package:treat_server/src/generated/redeem_result.dart' as _itbz5dhb;
 import 'package:treat_server/src/generated/shop.dart' as _it3lip7k;
 import 'package:treat_server/src/generated/shop_dashboard.dart' as _io00ljue;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
+import 'package:treat_server/src/generated/shop_page.dart' as _iv4eqf07;
+import 'package:treat_server/src/generated/wall_post.dart' as _ikxwgva9;
 import 'package:treat_server/src/generated/protocol.dart';
 import 'package:treat_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -181,6 +185,8 @@ class TestEndpoints {
   late final _ShopEndpoint shop;
 
   late final _ShopOffersEndpoint shopOffers;
+
+  late final _SocialEndpoint social;
 }
 
 class _InternalTestEndpoints extends TestEndpoints
@@ -219,6 +225,10 @@ class _InternalTestEndpoints extends TestEndpoints
       serializationManager,
     );
     shopOffers = _ShopOffersEndpoint(
+      endpoints,
+      serializationManager,
+    );
+    social = _SocialEndpoint(
       endpoints,
       serializationManager,
     );
@@ -625,8 +635,9 @@ class _ClaimEndpoint {
     _ist.TestSessionBuilder sessionBuilder,
     int claimId,
     _ifhr8s8c.ProofType proofType,
-    String path,
-  ) async {
+    String path, {
+    bool? shareOnWall,
+  }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -642,6 +653,44 @@ class _ClaimEndpoint {
             'claimId': claimId,
             'proofType': proofType,
             'path': path,
+            'shareOnWall': shareOnWall,
+          }),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iuhj4d1o.ClaimView>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_iuhj4d1o.ClaimView> thank(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+    String? note,
+    bool shareOnWall,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'claim',
+            method: 'thank',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'claim',
+          methodName: 'thank',
+          parameters: _ist.testObjectToJson({
+            'claimId': claimId,
+            'note': note,
+            'shareOnWall': shareOnWall,
           }),
           serializationManager: _serializationManager,
         );
@@ -862,6 +911,38 @@ class _OfferEndpoint {
         await _localUniqueSession.close();
       }
     });
+  }
+
+  _ida.Stream<List<_ipkteuk5.OfferCard>> watchDrops(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) {
+    var _localTestStreamManager =
+        _ist.TestStreamManager<List<_ipkteuk5.OfferCard>>();
+    _ist.callStreamFunctionAndHandleExceptions(
+      () async {
+        var _localUniqueSession =
+            (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+              endpoint: 'offer',
+              method: 'watchDrops',
+            );
+        var _localCallContext = await _endpointDispatch
+            .getMethodStreamCallContext(
+              createSessionCallback: (_) => _localUniqueSession,
+              endpointPath: 'offer',
+              methodName: 'watchDrops',
+              arguments: {},
+              requestedInputStreams: [],
+              serializationManager: _serializationManager,
+            );
+        await _localTestStreamManager.callStreamMethod(
+          _localCallContext,
+          _localUniqueSession,
+          {},
+        );
+      },
+      _localTestStreamManager.outputStreamController,
+    );
+    return _localTestStreamManager.outputStreamController.stream;
   }
 }
 
@@ -1208,6 +1289,37 @@ class _ShopOffersEndpoint {
     });
   }
 
+  _ida.Future<_i1s2ys04.Offer> startDrop(
+    _ist.TestSessionBuilder sessionBuilder,
+    _io47mjlk.DropInput input,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'shopOffers',
+            method: 'startDrop',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'shopOffers',
+          methodName: 'startDrop',
+          parameters: _ist.testObjectToJson({'input': input}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i1s2ys04.Offer>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_i1s2ys04.Offer> update(
     _ist.TestSessionBuilder sessionBuilder,
     int offerId,
@@ -1271,6 +1383,109 @@ class _ShopOffersEndpoint {
                   _localCallContext.arguments,
                 )
                 as _ida.Future<_i1s2ys04.Offer>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
+class _SocialEndpoint {
+  _SocialEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_iv4eqf07.ShopPage> shopPage(
+    _ist.TestSessionBuilder sessionBuilder,
+    int shopId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'social',
+            method: 'shopPage',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'social',
+          methodName: 'shopPage',
+          parameters: _ist.testObjectToJson({'shopId': shopId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iv4eqf07.ShopPage>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ijyz5z8h.PublicStudent> student(
+    _ist.TestSessionBuilder sessionBuilder,
+    int studentId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'social',
+            method: 'student',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'social',
+          methodName: 'student',
+          parameters: _ist.testObjectToJson({'studentId': studentId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ijyz5z8h.PublicStudent>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<List<_ikxwgva9.WallPost>> recentPosts(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'social',
+            method: 'recentPosts',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'social',
+          methodName: 'recentPosts',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<List<_ikxwgva9.WallPost>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

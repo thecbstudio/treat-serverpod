@@ -1,0 +1,15 @@
+### An approved post a student chose to show publicly.
+class: WallPost
+fields:
+  claimId: int
+  studentId: int
+  studentName: String
+  university: String
+  shopId: int
+  shopName: String
+  offerTitle: String
+  proofType: ProofType
+  thanksNote: String?
+  approvedAt: DateTime
+  ### Short-lived link to the screenshot.
+  imageUrl: String

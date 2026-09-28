@@ -20,11 +20,14 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
 import 'package:treat_server/src/generated/claim_view.dart' as _iuhj4d1o;
 import 'package:treat_server/src/generated/leaderboard_entry.dart' as _ikcio32l;
 import 'package:treat_server/src/generated/offer_card.dart' as _ipkteuk5;
+import 'package:treat_server/src/generated/wall_post.dart' as _ikxwgva9;
 import 'badge_id.dart' as _i14xwlyb;
 import 'claim.dart' as _iywv5oz4;
 import 'claim_proof.dart' as _iiz71frh;
 import 'claim_status.dart' as _i4cqplnc;
 import 'claim_view.dart' as _i48lh927;
+import 'drop_input.dart' as _ippz03u2;
+import 'drop_signal.dart' as _i1c14r0n;
 import 'eligibility.dart' as _iapxm79h;
 import 'eligibility_reason.dart' as _ixt5yy28;
 import 'future_calls_generated_models/expire_claim_call_expire_model.dart'
@@ -38,23 +41,29 @@ import 'offer_card.dart' as _irfq3mof;
 import 'offer_category.dart' as _iqmyfspq;
 import 'offer_frequency.dart' as _ix7dcs2a;
 import 'offer_input.dart' as _in0575rn;
+import 'offer_kind.dart' as _ijq1l2tf;
 import 'offer_status.dart' as _i40dfi1m;
 import 'proof_type.dart' as _i671eu65;
 import 'proof_upload.dart' as _idi75cqx;
+import 'public_student.dart' as _i377gh4k;
 import 'redeem_result.dart' as _iggnnz44;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_dashboard.dart' as _iqgdamt7;
 import 'shop_input.dart' as _i5vfstp6;
+import 'shop_page.dart' as _iv7ebkk1;
 import 'student_profile.dart' as _iovtxv26;
 import 'student_verification.dart' as _ipqqbskf;
 import 'top_student.dart' as _iub4wqas;
 import 'treat_exception.dart' as _iawcmjml;
 import 'user_role.dart' as _ir0y0iu6;
+import 'wall_post.dart' as _i6mr85kx;
 export 'badge_id.dart';
 export 'claim.dart';
 export 'claim_proof.dart';
 export 'claim_status.dart';
 export 'claim_view.dart';
+export 'drop_input.dart';
+export 'drop_signal.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
 export 'leaderboard_entry.dart';
@@ -64,18 +73,22 @@ export 'offer_card.dart';
 export 'offer_category.dart';
 export 'offer_frequency.dart';
 export 'offer_input.dart';
+export 'offer_kind.dart';
 export 'offer_status.dart';
 export 'proof_type.dart';
 export 'proof_upload.dart';
+export 'public_student.dart';
 export 'redeem_result.dart';
 export 'shop.dart';
 export 'shop_dashboard.dart';
 export 'shop_input.dart';
+export 'shop_page.dart';
 export 'student_profile.dart';
 export 'student_verification.dart';
 export 'top_student.dart';
 export 'treat_exception.dart';
 export 'user_role.dart';
+export 'wall_post.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
   Protocol._();
@@ -127,6 +140,13 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnType: _isp.ColumnType.text,
           isNullable: false,
           dartType: 'protocol:OfferFrequency',
+        ),
+        _isp.ColumnDefinition(
+          name: 'fromDrop',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
         ),
         _isp.ColumnDefinition(
           name: 'code',
@@ -209,6 +229,19 @@ class Protocol extends _is.DatabaseSerializationManager {
           isNullable: false,
           dartType: 'bool',
           columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'shareOnWall',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'thanksNote',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
         ),
       ],
       foreignKeys: [
@@ -406,6 +439,19 @@ class Protocol extends _is.DatabaseSerializationManager {
           isNullable: false,
           dartType: 'DateTime',
           columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'kind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:OfferKind',
+          columnDefault: '\'regular\'',
+        ),
+        _isp.ColumnDefinition(
+          name: 'endsAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
         ),
       ],
       foreignKeys: [
@@ -755,6 +801,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i48lh927.ClaimView) {
       return _i48lh927.ClaimView.fromJson(data) as T;
     }
+    if (t == _ippz03u2.DropInput) {
+      return _ippz03u2.DropInput.fromJson(data) as T;
+    }
+    if (t == _i1c14r0n.DropSignal) {
+      return _i1c14r0n.DropSignal.fromJson(data) as T;
+    }
     if (t == _iapxm79h.Eligibility) {
       return _iapxm79h.Eligibility.fromJson(data) as T;
     }
@@ -788,6 +840,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _in0575rn.OfferInput) {
       return _in0575rn.OfferInput.fromJson(data) as T;
     }
+    if (t == _ijq1l2tf.OfferKind) {
+      return _ijq1l2tf.OfferKind.fromJson(data) as T;
+    }
     if (t == _i40dfi1m.OfferStatus) {
       return _i40dfi1m.OfferStatus.fromJson(data) as T;
     }
@@ -796,6 +851,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _idi75cqx.ProofUpload) {
       return _idi75cqx.ProofUpload.fromJson(data) as T;
+    }
+    if (t == _i377gh4k.PublicStudent) {
+      return _i377gh4k.PublicStudent.fromJson(data) as T;
     }
     if (t == _iggnnz44.RedeemResult) {
       return _iggnnz44.RedeemResult.fromJson(data) as T;
@@ -808,6 +866,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _i5vfstp6.ShopInput) {
       return _i5vfstp6.ShopInput.fromJson(data) as T;
+    }
+    if (t == _iv7ebkk1.ShopPage) {
+      return _iv7ebkk1.ShopPage.fromJson(data) as T;
     }
     if (t == _iovtxv26.StudentProfile) {
       return _iovtxv26.StudentProfile.fromJson(data) as T;
@@ -824,6 +885,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ir0y0iu6.UserRole) {
       return _ir0y0iu6.UserRole.fromJson(data) as T;
     }
+    if (t == _i6mr85kx.WallPost) {
+      return _i6mr85kx.WallPost.fromJson(data) as T;
+    }
     if (t == _is.getType<_i14xwlyb.BadgeId?>()) {
       return (data != null ? _i14xwlyb.BadgeId.fromJson(data) : null) as T;
     }
@@ -838,6 +902,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i48lh927.ClaimView?>()) {
       return (data != null ? _i48lh927.ClaimView.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ippz03u2.DropInput?>()) {
+      return (data != null ? _ippz03u2.DropInput.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i1c14r0n.DropSignal?>()) {
+      return (data != null ? _i1c14r0n.DropSignal.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iapxm79h.Eligibility?>()) {
       return (data != null ? _iapxm79h.Eligibility.fromJson(data) : null) as T;
@@ -882,6 +952,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_in0575rn.OfferInput?>()) {
       return (data != null ? _in0575rn.OfferInput.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_ijq1l2tf.OfferKind?>()) {
+      return (data != null ? _ijq1l2tf.OfferKind.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_i40dfi1m.OfferStatus?>()) {
       return (data != null ? _i40dfi1m.OfferStatus.fromJson(data) : null) as T;
     }
@@ -890,6 +963,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_idi75cqx.ProofUpload?>()) {
       return (data != null ? _idi75cqx.ProofUpload.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i377gh4k.PublicStudent?>()) {
+      return (data != null ? _i377gh4k.PublicStudent.fromJson(data) : null)
+          as T;
     }
     if (t == _is.getType<_iggnnz44.RedeemResult?>()) {
       return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
@@ -903,6 +980,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_i5vfstp6.ShopInput?>()) {
       return (data != null ? _i5vfstp6.ShopInput.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iv7ebkk1.ShopPage?>()) {
+      return (data != null ? _iv7ebkk1.ShopPage.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iovtxv26.StudentProfile?>()) {
       return (data != null ? _iovtxv26.StudentProfile.fromJson(data) : null)
@@ -924,15 +1004,24 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_ir0y0iu6.UserRole?>()) {
       return (data != null ? _ir0y0iu6.UserRole.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_i6mr85kx.WallPost?>()) {
+      return (data != null ? _i6mr85kx.WallPost.fromJson(data) : null) as T;
+    }
+    if (t == List<_i671eu65.ProofType>) {
+      return (data as List)
+              .map((e) => deserialize<_i671eu65.ProofType>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_i14xwlyb.BadgeId>) {
       return (data as List)
               .map((e) => deserialize<_i14xwlyb.BadgeId>(e))
               .toList()
           as T;
     }
-    if (t == List<_i671eu65.ProofType>) {
+    if (t == List<_i6mr85kx.WallPost>) {
       return (data as List)
-              .map((e) => deserialize<_i671eu65.ProofType>(e))
+              .map((e) => deserialize<_i6mr85kx.WallPost>(e))
               .toList()
           as T;
     }
@@ -945,6 +1034,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == List<_iub4wqas.TopStudent>) {
       return (data as List)
               .map((e) => deserialize<_iub4wqas.TopStudent>(e))
+              .toList()
+          as T;
+    }
+    if (t == List<_irfq3mof.OfferCard>) {
+      return (data as List)
+              .map((e) => deserialize<_irfq3mof.OfferCard>(e))
               .toList()
           as T;
     }
@@ -972,6 +1067,12 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ikxwgva9.WallPost>) {
+      return (data as List)
+              .map((e) => deserialize<_ikxwgva9.WallPost>(e))
+              .toList()
+          as T;
+    }
     try {
       return _iais.Protocol().deserialize<T>(data, t);
     } on _is.DeserializationTypeNotFoundException catch (_) {}
@@ -991,6 +1092,8 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iiz71frh.ProofLink => 'ProofLink',
       _i4cqplnc.ClaimStatus => 'ClaimStatus',
       _i48lh927.ClaimView => 'ClaimView',
+      _ippz03u2.DropInput => 'DropInput',
+      _i1c14r0n.DropSignal => 'DropSignal',
       _iapxm79h.Eligibility => 'Eligibility',
       _ixt5yy28.EligibilityReason => 'EligibilityReason',
       _iizahf83.ExpireClaimCallExpireModel => 'ExpireClaimCallExpireModel',
@@ -1002,18 +1105,22 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iqmyfspq.OfferCategory => 'OfferCategory',
       _ix7dcs2a.OfferFrequency => 'OfferFrequency',
       _in0575rn.OfferInput => 'OfferInput',
+      _ijq1l2tf.OfferKind => 'OfferKind',
       _i40dfi1m.OfferStatus => 'OfferStatus',
       _i671eu65.ProofType => 'ProofType',
       _idi75cqx.ProofUpload => 'ProofUpload',
+      _i377gh4k.PublicStudent => 'PublicStudent',
       _iggnnz44.RedeemResult => 'RedeemResult',
       _isgf2ncs.Shop => 'Shop',
       _iqgdamt7.ShopDashboard => 'ShopDashboard',
       _i5vfstp6.ShopInput => 'ShopInput',
+      _iv7ebkk1.ShopPage => 'ShopPage',
       _iovtxv26.StudentProfile => 'StudentProfile',
       _ipqqbskf.StudentVerification => 'StudentVerification',
       _iub4wqas.TopStudent => 'TopStudent',
       _iawcmjml.TreatException => 'TreatException',
       _ir0y0iu6.UserRole => 'UserRole',
+      _i6mr85kx.WallPost => 'WallPost',
       _ => null,
     };
   }
@@ -1038,6 +1145,10 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ClaimStatus';
       case _i48lh927.ClaimView():
         return 'ClaimView';
+      case _ippz03u2.DropInput():
+        return 'DropInput';
+      case _i1c14r0n.DropSignal():
+        return 'DropSignal';
       case _iapxm79h.Eligibility():
         return 'Eligibility';
       case _ixt5yy28.EligibilityReason():
@@ -1060,12 +1171,16 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'OfferFrequency';
       case _in0575rn.OfferInput():
         return 'OfferInput';
+      case _ijq1l2tf.OfferKind():
+        return 'OfferKind';
       case _i40dfi1m.OfferStatus():
         return 'OfferStatus';
       case _i671eu65.ProofType():
         return 'ProofType';
       case _idi75cqx.ProofUpload():
         return 'ProofUpload';
+      case _i377gh4k.PublicStudent():
+        return 'PublicStudent';
       case _iggnnz44.RedeemResult():
         return 'RedeemResult';
       case _isgf2ncs.Shop():
@@ -1074,6 +1189,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ShopDashboard';
       case _i5vfstp6.ShopInput():
         return 'ShopInput';
+      case _iv7ebkk1.ShopPage():
+        return 'ShopPage';
       case _iovtxv26.StudentProfile():
         return 'StudentProfile';
       case _ipqqbskf.StudentVerification():
@@ -1084,6 +1201,11 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'TreatException';
       case _ir0y0iu6.UserRole():
         return 'UserRole';
+      case _i6mr85kx.WallPost():
+        return 'WallPost';
+    }
+    if (data is List<_ipkteuk5.OfferCard>) {
+      return 'List<OfferCard>';
     }
     className = _iais.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -1125,6 +1247,12 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'ClaimView') {
       return deserialize<_i48lh927.ClaimView>(data['data']);
     }
+    if (dataClassName == 'DropInput') {
+      return deserialize<_ippz03u2.DropInput>(data['data']);
+    }
+    if (dataClassName == 'DropSignal') {
+      return deserialize<_i1c14r0n.DropSignal>(data['data']);
+    }
     if (dataClassName == 'Eligibility') {
       return deserialize<_iapxm79h.Eligibility>(data['data']);
     }
@@ -1158,6 +1286,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'OfferInput') {
       return deserialize<_in0575rn.OfferInput>(data['data']);
     }
+    if (dataClassName == 'OfferKind') {
+      return deserialize<_ijq1l2tf.OfferKind>(data['data']);
+    }
     if (dataClassName == 'OfferStatus') {
       return deserialize<_i40dfi1m.OfferStatus>(data['data']);
     }
@@ -1166,6 +1297,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ProofUpload') {
       return deserialize<_idi75cqx.ProofUpload>(data['data']);
+    }
+    if (dataClassName == 'PublicStudent') {
+      return deserialize<_i377gh4k.PublicStudent>(data['data']);
     }
     if (dataClassName == 'RedeemResult') {
       return deserialize<_iggnnz44.RedeemResult>(data['data']);
@@ -1178,6 +1312,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ShopInput') {
       return deserialize<_i5vfstp6.ShopInput>(data['data']);
+    }
+    if (dataClassName == 'ShopPage') {
+      return deserialize<_iv7ebkk1.ShopPage>(data['data']);
     }
     if (dataClassName == 'StudentProfile') {
       return deserialize<_iovtxv26.StudentProfile>(data['data']);
@@ -1194,6 +1331,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'UserRole') {
       return deserialize<_ir0y0iu6.UserRole>(data['data']);
     }
+    if (dataClassName == 'WallPost') {
+      return deserialize<_i6mr85kx.WallPost>(data['data']);
+    }
     if (dataClassName.startsWith('serverpod_auth_idp.')) {
       data['className'] = dataClassName.substring(19);
       return _iais.Protocol().deserializeByClassName(data);
@@ -1205,6 +1345,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
       return _isp.Protocol().deserializeByClassName(data);
+    }
+    if (dataClassName == 'List<OfferCard>') {
+      return deserialize<List<_ipkteuk5.OfferCard>>(data['data']);
     }
     return super.deserializeByClassName(data);
   }

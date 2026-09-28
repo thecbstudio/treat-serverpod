@@ -1,0 +1,11 @@
+### A student's public profile — no email, no strikes.
+class: PublicStudent
+fields:
+  id: int
+  name: String
+  university: String
+  treats: int
+  streakWeeks: int
+  badges: List<BadgeId>
+  joinedAt: DateTime
+  wall: List<WallPost>

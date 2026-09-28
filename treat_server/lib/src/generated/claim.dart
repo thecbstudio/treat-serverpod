@@ -31,6 +31,7 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     this.student,
     required this.studentName,
     required this.frequency,
+    bool? fromDrop,
     required this.code,
     required this.status,
     DateTime? createdAt,
@@ -44,10 +45,14 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
-  }) : createdAt = createdAt ?? DateTime.now(),
+    bool? shareOnWall,
+    this.thanksNote,
+  }) : fromDrop = fromDrop ?? false,
+       createdAt = createdAt ?? DateTime.now(),
        appealed = appealed ?? false,
        verifyAttempts = verifyAttempts ?? 0,
-       strikeGiven = strikeGiven ?? false;
+       strikeGiven = strikeGiven ?? false,
+       shareOnWall = shareOnWall ?? false;
 
   factory Claim({
     int? id,
@@ -58,6 +63,7 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     _iovtxv26.StudentProfile? student,
     required String studentName,
     required _ix7dcs2a.OfferFrequency frequency,
+    bool? fromDrop,
     required String code,
     required _i4cqplnc.ClaimStatus status,
     DateTime? createdAt,
@@ -71,6 +77,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    String? thanksNote,
   }) = _ClaimImpl;
 
   factory Claim.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -93,6 +101,9 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       frequency: _ix7dcs2a.OfferFrequency.fromJson(
         (jsonSerialization['frequency'] as String),
       ),
+      fromDrop: jsonSerialization['fromDrop'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['fromDrop']),
       code: jsonSerialization['code'] as String,
       status: _i4cqplnc.ClaimStatus.fromJson(
         (jsonSerialization['status'] as String),
@@ -128,6 +139,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       strikeGiven: jsonSerialization['strikeGiven'] == null
           ? null
           : _is.BoolJsonExtension.fromJson(jsonSerialization['strikeGiven']),
+      shareOnWall: jsonSerialization['shareOnWall'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['shareOnWall']),
+      thanksNote: jsonSerialization['thanksNote'] as String?,
     );
   }
 
@@ -151,6 +166,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
   String studentName;
 
   _ix7dcs2a.OfferFrequency frequency;
+
+  /// Claimed from a drop: doesn't count toward the place's weekly/monthly
+  /// limit on regular offers.
+  bool fromDrop;
 
   /// 6 chars; unique among the shop's active claims.
   String code;
@@ -183,6 +202,12 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
   /// A claim can cost at most one strike; returned if an appeal is approved.
   bool strikeGiven;
 
+  /// Student agreed to show the approved post on the place's public page.
+  bool shareOnWall;
+
+  /// Optional thank-you note to the place, written after approval.
+  String? thanksNote;
+
   @override
   _is.Table<int?> get table => t;
 
@@ -198,6 +223,7 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     _iovtxv26.StudentProfile? student,
     String? studentName,
     _ix7dcs2a.OfferFrequency? frequency,
+    bool? fromDrop,
     String? code,
     _i4cqplnc.ClaimStatus? status,
     DateTime? createdAt,
@@ -211,6 +237,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    String? thanksNote,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -224,6 +252,7 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       if (student != null) 'student': student?.toJson(),
       'studentName': studentName,
       'frequency': frequency.toJson(),
+      'fromDrop': fromDrop,
       'code': code,
       'status': status.toJson(),
       'createdAt': createdAt.toJson(),
@@ -238,6 +267,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'appealed': appealed,
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
+      'shareOnWall': shareOnWall,
+      if (thanksNote != null) 'thanksNote': thanksNote,
     };
   }
 
@@ -253,6 +284,7 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       if (student != null) 'student': student?.toJsonForProtocol(),
       'studentName': studentName,
       'frequency': frequency.toJson(),
+      'fromDrop': fromDrop,
       'code': code,
       'status': status.toJson(),
       'createdAt': createdAt.toJson(),
@@ -266,6 +298,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'appealed': appealed,
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
+      'shareOnWall': shareOnWall,
+      if (thanksNote != null) 'thanksNote': thanksNote,
     };
   }
 
@@ -315,6 +349,7 @@ class _ClaimImpl extends Claim {
     _iovtxv26.StudentProfile? student,
     required String studentName,
     required _ix7dcs2a.OfferFrequency frequency,
+    bool? fromDrop,
     required String code,
     required _i4cqplnc.ClaimStatus status,
     DateTime? createdAt,
@@ -328,6 +363,8 @@ class _ClaimImpl extends Claim {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    String? thanksNote,
   }) : super._(
          id: id,
          offerId: offerId,
@@ -337,6 +374,7 @@ class _ClaimImpl extends Claim {
          student: student,
          studentName: studentName,
          frequency: frequency,
+         fromDrop: fromDrop,
          code: code,
          status: status,
          createdAt: createdAt,
@@ -350,6 +388,8 @@ class _ClaimImpl extends Claim {
          appealed: appealed,
          verifyAttempts: verifyAttempts,
          strikeGiven: strikeGiven,
+         shareOnWall: shareOnWall,
+         thanksNote: thanksNote,
        );
 
   /// Returns a shallow copy of this [Claim]
@@ -365,6 +405,7 @@ class _ClaimImpl extends Claim {
     Object? student = _Undefined,
     String? studentName,
     _ix7dcs2a.OfferFrequency? frequency,
+    bool? fromDrop,
     String? code,
     _i4cqplnc.ClaimStatus? status,
     DateTime? createdAt,
@@ -378,6 +419,8 @@ class _ClaimImpl extends Claim {
     bool? appealed,
     int? verifyAttempts,
     bool? strikeGiven,
+    bool? shareOnWall,
+    Object? thanksNote = _Undefined,
   }) {
     return Claim(
       id: id is int? ? id : this.id,
@@ -390,6 +433,7 @@ class _ClaimImpl extends Claim {
           : this.student?.copyWith(),
       studentName: studentName ?? this.studentName,
       frequency: frequency ?? this.frequency,
+      fromDrop: fromDrop ?? this.fromDrop,
       code: code ?? this.code,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
@@ -407,6 +451,8 @@ class _ClaimImpl extends Claim {
       appealed: appealed ?? this.appealed,
       verifyAttempts: verifyAttempts ?? this.verifyAttempts,
       strikeGiven: strikeGiven ?? this.strikeGiven,
+      shareOnWall: shareOnWall ?? this.shareOnWall,
+      thanksNote: thanksNote is String? ? thanksNote : this.thanksNote,
     );
   }
 }
@@ -438,6 +484,11 @@ class ClaimUpdateTable extends _is.UpdateTable<ClaimTable> {
     _ix7dcs2a.OfferFrequency value,
   ) => _is.ColumnValue(
     table.frequency,
+    value,
+  );
+
+  _is.ColumnValue<bool, bool> fromDrop(bool value) => _is.ColumnValue(
+    table.fromDrop,
     value,
   );
 
@@ -515,6 +566,16 @@ class ClaimUpdateTable extends _is.UpdateTable<ClaimTable> {
     table.strikeGiven,
     value,
   );
+
+  _is.ColumnValue<bool, bool> shareOnWall(bool value) => _is.ColumnValue(
+    table.shareOnWall,
+    value,
+  );
+
+  _is.ColumnValue<String, String> thanksNote(String? value) => _is.ColumnValue(
+    table.thanksNote,
+    value,
+  );
 }
 
 class ClaimTable extends _is.Table<int?> {
@@ -540,6 +601,11 @@ class ClaimTable extends _is.Table<int?> {
       'frequency',
       this,
       _is.EnumSerialization.byName,
+    );
+    fromDrop = _is.ColumnBool(
+      'fromDrop',
+      this,
+      hasDefault: true,
     );
     code = _is.ColumnString(
       'code',
@@ -599,6 +665,15 @@ class ClaimTable extends _is.Table<int?> {
       this,
       hasDefault: true,
     );
+    shareOnWall = _is.ColumnBool(
+      'shareOnWall',
+      this,
+      hasDefault: true,
+    );
+    thanksNote = _is.ColumnString(
+      'thanksNote',
+      this,
+    );
   }
 
   late final ClaimUpdateTable updateTable;
@@ -616,6 +691,10 @@ class ClaimTable extends _is.Table<int?> {
   late final _is.ColumnString studentName;
 
   late final _is.ColumnEnum<_ix7dcs2a.OfferFrequency> frequency;
+
+  /// Claimed from a drop: doesn't count toward the place's weekly/monthly
+  /// limit on regular offers.
+  late final _is.ColumnBool fromDrop;
 
   /// 6 chars; unique among the shop's active claims.
   late final _is.ColumnString code;
@@ -647,6 +726,12 @@ class ClaimTable extends _is.Table<int?> {
 
   /// A claim can cost at most one strike; returned if an appeal is approved.
   late final _is.ColumnBool strikeGiven;
+
+  /// Student agreed to show the approved post on the place's public page.
+  late final _is.ColumnBool shareOnWall;
+
+  /// Optional thank-you note to the place, written after approval.
+  late final _is.ColumnString thanksNote;
 
   _iqlmmtnc.OfferTable get offer {
     if (_offer != null) return _offer!;
@@ -682,6 +767,7 @@ class ClaimTable extends _is.Table<int?> {
     studentId,
     studentName,
     frequency,
+    fromDrop,
     code,
     status,
     createdAt,
@@ -695,6 +781,8 @@ class ClaimTable extends _is.Table<int?> {
     appealed,
     verifyAttempts,
     strikeGiven,
+    shareOnWall,
+    thanksNote,
   ];
 
   @override

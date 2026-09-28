@@ -15,6 +15,7 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
     as _iacs;
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
+import 'package:treat_server/src/generated/drop_input.dart' as _io47mjlk;
 import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
@@ -28,6 +29,7 @@ import '../endpoints/offer_endpoint.dart' as _i96ujqr4;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
 import '../endpoints/shop_endpoint.dart' as _i4fqeydl;
 import '../endpoints/shop_offers_endpoint.dart' as _ifm6c9vh;
+import '../endpoints/social_endpoint.dart' as _iy6grqf3;
 export 'future_calls.dart' show ServerpodFutureCallsGetter;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -80,6 +82,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'shopOffers',
+          null,
+        ),
+      'social': _iy6grqf3.SocialEndpoint()
+        ..initialize(
+          server,
+          'social',
           null,
         ),
     };
@@ -348,6 +356,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<String>(),
               nullable: false,
             ),
+            'shareOnWall': _is.ParameterDescription(
+              name: 'shareOnWall',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -359,7 +372,38 @@ class Endpoints extends _is.EndpointDispatch {
                     params['claimId'],
                     params['proofType'],
                     params['path'],
+                    shareOnWall: params['shareOnWall'],
                   ),
+        ),
+        'thank': _is.MethodConnector(
+          name: 'thank',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'note': _is.ParameterDescription(
+              name: 'note',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'shareOnWall': _is.ParameterDescription(
+              name: 'shareOnWall',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).thank(
+                session,
+                params['claimId'],
+                params['note'],
+                params['shareOnWall'],
+              ),
         ),
         'listMine': _is.MethodConnector(
           name: 'listMine',
@@ -459,6 +503,20 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['offer'] as _i96ujqr4.OfferEndpoint).get(
                 session,
                 params['offerId'],
+              ),
+        ),
+        'watchDrops': _is.MethodStreamConnector(
+          name: 'watchDrops',
+          params: {},
+          streamParams: {},
+          returnType: _is.MethodStreamReturnType.streamType,
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+                Map<String, Stream> streamParams,
+              ) => (endpoints['offer'] as _i96ujqr4.OfferEndpoint).watchDrops(
+                session,
               ),
         ),
       },
@@ -644,6 +702,26 @@ class Endpoints extends _is.EndpointDispatch {
                         params['input'],
                       ),
         ),
+        'startDrop': _is.MethodConnector(
+          name: 'startDrop',
+          params: {
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<_io47mjlk.DropInput>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shopOffers'] as _ifm6c9vh.ShopOffersEndpoint)
+                      .startDrop(
+                        session,
+                        params['input'],
+                      ),
+        ),
         'update': _is.MethodConnector(
           name: 'update',
           params: {
@@ -695,6 +773,60 @@ class Endpoints extends _is.EndpointDispatch {
                         params['offerId'],
                         params['status'],
                       ),
+        ),
+      },
+    );
+    connectors['social'] = _is.EndpointConnector(
+      name: 'social',
+      endpoint: endpoints['social']!,
+      methodConnectors: {
+        'shopPage': _is.MethodConnector(
+          name: 'shopPage',
+          params: {
+            'shopId': _is.ParameterDescription(
+              name: 'shopId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['social'] as _iy6grqf3.SocialEndpoint).shopPage(
+                    session,
+                    params['shopId'],
+                  ),
+        ),
+        'student': _is.MethodConnector(
+          name: 'student',
+          params: {
+            'studentId': _is.ParameterDescription(
+              name: 'studentId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['social'] as _iy6grqf3.SocialEndpoint).student(
+                    session,
+                    params['studentId'],
+                  ),
+        ),
+        'recentPosts': _is.MethodConnector(
+          name: 'recentPosts',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['social'] as _iy6grqf3.SocialEndpoint)
+                  .recentPosts(session),
         ),
       },
     );

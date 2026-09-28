@@ -1,0 +1,4 @@
+### "Something about this drop changed" — sent on the drops channel.
+class: DropSignal
+fields:
+  offerId: int
