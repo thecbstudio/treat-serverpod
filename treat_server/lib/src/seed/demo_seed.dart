@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_server/providers/email.dart';
 
 import '../domain/clock.dart';
 import '../generated/protocol.dart';
+import 'demo_history.dart';
 
 /// Demo data so Discover is never empty and the jury can log in.
 ///
@@ -94,20 +95,23 @@ Future<void> seedDemoData(Session session, {String? demoPassword}) async {
       session,
       where: (t) => t.authUserId.equals(authUserId),
     );
-    if (existing == null) {
-      await StudentProfile.db.insertRow(
-        session,
-        StudentProfile(
-          authUserId: authUserId,
-          name: 'Deniz Demo',
-          email: 'student@demo.treat',
-          university: 'Anadolu University',
-          verification: StudentVerification.verified,
-          categoriesTried: [],
-          joinedAt: now,
-        ),
-      );
-    }
+    final jury =
+        existing ??
+        await StudentProfile.db.insertRow(
+          session,
+          StudentProfile(
+            authUserId: authUserId,
+            name: 'Deniz Demo',
+            email: 'student@demo.treat',
+            university: 'Anadolu University',
+            verification: StudentVerification.verified,
+            categoriesTried: [],
+            joinedAt: now.subtract(const Duration(days: 30)),
+          ),
+        );
+    await seedJuryStudentHistory(session, jury);
+    await seedDemoHistory(session);
+    await ensureDemoDrop(session);
   }
 }
 
@@ -200,6 +204,56 @@ const _shops = [
     'PS5, Switch and a retro corner. Tournament nights on Fridays.',
     'pixeloyunkafe',
     true,
+  ),
+  (
+    'firin',
+    'Fırın 26',
+    OfferCategory.food,
+    'Tepebaşı',
+    'Hoşnudiye Mah. İki Eylül Cad. 26',
+    'Stone-oven simit and pastries from 6 am. The morning line is worth it.',
+    'firin26',
+    true,
+  ),
+  (
+    'mavikitap',
+    'Mavi Kitap Kafe',
+    OfferCategory.coffee,
+    'Odunpazarı',
+    'Arslanbey Sok. 4',
+    'A bookshop café: second-hand books, quiet tables and very good latte.',
+    'mavikitapkafe',
+    true,
+  ),
+  (
+    'ferah',
+    'Dondurmacı Ferah',
+    OfferCategory.dessert,
+    'Bademlik',
+    'Porsuk Bulvarı 61',
+    'Maraş-style ice cream, churned every morning. Pistachio is the move.',
+    'dondurmaciferah',
+    true,
+  ),
+  (
+    'bowling',
+    'Kampüs Bowling',
+    OfferCategory.activity,
+    'Tepebaşı',
+    'Espark AVM, Kat 3',
+    'Eight lanes, student league on Wednesdays, pizza by the lane.',
+    'kampusbowling',
+    true,
+  ),
+  (
+    'glow',
+    'Glow Nail Studio',
+    OfferCategory.beauty,
+    'Odunpazarı',
+    'Sakarya Cad. 19',
+    'Gel, nail art and quick manicures. Booking recommended on weekends.',
+    'glownailstudio',
+    false,
   ),
 ];
 
@@ -321,5 +375,67 @@ const _offers = [
     endHour: 23,
     dailyCap: 4,
     ageDays: 11,
+  ),
+  _SeedOffer(
+    shop: 'firin',
+    key: 'simit',
+    title: 'Simit + çay',
+    description: 'A warm simit and a glass of tea to start the day.',
+    frequency: OfferFrequency.weekly,
+    startHour: 7,
+    endHour: 12,
+    dailyCap: 10,
+    featured: true,
+    proofTypes: [ProofType.igStory, ProofType.googleReview],
+    ageDays: 12,
+  ),
+  _SeedOffer(
+    shop: 'mavikitap',
+    key: 'latte',
+    title: 'Latte + a used book of your choice',
+    description: 'Any latte, and pick one book from the 5 ₺ shelf to keep.',
+    frequency: OfferFrequency.monthly,
+    startHour: 10,
+    endHour: 22,
+    dailyCap: 4,
+    proofTypes: [ProofType.igPost, ProofType.igStory],
+    ageDays: 8,
+  ),
+  _SeedOffer(
+    shop: 'ferah',
+    key: 'scoops',
+    title: 'Two scoops in a cone',
+    description: 'Any two flavours. Pistachio and sour cherry recommended.',
+    frequency: OfferFrequency.weekly,
+    startHour: 12,
+    endHour: 23,
+    dailyCap: 8,
+    proofTypes: [ProofType.igStory, ProofType.tiktok],
+    ageDays: 5,
+  ),
+  _SeedOffer(
+    shop: 'bowling',
+    key: 'game',
+    title: 'One free game (shoes included)',
+    description: 'One game on any free lane, bring a friend — they pay half.',
+    frequency: OfferFrequency.monthly,
+    startHour: 12,
+    endHour: 24,
+    dailyCap: 6,
+    featured: true,
+    proofTypes: [ProofType.igStory, ProofType.tiktok, ProofType.googleReview],
+    ageDays: 16,
+  ),
+  _SeedOffer(
+    shop: 'glow',
+    key: 'manicure',
+    title: 'Express manicure',
+    description: '20-minute express manicure with a single colour.',
+    frequency: OfferFrequency.monthly,
+    startHour: 10,
+    endHour: 20,
+    dailyCap: 3,
+    proofTypes: [ProofType.igPost, ProofType.googleReview],
+    ageDays: 3,
   ),
 ];

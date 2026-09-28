@@ -105,7 +105,19 @@ String? lockMessage(Eligibility e, AppLocalizations l) => switch (e.reason) {
         : l.lockOutsideHours(hhmm(e.opensAtMin!)),
   EligibilityReason.totalCap => l.lockTotalCap,
   EligibilityReason.dailyCap => l.lockDailyCap,
+  EligibilityReason.dropEnded => l.lockDropEnded,
+  EligibilityReason.alreadyClaimed => l.lockAlreadyClaimed,
 };
+
+/// "12:04" / "1:02:09" countdown text.
+String countdown(Duration left) {
+  if (left.isNegative) left = Duration.zero;
+  String two(int n) => n.toString().padLeft(2, '0');
+  final h = left.inHours;
+  final m = two(left.inMinutes % 60);
+  final s = two(left.inSeconds % 60);
+  return h > 0 ? '$h:$m:$s' : '$m:$s';
+}
 
 /// Maps any error to user-facing copy. Never shows raw exceptions.
 String errorMessage(Object error, AppLocalizations l) {
@@ -127,6 +139,11 @@ String errorMessage(Object error, AppLocalizations l) {
       'proof_not_allowed' => l.err_proof_not_allowed,
       'proof_type_not_accepted' => l.err_proof_type_not_accepted,
       'invalid_proof' => l.err_invalid_proof,
+      'invalid_quantity' => l.err_invalid_quantity,
+      'invalid_duration' => l.err_invalid_duration,
+      'drop_not_editable' => l.err_drop_not_editable,
+      'not_approved' => l.err_not_approved,
+      'note_too_long' => l.err_note_too_long,
       // The server sends the eligibility reason as the message.
       'ineligible' =>
         lockMessage(

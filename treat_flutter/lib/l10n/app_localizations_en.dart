@@ -848,4 +848,157 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authShopHint =>
       'Create your login first — next you\'ll add your business details.';
+
+  @override
+  String get dropsTitle => 'Live drops';
+
+  @override
+  String get dropsSubtitle => 'Last-minute treats — first come, first served.';
+
+  @override
+  String get dropBadge => 'DROP';
+
+  @override
+  String get dropLive => 'LIVE';
+
+  @override
+  String dropLeft(int n, int total) {
+    return '$n of $total left';
+  }
+
+  @override
+  String get dropSoldOut => 'All gone';
+
+  @override
+  String dropEndsIn(String time) {
+    return 'ends in $time';
+  }
+
+  @override
+  String get dropEnded => 'Ended';
+
+  @override
+  String get dropRules =>
+      'One per student. Pick it up within 30 minutes after the drop ends.';
+
+  @override
+  String get lockDropEnded => 'This drop has ended.';
+
+  @override
+  String get lockAlreadyClaimed => 'You already got one from this drop.';
+
+  @override
+  String get shopStartDropCta => 'Got leftovers? Start a drop';
+
+  @override
+  String get shopStartDropHint =>
+      'Surplus pastries, the last seats, an empty hour — students nearby see it live.';
+
+  @override
+  String get dropFormTitle => 'Start a drop';
+
+  @override
+  String get dropFormWhat => 'What\'s up for grabs?';
+
+  @override
+  String get dropFormWhatHint => 'e.g. 6 croissants from this morning';
+
+  @override
+  String get dropFormDesc => 'Details (optional)';
+
+  @override
+  String get dropFormQuantity => 'How many?';
+
+  @override
+  String get dropFormDuration => 'Open for';
+
+  @override
+  String dropFormMinutes(int n) {
+    return '$n min';
+  }
+
+  @override
+  String get dropFormStart => 'Start drop';
+
+  @override
+  String get shopDropEnd => 'End drop';
+
+  @override
+  String get shopDropEndConfirm =>
+      'End this drop now? Students who already claimed can still pick up.';
+
+  @override
+  String get wallTitle => 'Posts from students';
+
+  @override
+  String get wallEmpty => 'No shared posts yet.';
+
+  @override
+  String get wallFreshTitle => 'Fresh on the wall';
+
+  @override
+  String placeTreated(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n students',
+      one: '1 student',
+    );
+    return 'Treated $_temp0';
+  }
+
+  @override
+  String get placeView => 'View place';
+
+  @override
+  String get placeOffers => 'Offers';
+
+  @override
+  String get placeNoOffers => 'No open offers right now.';
+
+  @override
+  String get studentProfileTitle => 'Student';
+
+  @override
+  String proofShareOnWall(String shop) {
+    return 'Show my post on $shop\'s page';
+  }
+
+  @override
+  String get proofShareHint =>
+      'Only after approval. You can change this later.';
+
+  @override
+  String get thanksTitle => 'Say thanks';
+
+  @override
+  String thanksHint(String shop) {
+    return 'A short note to $shop (optional)';
+  }
+
+  @override
+  String get thanksSend => 'Send';
+
+  @override
+  String get thanksSent => 'Thanks sent';
+
+  @override
+  String get thanksYourNote => 'Your note';
+
+  @override
+  String get err_invalid_quantity => 'Pick between 1 and 50.';
+
+  @override
+  String get err_invalid_duration => 'Pick between 10 and 180 minutes.';
+
+  @override
+  String get err_drop_not_editable =>
+      'Drops can\'t be edited — end it and start a new one.';
+
+  @override
+  String get err_not_approved =>
+      'You can thank the place after your post is approved.';
+
+  @override
+  String get err_note_too_long => 'Keep it under 280 characters.';
 }

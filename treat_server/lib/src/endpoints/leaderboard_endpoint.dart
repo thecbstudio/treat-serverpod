@@ -20,6 +20,7 @@ class LeaderboardEndpoint extends Endpoint {
       for (final (i, s) in students.indexed)
         LeaderboardEntry(
           rank: i + 1,
+          studentId: s.id!,
           name: s.name,
           university: s.university,
           treats: s.treats,

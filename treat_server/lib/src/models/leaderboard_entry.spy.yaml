@@ -2,6 +2,7 @@
 class: LeaderboardEntry
 fields:
   rank: int
+  studentId: int
   name: String
   university: String
   treats: int

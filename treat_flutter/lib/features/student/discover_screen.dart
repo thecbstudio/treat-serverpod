@@ -6,6 +6,8 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../drops/drops_strip.dart';
+import '../social/wall.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -19,9 +21,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final _search = TextEditingController();
   OfferCategory? _category;
 
+  int _refreshes = 0;
+
   Future<void> _reload() async {
     final f = client.offer.listActive();
-    setState(() => _future = f);
+    setState(() {
+      _future = f;
+      _refreshes++;
+    });
     await f.catchError((_) => <OfferCard>[]);
   }
 
@@ -59,6 +66,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     children: [
                       Text(l.discoverTitle, style: context.text.headlineMedium),
                       const SizedBox(height: 12),
+                      const LiveDropsStrip(),
                       TextField(
                         controller: _search,
                         onChanged: (_) => setState(() {}),
@@ -79,7 +87,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 16),
+                      if (_category == null && _search.text.isEmpty)
+                        FreshWallStrip(key: ValueKey(_refreshes)),
                     ],
                   ),
                 ),

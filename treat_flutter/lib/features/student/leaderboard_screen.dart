@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:treat_client/treat_client.dart';
 
 import '../../app/theme.dart';
@@ -74,7 +75,10 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                     for (final r in rows)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
-                        child: _Row(entry: r),
+                        child: GestureDetector(
+                          onTap: () => context.push('/student/${r.studentId}'),
+                          child: _Row(entry: r),
+                        ),
                       ),
                   ],
                 );

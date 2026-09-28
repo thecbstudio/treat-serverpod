@@ -6,11 +6,14 @@ import '../client.dart';
 import '../features/auth/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
 import '../features/auth/welcome_screen.dart';
+import '../features/drops/drop_form_screen.dart';
 import '../features/shop/dashboard_screen.dart';
 import '../features/shop/offer_form_screen.dart';
 import '../features/shop/scan_screen.dart';
 import '../features/shop/shop_offers_screen.dart';
 import '../features/shop/shop_profile_screen.dart';
+import '../features/social/place_screen.dart';
+import '../features/social/student_screen.dart';
 import '../features/student/claim_screen.dart';
 import '../features/student/discover_screen.dart';
 import '../features/student/leaderboard_screen.dart';
@@ -162,6 +165,20 @@ final router = GoRouter(
           builder: (_, _) => const ShopProfileScreen(),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/place/:id',
+      builder: (_, state) =>
+          PlaceScreen(shopId: int.parse(state.pathParameters['id']!)),
+    ),
+    GoRoute(
+      path: '/student/:id',
+      builder: (_, state) =>
+          StudentScreen(studentId: int.parse(state.pathParameters['id']!)),
+    ),
+    GoRoute(
+      path: '/shop/drops/new',
+      builder: (_, _) => const DropFormScreen(),
     ),
     GoRoute(
       path: '/shop/offers/new',

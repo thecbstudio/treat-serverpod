@@ -17,6 +17,7 @@ abstract class LeaderboardEntry
     implements _isc.SerializableModel, _isc.ProtocolSerialization {
   LeaderboardEntry._({
     required this.rank,
+    required this.studentId,
     required this.name,
     required this.university,
     required this.treats,
@@ -25,6 +26,7 @@ abstract class LeaderboardEntry
 
   factory LeaderboardEntry({
     required int rank,
+    required int studentId,
     required String name,
     required String university,
     required int treats,
@@ -34,6 +36,7 @@ abstract class LeaderboardEntry
   factory LeaderboardEntry.fromJson(Map<String, dynamic> jsonSerialization) {
     return LeaderboardEntry(
       rank: jsonSerialization['rank'] as int,
+      studentId: jsonSerialization['studentId'] as int,
       name: jsonSerialization['name'] as String,
       university: jsonSerialization['university'] as String,
       treats: jsonSerialization['treats'] as int,
@@ -42,6 +45,8 @@ abstract class LeaderboardEntry
   }
 
   int rank;
+
+  int studentId;
 
   String name;
 
@@ -56,6 +61,7 @@ abstract class LeaderboardEntry
   @_isc.useResult
   LeaderboardEntry copyWith({
     int? rank,
+    int? studentId,
     String? name,
     String? university,
     int? treats,
@@ -66,6 +72,7 @@ abstract class LeaderboardEntry
     return {
       '__className__': 'LeaderboardEntry',
       'rank': rank,
+      'studentId': studentId,
       'name': name,
       'university': university,
       'treats': treats,
@@ -78,6 +85,7 @@ abstract class LeaderboardEntry
     return {
       '__className__': 'LeaderboardEntry',
       'rank': rank,
+      'studentId': studentId,
       'name': name,
       'university': university,
       'treats': treats,
@@ -94,12 +102,14 @@ abstract class LeaderboardEntry
 class _LeaderboardEntryImpl extends LeaderboardEntry {
   _LeaderboardEntryImpl({
     required int rank,
+    required int studentId,
     required String name,
     required String university,
     required int treats,
     required bool isMe,
   }) : super._(
          rank: rank,
+         studentId: studentId,
          name: name,
          university: university,
          treats: treats,
@@ -112,6 +122,7 @@ class _LeaderboardEntryImpl extends LeaderboardEntry {
   @override
   LeaderboardEntry copyWith({
     int? rank,
+    int? studentId,
     String? name,
     String? university,
     int? treats,
@@ -119,6 +130,7 @@ class _LeaderboardEntryImpl extends LeaderboardEntry {
   }) {
     return LeaderboardEntry(
       rank: rank ?? this.rank,
+      studentId: studentId ?? this.studentId,
       name: name ?? this.name,
       university: university ?? this.university,
       treats: treats ?? this.treats,

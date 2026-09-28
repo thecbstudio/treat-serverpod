@@ -1599,6 +1599,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create your login first — next you\'ll add your business details.'**
   String get authShopHint;
+
+  /// No description provided for @dropsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live drops'**
+  String get dropsTitle;
+
+  /// No description provided for @dropsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Last-minute treats — first come, first served.'**
+  String get dropsSubtitle;
+
+  /// No description provided for @dropBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'DROP'**
+  String get dropBadge;
+
+  /// No description provided for @dropLive.
+  ///
+  /// In en, this message translates to:
+  /// **'LIVE'**
+  String get dropLive;
+
+  /// No description provided for @dropLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} of {total} left'**
+  String dropLeft(int n, int total);
+
+  /// No description provided for @dropSoldOut.
+  ///
+  /// In en, this message translates to:
+  /// **'All gone'**
+  String get dropSoldOut;
+
+  /// No description provided for @dropEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'ends in {time}'**
+  String dropEndsIn(String time);
+
+  /// No description provided for @dropEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get dropEnded;
+
+  /// No description provided for @dropRules.
+  ///
+  /// In en, this message translates to:
+  /// **'One per student. Pick it up within 30 minutes after the drop ends.'**
+  String get dropRules;
+
+  /// No description provided for @lockDropEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'This drop has ended.'**
+  String get lockDropEnded;
+
+  /// No description provided for @lockAlreadyClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'You already got one from this drop.'**
+  String get lockAlreadyClaimed;
+
+  /// No description provided for @shopStartDropCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Got leftovers? Start a drop'**
+  String get shopStartDropCta;
+
+  /// No description provided for @shopStartDropHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Surplus pastries, the last seats, an empty hour — students nearby see it live.'**
+  String get shopStartDropHint;
+
+  /// No description provided for @dropFormTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a drop'**
+  String get dropFormTitle;
+
+  /// No description provided for @dropFormWhat.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s up for grabs?'**
+  String get dropFormWhat;
+
+  /// No description provided for @dropFormWhatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 6 croissants from this morning'**
+  String get dropFormWhatHint;
+
+  /// No description provided for @dropFormDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Details (optional)'**
+  String get dropFormDesc;
+
+  /// No description provided for @dropFormQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'How many?'**
+  String get dropFormQuantity;
+
+  /// No description provided for @dropFormDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Open for'**
+  String get dropFormDuration;
+
+  /// No description provided for @dropFormMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} min'**
+  String dropFormMinutes(int n);
+
+  /// No description provided for @dropFormStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start drop'**
+  String get dropFormStart;
+
+  /// No description provided for @shopDropEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End drop'**
+  String get shopDropEnd;
+
+  /// No description provided for @shopDropEndConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'End this drop now? Students who already claimed can still pick up.'**
+  String get shopDropEndConfirm;
+
+  /// No description provided for @wallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts from students'**
+  String get wallTitle;
+
+  /// No description provided for @wallEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No shared posts yet.'**
+  String get wallEmpty;
+
+  /// No description provided for @wallFreshTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh on the wall'**
+  String get wallFreshTitle;
+
+  /// No description provided for @placeTreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Treated {n, plural, =1{1 student} other{{n} students}}'**
+  String placeTreated(int n);
+
+  /// No description provided for @placeView.
+  ///
+  /// In en, this message translates to:
+  /// **'View place'**
+  String get placeView;
+
+  /// No description provided for @placeOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get placeOffers;
+
+  /// No description provided for @placeNoOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'No open offers right now.'**
+  String get placeNoOffers;
+
+  /// No description provided for @studentProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Student'**
+  String get studentProfileTitle;
+
+  /// No description provided for @proofShareOnWall.
+  ///
+  /// In en, this message translates to:
+  /// **'Show my post on {shop}\'s page'**
+  String proofShareOnWall(String shop);
+
+  /// No description provided for @proofShareHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only after approval. You can change this later.'**
+  String get proofShareHint;
+
+  /// No description provided for @thanksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Say thanks'**
+  String get thanksTitle;
+
+  /// No description provided for @thanksHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A short note to {shop} (optional)'**
+  String thanksHint(String shop);
+
+  /// No description provided for @thanksSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get thanksSend;
+
+  /// No description provided for @thanksSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks sent'**
+  String get thanksSent;
+
+  /// No description provided for @thanksYourNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your note'**
+  String get thanksYourNote;
+
+  /// No description provided for @err_invalid_quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick between 1 and 50.'**
+  String get err_invalid_quantity;
+
+  /// No description provided for @err_invalid_duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick between 10 and 180 minutes.'**
+  String get err_invalid_duration;
+
+  /// No description provided for @err_drop_not_editable.
+  ///
+  /// In en, this message translates to:
+  /// **'Drops can\'t be edited — end it and start a new one.'**
+  String get err_drop_not_editable;
+
+  /// No description provided for @err_not_approved.
+  ///
+  /// In en, this message translates to:
+  /// **'You can thank the place after your post is approved.'**
+  String get err_not_approved;
+
+  /// No description provided for @err_note_too_long.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it under 280 characters.'**
+  String get err_note_too_long;
 }
 
 class _AppLocalizationsDelegate

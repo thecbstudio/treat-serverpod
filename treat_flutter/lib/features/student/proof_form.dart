@@ -18,9 +18,11 @@ class ProofForm extends StatefulWidget {
     required this.claimId,
     required this.proofTypes,
     required this.submitLabel,
+    required this.shopName,
   });
 
   final int claimId;
+  final String shopName;
   final List<ProofType> proofTypes;
   final String submitLabel;
 
@@ -33,6 +35,7 @@ class _ProofFormState extends State<ProofForm> {
   XFile? _file;
   Uint8List? _bytes;
   bool _busy = false;
+  bool _share = true;
 
   Future<void> _pick() async {
     try {
@@ -64,7 +67,12 @@ class _ProofFormState extends State<ProofForm> {
         upload.uploadDescription,
       ).uploadByteData(ByteData.sublistView(bytes));
       if (!ok) throw Exception('upload failed');
-      await client.claim.submitProof(widget.claimId, _type, upload.path);
+      await client.claim.submitProof(
+        widget.claimId,
+        _type,
+        upload.path,
+        shareOnWall: _share,
+      );
     } catch (e) {
       if (mounted) context.toast(errorMessage(e, context.l));
     } finally {
@@ -116,7 +124,17 @@ class _ProofFormState extends State<ProofForm> {
           icon: const Icon(Icons.image_outlined),
           label: Text(_file == null ? l.proofChoose : l.proofChange),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 4),
+        CheckboxListTile(
+          value: _share,
+          onChanged: _busy ? null : (v) => setState(() => _share = v ?? false),
+          contentPadding: EdgeInsets.zero,
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: T.accent,
+          title: Text(l.proofShareOnWall(widget.shopName)),
+          subtitle: Text(l.proofShareHint),
+        ),
+        const SizedBox(height: 6),
         FilledButton.icon(
           onPressed: _bytes == null || _busy ? null : _submit,
           icon: _busy

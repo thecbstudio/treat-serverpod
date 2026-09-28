@@ -7,6 +7,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../drops/drops_strip.dart';
 
 class OfferDetailScreen extends StatefulWidget {
   const OfferDetailScreen({super.key, required this.offerId});
@@ -69,6 +70,7 @@ class _Detail extends StatelessWidget {
     final offer = card.offer;
     final shop = card.shop;
     final eligibility = card.eligibility;
+    final isDrop = offer.kind == OfferKind.drop;
     final lock = eligibility == null
         ? (appSession.status == SessionStatus.shop ? l.lockShopView : null)
         : lockMessage(eligibility, l);
@@ -107,6 +109,14 @@ class _Detail extends StatelessWidget {
                 children: [
                   Row(
                     children: [
+                      if (isDrop) ...[
+                        Pill(
+                          l.dropBadge,
+                          tone: PillTone.red,
+                          icon: Icons.bolt_rounded,
+                        ),
+                        const SizedBox(width: 6),
+                      ],
                       Pill(offer.category.label(l), tone: PillTone.accent),
                       const SizedBox(width: 6),
                       if (shop.verified)
@@ -126,6 +136,10 @@ class _Detail extends StatelessWidget {
                       color: T.inkSecondary,
                     ),
                   ),
+                  if (isDrop) ...[
+                    const SizedBox(height: 12),
+                    _DropStatus(card: card),
+                  ],
                   const SizedBox(height: 12),
                   Text(offer.description, style: context.text.bodyLarge),
                   const SizedBox(height: 20),
@@ -145,34 +159,39 @@ class _Detail extends StatelessWidget {
                     ),
                   ],
                   SectionTitle(l.offerRules),
-                  TreatCard(
-                    child: Column(
-                      children: [
-                        _Row(
-                          Icons.repeat_rounded,
-                          offer.frequency.longLabel(l),
-                        ),
-                        _Row(
-                          Icons.schedule_rounded,
-                          l.offerHoursValue(
-                            hhmm(offer.activeStartMin),
-                            hhmm(offer.activeEndMin),
-                          ),
-                        ),
-                        if (offer.dailyCap != null)
+                  if (isDrop)
+                    TreatCard(
+                      child: _Row(Icons.bolt_rounded, l.dropRules),
+                    )
+                  else
+                    TreatCard(
+                      child: Column(
+                        children: [
                           _Row(
-                            Icons.today_rounded,
-                            '${l.offerDailyCap(offer.dailyCap!)} · '
-                            '${l.leftToday((offer.dailyCap! - card.claimedToday).clamp(0, offer.dailyCap!))}',
+                            Icons.repeat_rounded,
+                            offer.frequency.longLabel(l),
                           ),
-                        if (offer.totalCap != null)
                           _Row(
-                            Icons.inventory_2_outlined,
-                            l.offerTotalCap(offer.totalCap!),
+                            Icons.schedule_rounded,
+                            l.offerHoursValue(
+                              hhmm(offer.activeStartMin),
+                              hhmm(offer.activeEndMin),
+                            ),
                           ),
-                      ],
+                          if (offer.dailyCap != null)
+                            _Row(
+                              Icons.today_rounded,
+                              '${l.offerDailyCap(offer.dailyCap!)} · '
+                              '${l.leftToday((offer.dailyCap! - card.claimedToday).clamp(0, offer.dailyCap!))}',
+                            ),
+                          if (offer.totalCap != null)
+                            _Row(
+                              Icons.inventory_2_outlined,
+                              l.offerTotalCap(offer.totalCap!),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
                   SectionTitle(l.offerInReturn),
                   Wrap(
                     spacing: 8,
@@ -184,6 +203,7 @@ class _Detail extends StatelessWidget {
                   ),
                   SectionTitle(l.offerAboutShop),
                   TreatCard(
+                    onTap: () => context.push('/place/${shop.id}'),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -223,6 +243,21 @@ class _Detail extends StatelessWidget {
                             ),
                           ),
                         ],
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Text(
+                              l.placeView,
+                              style: context.text.labelLarge?.copyWith(
+                                color: T.accentInk,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              color: T.accentInk,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -303,4 +338,41 @@ class _ClaimButtonState extends State<_ClaimButton> {
       style: FilledButton.styleFrom(minimumSize: size),
     );
   }
+}
+
+class _DropStatus extends StatelessWidget {
+  const _DropStatus({required this.card});
+  final OfferCard card;
+
+  @override
+  Widget build(BuildContext context) => TreatCard(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Ticking(
+          builder: (context, now) {
+            final left = card.offer.endsAt!.difference(now);
+            final ended = left <= Duration.zero;
+            return Row(
+              children: [
+                if (!ended) const LivePulse(size: 8),
+                const SizedBox(width: 6),
+                Text(
+                  ended
+                      ? context.l.dropEnded
+                      : context.l.dropEndsIn(countdown(left)),
+                  style: context.text.titleMedium?.copyWith(
+                    color: ended ? T.inkSecondary : T.red,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        DropStock(card: card),
+      ],
+    ),
+  );
 }

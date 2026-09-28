@@ -312,6 +312,19 @@ class _FeedRow extends StatelessWidget {
                     color: T.inkSecondary,
                   ),
                 ),
+                if (c.thanksNote != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      '“${c.thanksNote}”',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.text.bodySmall?.copyWith(
+                        color: T.accentInk,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

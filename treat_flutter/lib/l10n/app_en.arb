@@ -364,5 +364,93 @@
   "welcomeShopHint": "Give small treats, get real local reach from students.",
   "welcomeHaveAccount": "Already have an account?",
   "authShopRegisterTitle": "Business sign-up",
-  "authShopHint": "Create your login first — next you'll add your business details."
+  "authShopHint": "Create your login first — next you'll add your business details.",
+  "dropsTitle": "Live drops",
+  "dropsSubtitle": "Last-minute treats — first come, first served.",
+  "dropBadge": "DROP",
+  "dropLive": "LIVE",
+  "dropLeft": "{n} of {total} left",
+  "@dropLeft": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "dropSoldOut": "All gone",
+  "dropEndsIn": "ends in {time}",
+  "@dropEndsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dropEnded": "Ended",
+  "dropRules": "One per student. Pick it up within 30 minutes after the drop ends.",
+  "lockDropEnded": "This drop has ended.",
+  "lockAlreadyClaimed": "You already got one from this drop.",
+  "shopStartDropCta": "Got leftovers? Start a drop",
+  "shopStartDropHint": "Surplus pastries, the last seats, an empty hour — students nearby see it live.",
+  "dropFormTitle": "Start a drop",
+  "dropFormWhat": "What's up for grabs?",
+  "dropFormWhatHint": "e.g. 6 croissants from this morning",
+  "dropFormDesc": "Details (optional)",
+  "dropFormQuantity": "How many?",
+  "dropFormDuration": "Open for",
+  "dropFormMinutes": "{n} min",
+  "@dropFormMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "dropFormStart": "Start drop",
+  "shopDropEnd": "End drop",
+  "shopDropEndConfirm": "End this drop now? Students who already claimed can still pick up.",
+  "wallTitle": "Posts from students",
+  "wallEmpty": "No shared posts yet.",
+  "wallFreshTitle": "Fresh on the wall",
+  "placeTreated": "Treated {n, plural, =1{1 student} other{{n} students}}",
+  "@placeTreated": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "placeView": "View place",
+  "placeOffers": "Offers",
+  "placeNoOffers": "No open offers right now.",
+  "studentProfileTitle": "Student",
+  "proofShareOnWall": "Show my post on {shop}'s page",
+  "@proofShareOnWall": {
+    "placeholders": {
+      "shop": {
+        "type": "String"
+      }
+    }
+  },
+  "proofShareHint": "Only after approval. You can change this later.",
+  "thanksTitle": "Say thanks",
+  "thanksHint": "A short note to {shop} (optional)",
+  "@thanksHint": {
+    "placeholders": {
+      "shop": {
+        "type": "String"
+      }
+    }
+  },
+  "thanksSend": "Send",
+  "thanksSent": "Thanks sent",
+  "thanksYourNote": "Your note",
+  "err_invalid_quantity": "Pick between 1 and 50.",
+  "err_invalid_duration": "Pick between 10 and 180 minutes.",
+  "err_drop_not_editable": "Drops can't be edited — end it and start a new one.",
+  "err_not_approved": "You can thank the place after your post is approved.",
+  "err_note_too_long": "Keep it under 280 characters."
 }

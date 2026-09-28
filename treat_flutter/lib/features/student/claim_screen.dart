@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -174,12 +175,7 @@ class _ClaimBody extends StatelessWidget {
                 body: l.claimProofPendingBody,
                 busy: true,
               ),
-              ClaimStatus.approved => _Verdict(
-                icon: Icons.celebration_outlined,
-                tone: PillTone.green,
-                title: l.claimApproved,
-                body: l.claimApprovedBody,
-              ),
+              ClaimStatus.approved => _Approved(view: view),
               ClaimStatus.rejected => _Rejected(view: view),
             },
           ),
@@ -363,6 +359,7 @@ class _Redeemed extends StatelessWidget {
         ProofForm(
           claimId: claim.id!,
           proofTypes: view.offer.proofTypes,
+          shopName: view.shop.name,
           submitLabel: l.proofSubmit,
         ),
       ],
@@ -457,10 +454,200 @@ class _Rejected extends StatelessWidget {
           ProofForm(
             claimId: claim.id!,
             proofTypes: view.offer.proofTypes,
+            shopName: view.shop.name,
             submitLabel: l.appealSubmit,
           ),
         ],
       ],
     );
   }
+}
+
+class _Approved extends StatelessWidget {
+  const _Approved({required this.view});
+  final ClaimView view;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            _Verdict(
+              icon: Icons.celebration_outlined,
+              tone: PillTone.green,
+              title: l.claimApproved,
+              body: l.claimApprovedBody,
+            ),
+            const Positioned.fill(child: IgnorePointer(child: Confetti())),
+          ],
+        ),
+        const SizedBox(height: 16),
+        _ThanksCard(view: view),
+      ],
+    );
+  }
+}
+
+class _ThanksCard extends StatefulWidget {
+  const _ThanksCard({required this.view});
+  final ClaimView view;
+
+  @override
+  State<_ThanksCard> createState() => _ThanksCardState();
+}
+
+class _ThanksCardState extends State<_ThanksCard> {
+  late final _note = TextEditingController(text: widget.view.claim.thanksNote);
+  late bool _share = widget.view.claim.shareOnWall;
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _note.dispose();
+    super.dispose();
+  }
+
+  Future<void> _send() async {
+    setState(() => _busy = true);
+    try {
+      await client.claim.thank(widget.view.claim.id!, _note.text, _share);
+      if (mounted) context.toast(context.l.thanksSent);
+    } catch (e) {
+      if (mounted) context.toast(errorMessage(e, context.l));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l;
+    final shop = widget.view.shop.name;
+    return TreatCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.favorite_border_rounded, color: T.accent),
+              const SizedBox(width: 8),
+              Text(l.thanksTitle, style: context.text.titleMedium),
+            ],
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: _note,
+            maxLength: 280,
+            minLines: 2,
+            maxLines: 4,
+            decoration: InputDecoration(hintText: l.thanksHint(shop)),
+          ),
+          CheckboxListTile(
+            value: _share,
+            onChanged: (v) => setState(() => _share = v ?? false),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            activeColor: T.accent,
+            title: Text(l.proofShareOnWall(shop)),
+          ),
+          FilledButton(
+            onPressed: _busy ? null : _send,
+            child: Text(l.thanksSend),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One-shot confetti burst in the brand colours.
+class Confetti extends StatefulWidget {
+  const Confetti({super.key});
+
+  @override
+  State<Confetti> createState() => _ConfettiState();
+}
+
+class _ConfettiState extends State<Confetti>
+    with SingleTickerProviderStateMixin {
+  late final _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1800),
+  )..forward();
+  final _pieces = List.generate(46, (i) => _Piece(math.Random(i)));
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _c,
+    builder: (context, _) =>
+        CustomPaint(painter: _ConfettiPainter(_pieces, _c.value)),
+  );
+}
+
+class _Piece {
+  _Piece(math.Random r)
+    : angle = -math.pi / 2 + (r.nextDouble() - 0.5) * math.pi * 0.9,
+      speed = 0.45 + r.nextDouble() * 0.55,
+      spin = (r.nextDouble() - 0.5) * 14,
+      color = const [
+        T.accent,
+        T.gold,
+        T.green,
+        T.red,
+        T.accentHover,
+      ][r.nextInt(5)],
+      size = 5 + r.nextDouble() * 5;
+
+  final double angle;
+  final double speed;
+  final double spin;
+  final Color color;
+  final double size;
+}
+
+class _ConfettiPainter extends CustomPainter {
+  _ConfettiPainter(this.pieces, this.t);
+  final List<_Piece> pieces;
+  final double t;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (t >= 1) return;
+    final origin = Offset(size.width / 2, size.height * 0.35);
+    final reach = size.width * 0.75;
+    for (final p in pieces) {
+      final d = reach * p.speed * t;
+      final pos =
+          origin +
+          Offset(math.cos(p.angle) * d, math.sin(p.angle) * d) +
+          Offset(0, 260 * t * t); // gravity
+      final paint = Paint()..color = p.color.withValues(alpha: 1 - t);
+      canvas
+        ..save()
+        ..translate(pos.dx, pos.dy)
+        ..rotate(p.spin * t)
+        ..drawRect(
+          Rect.fromCenter(
+            center: Offset.zero,
+            width: p.size,
+            height: p.size * 0.55,
+          ),
+          paint,
+        )
+        ..restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_ConfettiPainter old) => old.t != t;
 }

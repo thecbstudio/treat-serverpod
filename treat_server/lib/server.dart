@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:serverpod_auth_idp_server/core.dart';
@@ -6,6 +7,7 @@ import 'package:serverpod_cloud_storage/serverpod_cloud_storage.dart';
 
 import 'src/cache_busting.dart';
 import 'src/generated/serverpod.dart';
+import 'src/seed/demo_history.dart';
 import 'src/seed/demo_seed.dart';
 import 'src/services/jobs.dart';
 import 'src/web/routes/app_config_route.dart';
@@ -115,6 +117,24 @@ void run(List<String> args) async {
         demoPassword: pod.getPassword('demoAccountPassword'),
       );
       await resumePendingVerifications(session);
+      if (pod.getPassword('demoAccountPassword') != null) {
+        // Demo mode: keep a live drop around for anyone trying the app.
+        Timer.periodic(const Duration(minutes: 5), (_) async {
+          final s = await pod.createSession(enableLogging: false);
+          try {
+            await ensureDemoDrop(s);
+          } catch (e, st) {
+            s.log(
+              'Demo drop failed',
+              level: LogLevel.warning,
+              exception: e,
+              stackTrace: st,
+            );
+          } finally {
+            await s.close();
+          }
+        });
+      }
     } catch (e, stackTrace) {
       session.log(
         'Demo seed failed',

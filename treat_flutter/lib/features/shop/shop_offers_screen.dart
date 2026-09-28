@@ -6,6 +6,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../drops/drops_strip.dart';
 
 class ShopOffersScreen extends StatefulWidget {
   const ShopOffersScreen({super.key});
@@ -29,6 +30,33 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
       extra: offer,
     );
     if (changed == true) _reload();
+  }
+
+  Future<void> _openDropForm() async {
+    final started = await context.push<bool>('/shop/drops/new');
+    if (started == true) _reload();
+  }
+
+  Future<void> _endDrop(Offer drop) async {
+    final l = context.l;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(l.shopDropEndConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: T.red),
+            child: Text(l.shopDropEnd),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) await _setStatus(drop, OfferStatus.ended);
   }
 
   Future<void> _setStatus(Offer offer, OfferStatus status) async {
@@ -97,11 +125,40 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
                   );
                 }
                 if (!snap.hasData) return const LoadingView();
-                final cards = snap.data!;
+                final now = DateTime.now().toUtc();
+                // Drops first (live ones on top); drops over a day old drop off.
+                final drops =
+                    snap.data!
+                        .where(
+                          (c) =>
+                              c.offer.kind == OfferKind.drop &&
+                              c.offer.endsAt!.isAfter(
+                                now.subtract(const Duration(days: 1)),
+                              ),
+                        )
+                        .toList()
+                      ..sort(
+                        (a, b) => b.offer.endsAt!.compareTo(a.offer.endsAt!),
+                      );
+                final cards = snap.data!
+                    .where((c) => c.offer.kind == OfferKind.regular)
+                    .toList();
                 return ListView(
                   padding: const EdgeInsets.only(bottom: 96),
                   children: [
                     header,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: _StartDropCard(onTap: _openDropForm),
+                    ),
+                    for (final d in drops)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                        child: _ShopDropTile(
+                          card: d,
+                          onEnd: () => _endDrop(d.offer),
+                        ),
+                      ),
                     if (cards.isEmpty)
                       EmptyView(
                         icon: Icons.local_offer_outlined,
@@ -219,6 +276,120 @@ class _ShopOfferTile extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _StartDropCard extends StatelessWidget {
+  const _StartDropCard({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Material(
+    borderRadius: BorderRadius.circular(T.radiusLg),
+    clipBehavior: Clip.antiAlias,
+    child: InkWell(
+      onTap: onTap,
+      child: Ink(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [Color(0xFF2A1F1A), T.ink]),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                color: T.red,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.bolt_rounded, color: Colors.white),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l.shopStartDropCta,
+                    style: context.text.titleMedium?.copyWith(
+                      color: T.inkInverse,
+                    ),
+                  ),
+                  Text(
+                    context.l.shopStartDropHint,
+                    style: context.text.bodySmall?.copyWith(
+                      color: T.inkInverse.withValues(alpha: 0.75),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: T.inkInverse),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+class _ShopDropTile extends StatelessWidget {
+  const _ShopDropTile({required this.card, required this.onEnd});
+  final OfferCard card;
+  final VoidCallback onEnd;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l;
+    final offer = card.offer;
+    return TreatCard(
+      child: Ticking(
+        builder: (context, now) {
+          final left = offer.endsAt!.difference(now);
+          final live =
+              offer.status == OfferStatus.active && left > Duration.zero;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Pill(
+                    l.dropBadge,
+                    tone: live ? PillTone.red : PillTone.neutral,
+                    icon: Icons.bolt_rounded,
+                  ),
+                  const SizedBox(width: 8),
+                  if (live) ...[
+                    const LivePulse(size: 7),
+                    Text(
+                      l.dropEndsIn(countdown(left)),
+                      style: context.text.labelLarge?.copyWith(
+                        color: T.red,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ] else
+                    Text(
+                      l.dropEnded,
+                      style: context.text.labelLarge?.copyWith(
+                        color: T.inkSecondary,
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(offer.title, style: context.text.titleMedium),
+              const SizedBox(height: 8),
+              DropStock(card: card),
+              if (live) ...[
+                const SizedBox(height: 10),
+                OutlinedButton(onPressed: onEnd, child: Text(l.shopDropEnd)),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
