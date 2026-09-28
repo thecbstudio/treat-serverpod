@@ -1648,11 +1648,53 @@ abstract class AppLocalizations {
   /// **'Ended'**
   String get dropEnded;
 
+  /// No description provided for @dropClaimedOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} of {total} claimed'**
+  String dropClaimedOf(int n, int total);
+
   /// No description provided for @dropRules.
   ///
   /// In en, this message translates to:
   /// **'One per student. Pick it up within 30 minutes after the drop ends.'**
   String get dropRules;
+
+  /// No description provided for @dropClaimHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick it up by {time} — after that your code stops working.'**
+  String dropClaimHint(String time);
+
+  /// No description provided for @lockShortPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get lockShortPaused;
+
+  /// No description provided for @lockShortVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify to claim'**
+  String get lockShortVerify;
+
+  /// No description provided for @lockShortActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim open'**
+  String get lockShortActive;
+
+  /// No description provided for @lockShortUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Already used'**
+  String get lockShortUsed;
+
+  /// No description provided for @lockShortOpens.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens {time}'**
+  String lockShortOpens(String time);
 
   /// No description provided for @lockDropEnded.
   ///
@@ -1744,6 +1786,12 @@ abstract class AppLocalizations {
   /// **'Posts from students'**
   String get wallTitle;
 
+  /// No description provided for @studentWallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts'**
+  String get studentWallTitle;
+
   /// No description provided for @wallEmpty.
   ///
   /// In en, this message translates to:
@@ -1815,6 +1863,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send'**
   String get thanksSend;
+
+  /// No description provided for @thanksUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get thanksUpdate;
 
   /// No description provided for @thanksSent.
   ///

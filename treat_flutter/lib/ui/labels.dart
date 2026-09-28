@@ -14,6 +14,10 @@ String hhmm(int minuteOfDay) =>
 String istanbulDateTime(DateTime instant) =>
     DateFormat('EEE d MMM, HH:mm').format(instant.toUtc().add(_istanbulOffset));
 
+/// "14:05" in Istanbul time.
+String istanbulTime(DateTime instant) =>
+    DateFormat('HH:mm').format(instant.toUtc().add(_istanbulOffset));
+
 String istanbulDate(DateTime instant) =>
     DateFormat('d MMM yyyy').format(instant.toUtc().add(_istanbulOffset));
 
@@ -107,6 +111,24 @@ String? lockMessage(Eligibility e, AppLocalizations l) => switch (e.reason) {
   EligibilityReason.dailyCap => l.lockDailyCap,
   EligibilityReason.dropEnded => l.lockDropEnded,
   EligibilityReason.alreadyClaimed => l.lockAlreadyClaimed,
+};
+
+/// Pill-sized version of [lockMessage] for offer cards.
+String? lockShort(Eligibility e, AppLocalizations l) => switch (e.reason) {
+  EligibilityReason.ok => null,
+  EligibilityReason.offerInactive ||
+  EligibilityReason.tooManyStrikes => l.lockShortPaused,
+  EligibilityReason.notVerified => l.lockShortVerify,
+  EligibilityReason.activeClaim => l.lockShortActive,
+  EligibilityReason.frequency ||
+  EligibilityReason.alreadyClaimed => l.lockShortUsed,
+  EligibilityReason.outsideHours =>
+    e.opensAtMin == null
+        ? l.lockShortPaused
+        : l.lockShortOpens(hhmm(e.opensAtMin!)),
+  EligibilityReason.totalCap => l.dropSoldOut,
+  EligibilityReason.dropEnded => l.dropEnded,
+  EligibilityReason.dailyCap => l.soldOutToday,
 };
 
 /// "12:04" / "1:02:09" countdown text.

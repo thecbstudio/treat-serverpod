@@ -390,7 +390,38 @@
     }
   },
   "dropEnded": "Ended",
+  "dropClaimedOf": "{n} of {total} claimed",
+  "@dropClaimedOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "dropRules": "One per student. Pick it up within 30 minutes after the drop ends.",
+  "dropClaimHint": "Pick it up by {time} — after that your code stops working.",
+  "@dropClaimHint": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lockShortPaused": "Paused",
+  "lockShortVerify": "Verify to claim",
+  "lockShortActive": "Claim open",
+  "lockShortUsed": "Already used",
+  "lockShortOpens": "Opens {time}",
+  "@lockShortOpens": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "lockDropEnded": "This drop has ended.",
   "lockAlreadyClaimed": "You already got one from this drop.",
   "shopStartDropCta": "Got leftovers? Start a drop",
@@ -413,6 +444,7 @@
   "shopDropEnd": "End drop",
   "shopDropEndConfirm": "End this drop now? Students who already claimed can still pick up.",
   "wallTitle": "Posts from students",
+  "studentWallTitle": "Posts",
   "wallEmpty": "No shared posts yet.",
   "wallFreshTitle": "Fresh on the wall",
   "placeTreated": "Treated {n, plural, =1{1 student} other{{n} students}}",
@@ -446,6 +478,7 @@
     }
   },
   "thanksSend": "Send",
+  "thanksUpdate": "Update",
   "thanksSent": "Thanks sent",
   "thanksYourNote": "Your note",
   "err_invalid_quantity": "Pick between 1 and 50.",

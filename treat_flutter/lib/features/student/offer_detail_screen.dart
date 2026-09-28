@@ -60,6 +60,14 @@ class _BackBar extends StatelessWidget {
   );
 }
 
+/// Mirrors the server's claim expiry for drops: 30 minutes after the drop
+/// ends, but never longer than the regular 2-hour QR window.
+DateTime _dropPickupBy(Offer offer) {
+  final pickupBy = offer.endsAt!.add(const Duration(minutes: 30));
+  final regular = DateTime.now().add(const Duration(hours: 2));
+  return pickupBy.isBefore(regular) ? pickupBy : regular;
+}
+
 class _Detail extends StatelessWidget {
   const _Detail({required this.card});
   final OfferCard card;
@@ -151,7 +159,9 @@ class _Detail extends StatelessWidget {
                     _ClaimButton(offerId: offer.id!, eligibility: eligibility),
                     const SizedBox(height: 8),
                     Text(
-                      l.offerClaimHint,
+                      isDrop
+                          ? l.dropClaimHint(istanbulTime(_dropPickupBy(offer)))
+                          : l.offerClaimHint,
                       textAlign: TextAlign.center,
                       style: context.text.bodySmall?.copyWith(
                         color: T.inkSecondary,

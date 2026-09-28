@@ -878,8 +878,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dropEnded => 'Ended';
 
   @override
+  String dropClaimedOf(int n, int total) {
+    return '$n of $total claimed';
+  }
+
+  @override
   String get dropRules =>
       'One per student. Pick it up within 30 minutes after the drop ends.';
+
+  @override
+  String dropClaimHint(String time) {
+    return 'Pick it up by $time — after that your code stops working.';
+  }
+
+  @override
+  String get lockShortPaused => 'Paused';
+
+  @override
+  String get lockShortVerify => 'Verify to claim';
+
+  @override
+  String get lockShortActive => 'Claim open';
+
+  @override
+  String get lockShortUsed => 'Already used';
+
+  @override
+  String lockShortOpens(String time) {
+    return 'Opens $time';
+  }
 
   @override
   String get lockDropEnded => 'This drop has ended.';
@@ -931,6 +958,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wallTitle => 'Posts from students';
 
   @override
+  String get studentWallTitle => 'Posts';
+
+  @override
   String get wallEmpty => 'No shared posts yet.';
 
   @override
@@ -978,6 +1008,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get thanksSend => 'Send';
+
+  @override
+  String get thanksUpdate => 'Update';
 
   @override
   String get thanksSent => 'Thanks sent';

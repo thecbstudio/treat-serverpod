@@ -94,7 +94,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     ],
                   ),
                 ],
-                SectionTitle(l.wallTitle),
+                SectionTitle(l.studentWallTitle),
                 WallGrid(posts: s.wall, showShop: true),
               ],
             ),

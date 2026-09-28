@@ -23,7 +23,10 @@ class ShopEndpoint extends Endpoint {
     final activeOffers = await Offer.db.count(
       session,
       where: (t) =>
-          t.shopId.equals(shop.id!) & t.status.equals(OfferStatus.active),
+          t.shopId.equals(shop.id!) &
+          t.status.equals(OfferStatus.active) &
+          // Ended drops keep status active; don't count them.
+          (t.endsAt.equals(null) | (t.endsAt > now)),
     );
     final claimsThisWeek = await Claim.db.count(
       session,

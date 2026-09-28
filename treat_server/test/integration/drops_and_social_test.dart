@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:test/test.dart';
@@ -113,6 +114,15 @@ void main() {
       expect(card.eligibility!.reason, EligibilityReason.dropEnded);
     });
 
+    test('when a drop has ended then the panel no longer counts it as an '
+        'active offer', () async {
+      await endpoints.shopOffers.create(shop, offerInput());
+      final drop = await endpoints.shopOffers.startDrop(shop, dropInput());
+      expect((await endpoints.shop.dashboard(shop)).activeOffers, 2);
+      now = drop.endsAt!;
+      expect((await endpoints.shop.dashboard(shop)).activeOffers, 1);
+    });
+
     test(
       'when a drop is edited like an offer then drop_not_editable',
       () async {
@@ -185,18 +195,30 @@ void main() {
         );
         await endpoints.profile.createStudent(bea, 'Bea', 'AU');
 
-        final updates = endpoints.offer
-            .watchDrops(bea)
-            .map((cards) => [for (final c in cards) c.claimedTotal])
-            .take(3)
-            .toList();
-        await flushEventQueue();
+        // Wait for each update before the next action, so a slow initial
+        // DB read under load can't reorder or merge the snapshots.
+        final seen = <List<int>>[];
+        Completer<void>? waiting;
+        final sub = endpoints.offer.watchDrops(bea).listen((cards) {
+          seen.add([for (final c in cards) c.claimedTotal]);
+          waiting?.complete();
+          waiting = null;
+        });
+        Future<void> nextUpdate(int count) async {
+          if (seen.length >= count) return;
+          await (waiting = Completer<void>()).future.timeout(
+            const Duration(seconds: 10),
+          );
+        }
 
+        await nextUpdate(1);
         final drop = await endpoints.shopOffers.startDrop(shop, dropInput());
-        await flushEventQueue();
+        await nextUpdate(2);
         await endpoints.claim.create(ali, drop.id!);
+        await nextUpdate(3);
+        await sub.cancel();
 
-        expect(await updates, [
+        expect(seen, [
           <int>[],
           [0],
           [1],

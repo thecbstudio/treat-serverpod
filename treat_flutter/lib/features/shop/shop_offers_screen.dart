@@ -382,7 +382,15 @@ class _ShopDropTile extends StatelessWidget {
               const SizedBox(height: 8),
               Text(offer.title, style: context.text.titleMedium),
               const SizedBox(height: 8),
-              DropStock(card: card),
+              if (live)
+                DropStock(card: card)
+              else
+                Text(
+                  l.dropClaimedOf(card.claimedTotal, offer.totalCap ?? 0),
+                  style: context.text.bodyMedium?.copyWith(
+                    color: T.inkSecondary,
+                  ),
+                ),
               if (live) ...[
                 const SizedBox(height: 10),
                 OutlinedButton(onPressed: onEnd, child: Text(l.shopDropEnd)),

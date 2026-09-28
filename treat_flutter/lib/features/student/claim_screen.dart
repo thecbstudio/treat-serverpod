@@ -503,6 +503,7 @@ class _ThanksCard extends StatefulWidget {
 class _ThanksCardState extends State<_ThanksCard> {
   late final _note = TextEditingController(text: widget.view.claim.thanksNote);
   late bool _share = widget.view.claim.shareOnWall;
+  late bool _sent = widget.view.claim.thanksNote != null;
   bool _busy = false;
 
   @override
@@ -515,7 +516,9 @@ class _ThanksCardState extends State<_ThanksCard> {
     setState(() => _busy = true);
     try {
       await client.claim.thank(widget.view.claim.id!, _note.text, _share);
-      if (mounted) context.toast(context.l.thanksSent);
+      if (!mounted) return;
+      setState(() => _sent = true);
+      context.toast(context.l.thanksSent);
     } catch (e) {
       if (mounted) context.toast(errorMessage(e, context.l));
     } finally {
@@ -556,7 +559,7 @@ class _ThanksCardState extends State<_ThanksCard> {
           ),
           FilledButton(
             onPressed: _busy ? null : _send,
-            child: Text(l.thanksSend),
+            child: Text(_sent ? l.thanksUpdate : l.thanksSend),
           ),
         ],
       ),

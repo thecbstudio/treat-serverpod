@@ -169,9 +169,13 @@ class OfferTile extends StatelessWidget {
     final offer = card.offer;
     final dailyCap = offer.dailyCap;
     final left = dailyCap == null ? null : dailyCap - card.claimedToday;
-    final locked =
-        card.eligibility != null &&
-        card.eligibility!.reason != EligibilityReason.ok;
+    final eligibility = card.eligibility;
+    // The "left today" pill already says a daily cap is used up.
+    final lock =
+        eligibility == null ||
+            (eligibility.reason == EligibilityReason.dailyCap && left != null)
+        ? null
+        : lockShort(eligibility, l);
 
     return TreatCard(
       padding: EdgeInsets.zero,
@@ -248,15 +252,8 @@ class OfferTile extends StatelessWidget {
                         left > 0 ? l.leftToday(left) : l.soldOutToday,
                         tone: left > 0 ? PillTone.green : PillTone.red,
                       ),
-                    if (locked)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: Icon(
-                          Icons.lock_outline_rounded,
-                          size: 18,
-                          color: T.inkTertiary,
-                        ),
-                      ),
+                    if (lock != null)
+                      Pill(lock, icon: Icons.lock_outline_rounded),
                   ],
                 ),
               ],
