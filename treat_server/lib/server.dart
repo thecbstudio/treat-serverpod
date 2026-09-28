@@ -7,6 +7,7 @@ import 'package:serverpod_cloud_storage/serverpod_cloud_storage.dart';
 import 'src/cache_busting.dart';
 import 'src/generated/serverpod.dart';
 import 'src/seed/demo_seed.dart';
+import 'src/services/jobs.dart';
 import 'src/web/routes/app_config_route.dart';
 
 /// The starting point of the Serverpod server.
@@ -113,6 +114,7 @@ void run(List<String> args) async {
         session,
         demoPassword: pod.getPassword('demoAccountPassword'),
       );
+      await resumePendingVerifications(session);
     } catch (e, stackTrace) {
       session.log(
         'Demo seed failed',

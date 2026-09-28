@@ -30,10 +30,10 @@ Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web)
 | **Transactions + row locks** | Claiming locks the student and the offer (`LockMode.forUpdate`) so double taps and concurrent students can't beat caps or the frequency rule. Redeem is idempotent inside a locked transaction. |
 | **Streams (WebSockets)** | `claim.watch(id)` pushes the student's claim state; `shop.watchFeed()` pushes the business panel. |
 | **Server events** | `session.messages` channels `claim:<id>` / `shop:<id>` fan changes out to open streams; `watch` also re-checks the DB every 5 s so a missed message (e.g. multiple instances without Redis) only delays an update. |
-| **Future calls** | `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` runs the AI check right after submit, retries with backoff, and never punishes the student for an API failure. |
+| **Future calls** | `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` runs the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
 | **File uploads / cloud storage** | Proof screenshots go to **private** storage through upload descriptions; the server picks the path, checks type/size by magic bytes, and gives the business short-lived download links. |
 | **Authentication** | Serverpod email identity provider (sign-up, verification code, login) + our own student / business profiles. `.edu` e-mails are verified automatically. |
-| **Testing** | `serverpod_test` (`withServerpod`): 67 tests — rules, claim/redeem/expiry, live stream, proof verification with a fake AI, strikes and appeals. |
+| **Testing** | `serverpod_test` (`withServerpod`): 68 tests — rules, claim/redeem/expiry, live stream, proof verification with a fake AI, strikes and appeals. |
 | **Serverpod Cloud** | Hosting of server + Flutter web app, Postgres, storage and e-mail. |
 
 ### Rules worth knowing (`treat_server/lib/src/domain/rules.dart`)

@@ -2,9 +2,9 @@ import 'package:serverpod/serverpod.dart';
 
 import '../domain/clock.dart';
 import '../domain/rules.dart';
-import '../generated/future_calls.dart';
 import '../generated/protocol.dart';
 import 'accounts.dart';
+import 'jobs.dart';
 
 String claimChannel(int claimId) => 'claim:$claimId';
 String shopChannel(int shopId) => 'shop:$shopId';
@@ -111,10 +111,7 @@ Future<ClaimView> createClaim(Session session, int offerId) async {
     );
   });
 
-  await session.serverpod.futureCalls
-      .callAtTime(claim.expiresAt, identifier: expireCallId(claim.id!))
-      .expireClaimCall
-      .expire(claim.id!);
+  await scheduleExpiry(session, claim);
   await notifyClaimChanged(session, claim);
   return claimViewOf(session, claim);
 }
@@ -246,7 +243,7 @@ Future<RedeemResult> redeemClaim(Session session, String input) async {
     throw treatError('expired', 'This code has expired.');
   }
   if (!result.already) {
-    await session.serverpod.futureCalls.cancel(expireCallId(claim.id!));
+    await cancelExpiry(session, claim.id!);
     await notifyClaimChanged(session, claim);
   }
   return RedeemResult(
@@ -276,10 +273,7 @@ Future<void> expireClaimIfDue(Session session, int claimId) async {
   if (expired == null) return;
   if (expired.status == ClaimStatus.active) {
     // Fired early (clock skew): try again at the real expiry.
-    await session.serverpod.futureCalls
-        .callAtTime(expired.expiresAt, identifier: expireCallId(claimId))
-        .expireClaimCall
-        .expire(claimId);
+    await scheduleExpiry(session, expired);
     return;
   }
   await notifyClaimChanged(session, expired);

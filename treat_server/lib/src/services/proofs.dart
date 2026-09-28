@@ -3,10 +3,10 @@ import 'package:serverpod/serverpod.dart';
 import '../ai/proof_verifier.dart';
 import '../domain/clock.dart';
 import '../domain/rules.dart';
-import '../generated/future_calls.dart';
 import '../generated/protocol.dart';
 import 'accounts.dart';
 import 'claims.dart';
+import 'jobs.dart';
 
 const proofStorage = 'private';
 const maxProofBytes = 5 * 1024 * 1024;
@@ -150,10 +150,7 @@ Future<ClaimView> submitProofFor(
     );
   });
 
-  await session.serverpod.futureCalls
-      .callWithDelay(Duration.zero, identifier: verifyCallId(claimId))
-      .verifyProofCall
-      .verify(claimId);
+  await scheduleVerification(session, claimId);
   await notifyClaimChanged(session, claim);
   return claimViewOf(session, claim);
 }
@@ -322,10 +319,7 @@ Future<void> _retryOrGiveUp(Session session, int claimId) async {
   if (result.retry) {
     // 20 s, then 60 s.
     final delay = Duration(seconds: result.claim.verifyAttempts == 1 ? 20 : 60);
-    await session.serverpod.futureCalls
-        .callWithDelay(delay, identifier: verifyCallId(claimId))
-        .verifyProofCall
-        .verify(claimId);
+    await scheduleVerification(session, claimId, delay: delay);
   } else {
     await notifyClaimChanged(session, result.claim);
   }

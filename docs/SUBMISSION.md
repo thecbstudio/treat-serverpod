@@ -25,7 +25,7 @@ One user, one problem, one flow: *show QR → get scanned → post → get appro
 - **File uploads:** proof screenshots go to private cloud storage via upload descriptions; the server chooses the path and validates the file; businesses get short-lived links.
 - **Auth:** Serverpod's e-mail identity provider; `.edu` addresses are verified automatically.
 - **AI:** Claude via the Anthropic Messages API; the verdict is forced through a tool call (structured JSON, no text parsing).
-- **Tests:** 67 `serverpod_test` tests (rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes & appeals).
+- **Tests:** 68 `serverpod_test` tests (rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes & appeals).
 
 ## 4. AI disclosure
 
