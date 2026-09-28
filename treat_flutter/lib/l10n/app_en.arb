@@ -356,5 +356,13 @@
   "err_proof_not_allowed": "This claim doesn't take a screenshot right now.",
   "err_proof_type_not_accepted": "Pick one of the posts this place asks for.",
   "err_invalid_proof": "Upload a JPEG, PNG or WebP screenshot (max 5 MB).",
-  "claimTitleTreat": "Your treat"
+  "claimTitleTreat": "Your treat",
+  "welcomeWho": "Who are you?",
+  "welcomeStudentCta": "I'm a student",
+  "welcomeStudentHint": "Claim free treats around campus, post about them.",
+  "welcomeShopCta": "I run a business",
+  "welcomeShopHint": "Give small treats, get real local reach from students.",
+  "welcomeHaveAccount": "Already have an account?",
+  "authShopRegisterTitle": "Business sign-up",
+  "authShopHint": "Create your login first — next you'll add your business details."
 }

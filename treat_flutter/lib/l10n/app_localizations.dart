@@ -1551,6 +1551,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your treat'**
   String get claimTitleTreat;
+
+  /// No description provided for @welcomeWho.
+  ///
+  /// In en, this message translates to:
+  /// **'Who are you?'**
+  String get welcomeWho;
+
+  /// No description provided for @welcomeStudentCta.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m a student'**
+  String get welcomeStudentCta;
+
+  /// No description provided for @welcomeStudentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim free treats around campus, post about them.'**
+  String get welcomeStudentHint;
+
+  /// No description provided for @welcomeShopCta.
+  ///
+  /// In en, this message translates to:
+  /// **'I run a business'**
+  String get welcomeShopCta;
+
+  /// No description provided for @welcomeShopHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Give small treats, get real local reach from students.'**
+  String get welcomeShopHint;
+
+  /// No description provided for @welcomeHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get welcomeHaveAccount;
+
+  /// No description provided for @authShopRegisterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Business sign-up'**
+  String get authShopRegisterTitle;
+
+  /// No description provided for @authShopHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your login first — next you\'ll add your business details.'**
+  String get authShopHint;
 }
 
 class _AppLocalizationsDelegate

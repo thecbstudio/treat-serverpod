@@ -18,7 +18,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  UserRole? _role;
+  UserRole? _role = appSession.intendedRole;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +37,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           children: [
             Text(l.onboardingBody, style: context.text.titleMedium),
             const SizedBox(height: 14),
-            _RoleTile(
+            RoleTile(
               icon: Icons.school_outlined,
               title: l.onboardingStudent,
               hint: l.onboardingStudentHint,
               onTap: () => setState(() => _role = UserRole.student),
             ),
             const SizedBox(height: 10),
-            _RoleTile(
+            RoleTile(
               icon: Icons.storefront_outlined,
               title: l.onboardingShop,
               hint: l.onboardingShopHint,
@@ -72,8 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-class _RoleTile extends StatelessWidget {
-  const _RoleTile({
+class RoleTile extends StatelessWidget {
+  const RoleTile({
+    super.key,
     required this.icon,
     required this.title,
     required this.hint,

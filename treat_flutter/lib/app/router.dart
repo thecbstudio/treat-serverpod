@@ -83,8 +83,14 @@ final router = GoRouter(
     GoRoute(path: '/welcome', builder: (_, _) => const WelcomeScreen()),
     GoRoute(
       path: '/sign-in',
-      builder: (_, state) =>
-          SignInScreen(register: state.uri.queryParameters['mode'] != 'login'),
+      builder: (_, state) => SignInScreen(
+        register: state.uri.queryParameters['mode'] != 'login',
+        role: switch (state.uri.queryParameters['role']) {
+          'student' => UserRole.student,
+          'shop' => UserRole.shop,
+          _ => null,
+        },
+      ),
     ),
     GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
     ShellRoute(

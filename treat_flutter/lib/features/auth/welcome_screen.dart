@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 import '../../app/theme.dart';
 import '../../ui/widgets.dart';
 import 'auth_hero.dart';
+import 'onboarding_screen.dart' show RoleTile;
 
+/// First screen: what treat is, then "who are you?" — student or business —
+/// before any sign-up form.
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -48,22 +51,37 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           const SizedBox(height: 8),
-          FilledButton(
-            onPressed: () => context.push('/sign-in?mode=register'),
-            child: Text(l.welcomeRegister),
+          Text(l.welcomeWho, style: context.text.titleMedium),
+          const SizedBox(height: 10),
+          RoleTile(
+            icon: Icons.school_outlined,
+            title: l.welcomeStudentCta,
+            hint: l.welcomeStudentHint,
+            onTap: () => context.push('/sign-in?mode=register&role=student'),
           ),
           const SizedBox(height: 10),
-          OutlinedButton(
-            onPressed: () => context.push('/sign-in?mode=login'),
-            child: Text(l.welcomeLogin),
+          RoleTile(
+            icon: Icons.storefront_outlined,
+            title: l.welcomeShopCta,
+            hint: l.welcomeShopHint,
+            onTap: () => context.push('/sign-in?mode=register&role=shop'),
           ),
           const SizedBox(height: 16),
-          Text(
-            l.welcomeForShops,
-            textAlign: TextAlign.center,
-            style: context.text.bodyMedium?.copyWith(color: T.inkSecondary),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                l.welcomeHaveAccount,
+                style: context.text.bodyMedium?.copyWith(
+                  color: T.inkSecondary,
+                ),
+              ),
+              TextButton(
+                onPressed: () => context.push('/sign-in?mode=login'),
+                child: Text(l.welcomeLogin),
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
           Text(
             l.welcomeDemoHint,
             textAlign: TextAlign.center,

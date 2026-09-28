@@ -821,4 +821,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get claimTitleTreat => 'Your treat';
+
+  @override
+  String get welcomeWho => 'Who are you?';
+
+  @override
+  String get welcomeStudentCta => 'I\'m a student';
+
+  @override
+  String get welcomeStudentHint =>
+      'Claim free treats around campus, post about them.';
+
+  @override
+  String get welcomeShopCta => 'I run a business';
+
+  @override
+  String get welcomeShopHint =>
+      'Give small treats, get real local reach from students.';
+
+  @override
+  String get welcomeHaveAccount => 'Already have an account?';
+
+  @override
+  String get authShopRegisterTitle => 'Business sign-up';
+
+  @override
+  String get authShopHint =>
+      'Create your login first — next you\'ll add your business details.';
 }

@@ -14,6 +14,10 @@ class AppSession extends ChangeNotifier {
   }
 
   SessionStatus status = SessionStatus.loading;
+
+  /// Role picked on the welcome screen before signing up; onboarding opens
+  /// straight on that form.
+  UserRole? intendedRole;
   Me? me;
   Object? error;
   bool _loading = false;

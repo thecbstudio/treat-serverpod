@@ -134,6 +134,7 @@ class _ShopProfileFormState extends State<ShopProfileForm> {
             decoration: InputDecoration(
               labelText: l.fieldInstagram,
               helperText: l.fieldInstagramHint,
+              helperMaxLines: 2,
               prefixText: '@',
             ),
             maxLength: 31,
