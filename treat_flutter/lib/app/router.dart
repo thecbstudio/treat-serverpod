@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:treat_client/treat_client.dart';
 
 import '../client.dart';
+import '../features/auth/auth_hero.dart' show Wordmark;
 import '../features/auth/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
 import '../features/auth/welcome_screen.dart';
@@ -22,6 +23,7 @@ import '../features/student/offer_detail_screen.dart';
 import '../features/student/profile_screen.dart';
 import '../ui/widgets.dart';
 import 'session.dart';
+import 'theme.dart';
 
 const _publicPaths = {'/welcome', '/sign-in'};
 
@@ -235,6 +237,37 @@ class _NavShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final index = tabs.indexWhere((t) => location.startsWith(t.path));
+    if (context.isWide) {
+      final extended = MediaQuery.sizeOf(context).width >= 1200;
+      return Scaffold(
+        body: Row(
+          children: [
+            NavigationRail(
+              extended: extended,
+              labelType: extended ? null : NavigationRailLabelType.all,
+              minExtendedWidth: 200,
+              backgroundColor: T.card,
+              selectedIndex: index < 0 ? 0 : index,
+              onDestinationSelected: (i) => context.go(tabs[i].path),
+              leading: const Padding(
+                padding: EdgeInsets.fromLTRB(8, 20, 8, 28),
+                child: Wordmark(),
+              ),
+              destinations: [
+                for (final t in tabs)
+                  NavigationRailDestination(
+                    icon: Icon(t.icon),
+                    selectedIcon: Icon(t.selectedIcon),
+                    label: Text(_label(context, t.path)),
+                  ),
+              ],
+            ),
+            const VerticalDivider(width: 1, color: T.border),
+            Expanded(child: child),
+          ],
+        ),
+      );
+    }
     return Scaffold(
       body: child,
       bottomNavigationBar: NavigationBar(

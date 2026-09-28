@@ -11,20 +11,146 @@ extension L10nX on BuildContext {
   void toast(String message) => ScaffoldMessenger.of(this)
     ..hideCurrentSnackBar()
     ..showSnackBar(SnackBar(content: Text(message)));
+
+  /// Laptop/desktop: side navigation, grids, two-column pages.
+  bool get isWide => MediaQuery.sizeOf(this).width >= T.wideBreakpoint;
 }
 
-/// Centers content at the app's max width (phone-first, fine on desktop).
+/// Centers content at the app's max width. Forms and single-thing screens
+/// stay phone-width; [wide] screens (lists of cards, dashboards) use more of
+/// a laptop screen.
 class AppWidth extends StatelessWidget {
-  const AppWidth({super.key, required this.child});
+  const AppWidth({super.key, required this.child, this.wide = false});
   final Widget child;
+  final bool wide;
 
   @override
   Widget build(BuildContext context) => Align(
     alignment: Alignment.topCenter,
     child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: T.appMax),
+      constraints: BoxConstraints(maxWidth: wide ? T.appWide : T.appMax),
       child: child,
     ),
+  );
+}
+
+int _gridColumns(double width, double minTileWidth, double spacing) =>
+    ((width + spacing) / (minTileWidth + spacing)).floor().clamp(1, 3);
+
+Widget _gridRow(
+  BuildContext context, {
+  required int row,
+  required int columns,
+  required int itemCount,
+  required double spacing,
+  required IndexedWidgetBuilder itemBuilder,
+}) => IntrinsicHeight(
+  child: Row(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      for (var c = 0; c < columns; c++) ...[
+        if (c > 0) SizedBox(width: spacing),
+        Expanded(
+          child: row * columns + c < itemCount
+              ? itemBuilder(context, row * columns + c)
+              : const SizedBox.shrink(),
+        ),
+      ],
+    ],
+  ),
+);
+
+/// Box version of [SliverCardGrid] for pages built as a single column.
+class CardGrid extends StatelessWidget {
+  const CardGrid({
+    super.key,
+    required this.itemCount,
+    required this.itemBuilder,
+    this.minTileWidth = 330,
+    this.spacing = 12,
+  });
+
+  final int itemCount;
+  final IndexedWidgetBuilder itemBuilder;
+  final double minTileWidth;
+  final double spacing;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final columns = _gridColumns(
+        constraints.maxWidth,
+        minTileWidth,
+        spacing,
+      );
+      final rows = (itemCount / columns).ceil();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var r = 0; r < rows; r++) ...[
+            if (r > 0) SizedBox(height: spacing),
+            if (columns == 1)
+              itemBuilder(context, r)
+            else
+              _gridRow(
+                context,
+                row: r,
+                columns: columns,
+                itemCount: itemCount,
+                spacing: spacing,
+                itemBuilder: itemBuilder,
+              ),
+          ],
+        ],
+      );
+    },
+  );
+}
+
+/// Cards in as many columns (1–3) as fit [minTileWidth]; one column on a
+/// phone. Tiles in a row share the tallest tile's height.
+class SliverCardGrid extends StatelessWidget {
+  const SliverCardGrid({
+    super.key,
+    required this.itemCount,
+    required this.itemBuilder,
+    this.minTileWidth = 330,
+    this.spacing = 14,
+  });
+
+  final int itemCount;
+  final IndexedWidgetBuilder itemBuilder;
+  final double minTileWidth;
+  final double spacing;
+
+  @override
+  Widget build(BuildContext context) => SliverLayoutBuilder(
+    builder: (context, constraints) {
+      final columns = _gridColumns(
+        constraints.crossAxisExtent,
+        minTileWidth,
+        spacing,
+      );
+      if (columns == 1) {
+        return SliverList.separated(
+          itemCount: itemCount,
+          separatorBuilder: (_, _) => SizedBox(height: spacing),
+          itemBuilder: itemBuilder,
+        );
+      }
+      return SliverList.separated(
+        itemCount: (itemCount / columns).ceil(),
+        separatorBuilder: (_, _) => SizedBox(height: spacing),
+        itemBuilder: (context, row) => _gridRow(
+          context,
+          row: row,
+          columns: columns,
+          itemCount: itemCount,
+          spacing: spacing,
+          itemBuilder: itemBuilder,
+        ),
+      );
+    },
   );
 }
 

@@ -35,6 +35,8 @@ abstract final class T {
   static const radiusLg = 16.0;
 
   static const appMax = 560.0;
+  static const appWide = 1120.0;
+  static const wideBreakpoint = 900.0;
   static const tapMin = 44.0;
 
   static const cardShadow = [
@@ -152,6 +154,20 @@ ThemeData buildTheme() {
               ? T.accentInk
               : T.inkSecondary,
         ),
+      ),
+    ),
+    navigationRailTheme: NavigationRailThemeData(
+      backgroundColor: T.card,
+      indicatorColor: T.accentSoft,
+      selectedIconTheme: const IconThemeData(color: T.accentInk),
+      unselectedIconTheme: const IconThemeData(color: T.inkSecondary),
+      selectedLabelTextStyle: text.labelLarge?.copyWith(
+        fontWeight: FontWeight.w800,
+        color: T.ink,
+      ),
+      unselectedLabelTextStyle: text.labelLarge?.copyWith(
+        fontWeight: FontWeight.w700,
+        color: T.inkSecondary,
       ),
     ),
     dividerTheme: const DividerThemeData(color: T.border, space: 1),

@@ -103,6 +103,7 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
       ),
       body: SafeArea(
         child: AppWidth(
+          wide: true,
           child: RefreshIndicator(
             color: T.accent,
             onRefresh: _reload,
@@ -151,12 +152,15 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: _StartDropCard(onTap: _openDropForm),
                     ),
-                    for (final d in drops)
+                    if (drops.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                        child: _ShopDropTile(
-                          card: d,
-                          onEnd: () => _endDrop(d.offer),
+                        child: CardGrid(
+                          itemCount: drops.length,
+                          itemBuilder: (context, i) => _ShopDropTile(
+                            card: drops[i],
+                            onEnd: () => _endDrop(drops[i].offer),
+                          ),
                         ),
                       ),
                     if (cards.isEmpty)
@@ -165,19 +169,25 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
                         title: l.shopOffersEmpty,
                         hint: l.shopOffersEmptyHint,
                       ),
-                    for (final card in cards)
+                    if (cards.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                        child: _ShopOfferTile(
-                          card: card,
-                          onEdit: () => _openForm(card.offer),
-                          onToggle: () => _setStatus(
-                            card.offer,
-                            card.offer.status == OfferStatus.active
-                                ? OfferStatus.paused
-                                : OfferStatus.active,
-                          ),
-                          onDelete: () => _delete(card.offer),
+                        child: CardGrid(
+                          itemCount: cards.length,
+                          itemBuilder: (context, i) {
+                            final card = cards[i];
+                            return _ShopOfferTile(
+                              card: card,
+                              onEdit: () => _openForm(card.offer),
+                              onToggle: () => _setStatus(
+                                card.offer,
+                                card.offer.status == OfferStatus.active
+                                    ? OfferStatus.paused
+                                    : OfferStatus.active,
+                              ),
+                              onDelete: () => _delete(card.offer),
+                            );
+                          },
                         ),
                       ),
                   ],

@@ -55,6 +55,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return Scaffold(
       body: SafeArea(
         child: AppWidth(
+          wide: true,
           child: RefreshIndicator(
             color: T.accent,
             onRefresh: _reload,
@@ -117,9 +118,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     }
                     return SliverPadding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                      sliver: SliverList.separated(
+                      sliver: SliverCardGrid(
                         itemCount: cards.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 14),
                         itemBuilder: (context, i) => OfferTile(
                           card: cards[i],
                           onTap: () async {

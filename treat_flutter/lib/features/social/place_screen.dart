@@ -97,6 +97,7 @@ class _Page extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: AppWidth(
+            wide: true,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
               child: Column(
@@ -193,14 +194,13 @@ class _Page extends StatelessWidget {
                         color: T.inkSecondary,
                       ),
                     ),
-                  for (final c in offers)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: OfferTile(
-                        card: c,
-                        onTap: () => context.push('/offer/${c.offer.id}'),
-                      ),
+                  CardGrid(
+                    itemCount: offers.length,
+                    itemBuilder: (context, i) => OfferTile(
+                      card: offers[i],
+                      onTap: () => context.push('/offer/${offers[i].offer.id}'),
                     ),
+                  ),
                   SectionTitle(l.wallTitle),
                   WallGrid(posts: page.wall),
                 ],

@@ -11,6 +11,7 @@ class AuthScaffold extends StatelessWidget {
     this.subtitle,
     required this.child,
     this.showBack = false,
+    this.aside,
   });
 
   final String title;
@@ -18,8 +19,104 @@ class AuthScaffold extends StatelessWidget {
   final Widget child;
   final bool showBack;
 
+  /// Extra content for the hero panel on wide screens (on a phone the
+  /// screen puts it in the card instead).
+  final Widget? aside;
+
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) =>
+      context.isWide ? _wide(context) : _narrow(context);
+
+  /// Laptop: the persimmon panel fills the left, the card sits on the right.
+  Widget _wide(BuildContext context) => Scaffold(
+    body: Row(
+      children: [
+        Expanded(
+          flex: 11,
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFEF6A3F), T.accent, T.accentHover],
+              ),
+            ),
+            child: CustomPaint(
+              painter: _DotsPainter(),
+              child: SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 56,
+                      vertical: 40,
+                    ),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 520),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (showBack)
+                            IconButton(
+                              onPressed: () => Navigator.of(context).maybePop(),
+                              icon: const Icon(Icons.arrow_back_rounded),
+                              color: T.inkInverse,
+                              tooltip: context.l.back,
+                            ),
+                          const Wordmark(color: T.inkInverse, size: 56),
+                          const SizedBox(height: 16),
+                          Text(
+                            title,
+                            style: context.text.displaySmall?.copyWith(
+                              color: T.inkInverse,
+                              fontWeight: FontWeight.w800,
+                              height: 1.1,
+                            ),
+                          ),
+                          if (subtitle != null) ...[
+                            const SizedBox(height: 12),
+                            Text(
+                              subtitle!,
+                              style: context.text.titleMedium?.copyWith(
+                                color: T.inkInverse.withValues(alpha: 0.9),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                          if (aside != null) ...[
+                            const SizedBox(height: 32),
+                            aside!,
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 9,
+          child: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(32),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 460),
+                  child: TreatCard(
+                    padding: const EdgeInsets.all(24),
+                    child: child,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  Widget _narrow(BuildContext context) => Scaffold(
     body: SingleChildScrollView(
       child: Stack(
         children: [

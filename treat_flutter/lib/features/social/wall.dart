@@ -124,8 +124,9 @@ class WallGrid extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: posts.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      // Two columns on a phone, more on a laptop.
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 220,
         mainAxisSpacing: 10,
         crossAxisSpacing: 10,
         childAspectRatio: 0.62,

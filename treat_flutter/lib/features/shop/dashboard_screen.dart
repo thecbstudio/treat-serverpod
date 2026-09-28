@@ -94,11 +94,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l;
     final data = _data;
     return Scaffold(
       body: SafeArea(
         child: AppWidth(
+          wide: true,
           child: switch ((data, _error)) {
             (null, final Object e) => ErrorView(error: e, onRetry: _load),
             (null, _) => const LoadingView(),
@@ -107,82 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onRefresh: _load,
               child: ListView(
                 padding: const EdgeInsets.all(16),
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          d.shop.name,
-                          style: context.text.headlineMedium,
-                        ),
-                      ),
-                      Pill(
-                        l.claimLive,
-                        tone: PillTone.green,
-                        icon: Icons.circle,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  // Rows of equal-height cards; sized by content so nothing
-                  // overflows on narrow phones.
-                  for (final pair in [
-                    [
-                      (l.dashTotalRedeems, d.shop.totalRedeems),
-                      (l.dashApprovedProofs, d.shop.approvedProofs),
-                    ],
-                    [
-                      (l.dashActiveOffers, d.activeOffers),
-                      (l.dashWeekClaims, d.claimsThisWeek),
-                    ],
-                  ]) ...[
-                    IntrinsicHeight(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(child: _Stat(pair[0].$1, '${pair[0].$2}')),
-                          const SizedBox(width: 10),
-                          Expanded(child: _Stat(pair[1].$1, '${pair[1].$2}')),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  _RoiCard(data: d),
-                  SectionTitle(l.dashLive),
-                  if (d.recent.isEmpty)
-                    Text(
-                      l.dashEmpty,
-                      style: context.text.bodyMedium?.copyWith(
-                        color: T.inkSecondary,
-                      ),
-                    ),
-                  for (final v in d.recent)
-                    _FeedRow(
-                      view: v,
-                      flash: v.claim.id == _flashClaimId,
-                      onViewProof:
-                          v.claim.status == ClaimStatus.approved ||
-                              v.claim.status == ClaimStatus.rejected ||
-                              v.claim.status == ClaimStatus.proofPending
-                          ? () => _showProof(v)
-                          : null,
-                    ),
-                  if (d.topStudents.isNotEmpty) ...[
-                    SectionTitle(l.dashTopStudents),
-                    for (final s in d.topStudents)
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: InitialsAvatar(s.name),
-                        title: Text(s.name),
-                        subtitle: Text(s.university),
-                        trailing: Pill(
-                          l.dashApprovedCount(s.approved),
-                          tone: PillTone.green,
-                        ),
-                      ),
-                  ],
-                ],
+                children: context.isWide ? _wide(d) : _narrow(d),
               ),
             ),
           },
@@ -190,6 +115,117 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+  Widget _header(ShopDashboard d) => Row(
+    children: [
+      Expanded(child: Text(d.shop.name, style: context.text.headlineMedium)),
+      Pill(context.l.claimLive, tone: PillTone.green, icon: Icons.circle),
+    ],
+  );
+
+  List<(String, int)> _stats(ShopDashboard d) => [
+    (context.l.dashTotalRedeems, d.shop.totalRedeems),
+    (context.l.dashApprovedProofs, d.shop.approvedProofs),
+    (context.l.dashActiveOffers, d.activeOffers),
+    (context.l.dashWeekClaims, d.claimsThisWeek),
+  ];
+
+  /// Equal-height cards sized by content, so nothing overflows.
+  Widget _statRow(List<(String, int)> stats) => IntrinsicHeight(
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final (i, (label, value)) in stats.indexed) ...[
+          if (i > 0) const SizedBox(width: 10),
+          Expanded(child: _Stat(label, '$value')),
+        ],
+      ],
+    ),
+  );
+
+  List<Widget> _feedSection(ShopDashboard d) => [
+    SectionTitle(context.l.dashLive),
+    if (d.recent.isEmpty)
+      Text(
+        context.l.dashEmpty,
+        style: context.text.bodyMedium?.copyWith(color: T.inkSecondary),
+      ),
+    for (final v in d.recent)
+      _FeedRow(
+        view: v,
+        flash: v.claim.id == _flashClaimId,
+        onViewProof:
+            v.claim.status == ClaimStatus.approved ||
+                v.claim.status == ClaimStatus.rejected ||
+                v.claim.status == ClaimStatus.proofPending
+            ? () => _showProof(v)
+            : null,
+      ),
+  ];
+
+  List<Widget> _topStudents(ShopDashboard d) => [
+    if (d.topStudents.isNotEmpty) ...[
+      SectionTitle(context.l.dashTopStudents),
+      for (final s in d.topStudents)
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: InitialsAvatar(s.name),
+          title: Text(s.name),
+          subtitle: Text(s.university),
+          trailing: Pill(
+            context.l.dashApprovedCount(s.approved),
+            tone: PillTone.green,
+          ),
+        ),
+    ],
+  ];
+
+  List<Widget> _narrow(ShopDashboard d) {
+    final stats = _stats(d);
+    return [
+      _header(d),
+      const SizedBox(height: 14),
+      _statRow(stats.sublist(0, 2)),
+      const SizedBox(height: 10),
+      _statRow(stats.sublist(2)),
+      const SizedBox(height: 10),
+      _RoiCard(data: d),
+      ..._feedSection(d),
+      ..._topStudents(d),
+    ];
+  }
+
+  /// Laptop: all numbers in one row, the live feed beside ROI + top students.
+  List<Widget> _wide(ShopDashboard d) => [
+    _header(d),
+    const SizedBox(height: 14),
+    _statRow(_stats(d)),
+    const SizedBox(height: 6),
+    Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: _feedSection(d),
+          ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 20),
+              _RoiCard(data: d),
+              ..._topStudents(d),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ];
 }
 
 class _Stat extends StatelessWidget {
