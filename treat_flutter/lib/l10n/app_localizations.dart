@@ -799,7 +799,7 @@ abstract class AppLocalizations {
   /// No description provided for @shopOfferClaimedTotal.
   ///
   /// In en, this message translates to:
-  /// **'Claimed {n} times'**
+  /// **'{n, plural, =1{Claimed once} other{Claimed {n} times}}'**
   String shopOfferClaimedTotal(int n);
 
   /// No description provided for @shopOfferClaimedToday.

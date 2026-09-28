@@ -124,21 +124,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 2.6,
-                    children: [
-                      _Stat(l.dashTotalRedeems, '${d.shop.totalRedeems}'),
-                      _Stat(l.dashApprovedProofs, '${d.shop.approvedProofs}'),
-                      _Stat(l.dashActiveOffers, '${d.activeOffers}'),
-                      _Stat(l.dashWeekClaims, '${d.claimsThisWeek}'),
+                  // Rows of equal-height cards; sized by content so nothing
+                  // overflows on narrow phones.
+                  for (final pair in [
+                    [
+                      (l.dashTotalRedeems, d.shop.totalRedeems),
+                      (l.dashApprovedProofs, d.shop.approvedProofs),
                     ],
-                  ),
-                  const SizedBox(height: 10),
+                    [
+                      (l.dashActiveOffers, d.activeOffers),
+                      (l.dashWeekClaims, d.claimsThisWeek),
+                    ],
+                  ]) ...[
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: _Stat(pair[0].$1, '${pair[0].$2}')),
+                          const SizedBox(width: 10),
+                          Expanded(child: _Stat(pair[1].$1, '${pair[1].$2}')),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                   _RoiCard(data: d),
                   SectionTitle(l.dashLive),
                   if (d.recent.isEmpty)
@@ -203,8 +212,7 @@ class _Stat extends StatelessWidget {
         ),
         Text(
           label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
           style: context.text.labelMedium?.copyWith(color: T.inkSecondary),
         ),
       ],

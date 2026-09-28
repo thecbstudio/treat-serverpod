@@ -180,6 +180,7 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                       decoration: InputDecoration(
                         labelText: l.formDailyCap,
                         helperText: l.formCapHint,
+                        helperMaxLines: 2,
                       ),
                       keyboardType: TextInputType.number,
                       validator: _capValidator,
@@ -192,6 +193,7 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                       decoration: InputDecoration(
                         labelText: l.formTotalCap,
                         helperText: l.formCapHint,
+                        helperMaxLines: 2,
                       ),
                       keyboardType: TextInputType.number,
                       validator: _capValidator,

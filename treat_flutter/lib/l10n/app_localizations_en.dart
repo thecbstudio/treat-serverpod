@@ -395,7 +395,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String shopOfferClaimedTotal(int n) {
-    return 'Claimed $n times';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'Claimed $n times',
+      one: 'Claimed once',
+    );
+    return '$_temp0';
   }
 
   @override

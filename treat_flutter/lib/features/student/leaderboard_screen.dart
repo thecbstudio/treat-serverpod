@@ -34,7 +34,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
               future: _future,
               builder: (context, snap) {
                 final header = Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                  padding: const EdgeInsets.only(top: 16, bottom: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -53,6 +53,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                 );
                 if (snap.hasError) {
                   return ListView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     children: [
                       header,
                       ErrorView(error: snap.error!, onRetry: _reload),

@@ -186,7 +186,7 @@
   "shopOffersEmptyHint": "Create your first offer; students see it in Discover right away.",
   "shopOfferLive": "Live",
   "shopOfferPaused": "Paused",
-  "shopOfferClaimedTotal": "Claimed {n} times",
+  "shopOfferClaimedTotal": "{n, plural, =1{Claimed once} other{Claimed {n} times}}",
   "@shopOfferClaimedTotal": {
     "placeholders": {
       "n": {
