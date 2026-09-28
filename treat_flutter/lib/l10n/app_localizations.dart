@@ -202,12 +202,6 @@ abstract class AppLocalizations {
   /// **'Are you a business? Sign up the same way and pick “Business”.'**
   String get welcomeForShops;
 
-  /// No description provided for @welcomeDemoHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Judging? Demo logins are in the project README.'**
-  String get welcomeDemoHint;
-
   /// No description provided for @authLoginTitle.
   ///
   /// In en, this message translates to:
@@ -1911,6 +1905,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep it under 280 characters.'**
   String get err_note_too_long;
+
+  /// No description provided for @err_demo_off.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo sign-in is turned off on this server.'**
+  String get err_demo_off;
+
+  /// No description provided for @err_demo_busy.
+  ///
+  /// In en, this message translates to:
+  /// **'Lots of people are trying the demo right now. Try again in a few minutes.'**
+  String get err_demo_busy;
+
+  /// No description provided for @err_no_sample.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no sample screenshot for this offer. Upload your own.'**
+  String get err_no_sample;
+
+  /// No description provided for @demoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Judging? Try it in one tap'**
+  String get demoTitle;
+
+  /// No description provided for @demoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the student here and the business in a second window — watch both update live.'**
+  String get demoHint;
+
+  /// No description provided for @demoStudent.
+  ///
+  /// In en, this message translates to:
+  /// **'Student'**
+  String get demoStudent;
+
+  /// No description provided for @demoShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get demoShop;
+
+  /// No description provided for @proofSampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: no post handy?'**
+  String get proofSampleTitle;
+
+  /// No description provided for @proofSampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a ready-made story screenshot. Claude checks it for real — try both.'**
+  String get proofSampleHint;
+
+  /// No description provided for @proofSampleGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a story that tags {shop}'**
+  String proofSampleGood(String shop);
+
+  /// No description provided for @proofSampleBad.
+  ///
+  /// In en, this message translates to:
+  /// **'Send one that tags nobody'**
+  String get proofSampleBad;
 }
 
 class _AppLocalizationsDelegate

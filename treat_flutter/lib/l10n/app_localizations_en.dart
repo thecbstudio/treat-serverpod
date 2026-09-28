@@ -66,10 +66,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Are you a business? Sign up the same way and pick “Business”.';
 
   @override
-  String get welcomeDemoHint =>
-      'Judging? Demo logins are in the project README.';
-
-  @override
   String get authLoginTitle => 'Welcome back';
 
   @override
@@ -1034,4 +1030,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_note_too_long => 'Keep it under 280 characters.';
+
+  @override
+  String get err_demo_off => 'Demo sign-in is turned off on this server.';
+
+  @override
+  String get err_demo_busy =>
+      'Lots of people are trying the demo right now. Try again in a few minutes.';
+
+  @override
+  String get err_no_sample =>
+      'There\'s no sample screenshot for this offer. Upload your own.';
+
+  @override
+  String get demoTitle => 'Judging? Try it in one tap';
+
+  @override
+  String get demoHint =>
+      'Open the student here and the business in a second window — watch both update live.';
+
+  @override
+  String get demoStudent => 'Student';
+
+  @override
+  String get demoShop => 'Business';
+
+  @override
+  String get proofSampleTitle => 'Demo: no post handy?';
+
+  @override
+  String get proofSampleHint =>
+      'Send a ready-made story screenshot. Claude checks it for real — try both.';
+
+  @override
+  String proofSampleGood(String shop) {
+    return 'Send a story that tags $shop';
+  }
+
+  @override
+  String get proofSampleBad => 'Send one that tags nobody';
 }

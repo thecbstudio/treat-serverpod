@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:serverpod/serverpod.dart';
 
 import '../ai/proof_verifier.dart';
@@ -6,6 +8,7 @@ import '../domain/rules.dart';
 import '../generated/protocol.dart';
 import 'accounts.dart';
 import 'claims.dart';
+import 'demo.dart';
 import 'jobs.dart';
 
 const proofStorage = 'private';
@@ -155,6 +158,50 @@ Future<ClaimView> submitProofFor(
   await scheduleVerification(session, claimId);
   await notifyClaimChanged(session, claim);
   return claimViewOf(session, claim);
+}
+
+/// Demo students only: stores a ready-made story screenshot (one that tags the
+/// place, or one that tags nobody) and submits it through the normal path, so
+/// judges can see Claude approve and reject without posting anything.
+Future<ClaimView> submitSampleProofFor(
+  Session session,
+  int claimId, {
+  required bool good,
+  bool shareOnWall = false,
+}) async {
+  requireDemoMode(session);
+  final student = await requireStudent(session);
+  if (!isDemoStudent(student)) {
+    throw treatError('demo_off', 'Samples are for demo accounts only.');
+  }
+  final claim = await _ownClaim(session, claimId);
+  if (!_canUpload(claim)) {
+    throw treatError(
+      'proof_not_allowed',
+      'This claim does not take a proof now.',
+    );
+  }
+  final offer = await Offer.db.findById(session, claim.offerId);
+  final shop = await Shop.db.findById(session, claim.shopId);
+  final bytes = !offer!.proofTypes.contains(ProofType.igStory)
+      ? null
+      : await sampleProofBytes(shop!, good: good);
+  if (bytes == null) {
+    throw treatError('no_sample', 'No sample screenshot for this offer.');
+  }
+  final path = 'proofs/$claimId/${clock().millisecondsSinceEpoch}.img';
+  await session.storage.storeFile(
+    storageId: proofStorage,
+    path: path,
+    byteData: ByteData.sublistView(Uint8List.fromList(bytes)),
+  );
+  return submitProofFor(
+    session,
+    claimId,
+    ProofType.igStory,
+    path,
+    shareOnWall: shareOnWall,
+  );
 }
 
 /// Run by the VerifyProof future call. Asks the AI, then applies the verdict:

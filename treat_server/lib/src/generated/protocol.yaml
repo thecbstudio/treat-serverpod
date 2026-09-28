@@ -13,10 +13,15 @@ claim:
   - create:
   - proofUpload:
   - submitProof:
+  - submitSampleProof:
   - thank:
   - listMine:
   - get:
   - watch:
+demo:
+  - enabled:
+  - signInAsGuestStudent:
+  - signInAsDemoShop:
 leaderboard:
   - top:
 offer:

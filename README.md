@@ -7,7 +7,7 @@ A student grabs an offer ("medium filter coffee"), shows a QR code at the counte
 Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web) + Serverpod 4**.
 
 > **Live app:** https://treat-app.serverpod.space *(being deployed on Serverpod Cloud)*
-> **Demo logins:** see [Demo accounts](#demo-accounts).
+> **Judging?** Tap **Student** / **Business** under *"Judging? Try it in one tap"* on the welcome screen — no sign-up, no real post needed. Details: [Demo accounts](#demo-accounts).
 
 ---
 
@@ -32,8 +32,8 @@ Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web)
 | **Server events** | `session.messages` channels `claim:<id>` / `shop:<id>` fan changes out to open streams; `watch` also re-checks the DB every 5 s so a missed message (e.g. multiple instances without Redis) only delays an update. |
 | **Future calls** | `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` runs the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
 | **File uploads / cloud storage** | Proof screenshots go to **private** storage through upload descriptions; the server picks the path, checks type/size by magic bytes, and gives the business short-lived download links. |
-| **Authentication** | Serverpod email identity provider (sign-up, verification code, login) + our own student / business profiles. `.edu` e-mails are verified automatically. |
-| **Testing** | `serverpod_test` (`withServerpod`): 68 tests — rules, claim/redeem/expiry, live stream, proof verification with a fake AI, strikes and appeals. |
+| **Authentication** | Serverpod email identity provider (sign-up, verification code, login) + our own student / business profiles. `.edu` e-mails are verified automatically. Demo mode adds a one-tap sign-in that creates a guest and issues its token server-side (`AuthServices.instance.tokenManager.issueToken`). |
+| **Testing** | `serverpod_test` (`withServerpod`): 92 tests — rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes and appeals, drops, demo sign-in. |
 | **Serverpod Cloud** | Hosting of server + Flutter web app, Postgres, storage and e-mail. |
 
 ### Rules worth knowing (`treat_server/lib/src/domain/rules.dart`)
@@ -71,7 +71,13 @@ Created automatically on server start when `demoAccountPassword` is set (local p
 | Business — Kırlangıç Kahve | `kirlangic@demo.treat` |
 | Other businesses | `tostcu@`, `duman@`, `form@`, `yirmi7@demo.treat` |
 
-Try it with two browsers (or a normal + incognito window): student claims an offer → business scans the code on **Scan** → student uploads a screenshot → watch both screens update.
+**Fastest way to try it (two browser windows, e.g. normal + incognito):**
+1. Window A: welcome screen → **Student** (one tap; every tap creates a fresh, verified guest student, so judges never block each other).
+2. Window B: welcome screen → **Business** (the shared demo place, Pixel Oyun Kafe, which always has a live drop).
+3. A: open the live drop → **Claim treat** → note the 6-character code. B: **Scan** → type the code. A flips to *Redeemed* by itself.
+4. A: no real post needed — under *Demo: no post handy?* send the sample story that **tags nobody** → Claude rejects it (strike 1/3). Appeal with the sample that **tags the place** → Claude approves and the strike is returned. B's **Panel** updates live.
+
+The samples are ready-made story screenshots stored on the server; they go through exactly the same upload → storage → Claude path as a real one. They only exist for demo accounts, and demo sign-in only exists while the server runs in demo mode (`demoAccountPassword` set).
 
 ## Project layout
 

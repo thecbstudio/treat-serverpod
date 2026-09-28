@@ -303,6 +303,22 @@ class EndpointClaim extends _isc.EndpointRef {
     },
   );
 
+  /// Demo accounts only: submits a ready-made story screenshot that tags the
+  /// place ([good]) or tags nobody, through the same verification.
+  _ida.Future<_iq1pcdgl.ClaimView> submitSampleProof(
+    int claimId,
+    bool good, {
+    bool? shareOnWall,
+  }) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+    'claim',
+    'submitSampleProof',
+    {
+      'claimId': claimId,
+      'good': good,
+      'shareOnWall': shareOnWall,
+    },
+  );
+
   /// After approval: a short thank-you note to the place (shown on its page
   /// and in its panel) and whether the post may appear on its public wall.
   _ida.Future<_iq1pcdgl.ClaimView> thank(
@@ -343,6 +359,41 @@ class EndpointClaim extends _isc.EndpointRef {
         'claim',
         'watch',
         {'claimId': claimId},
+        {},
+      );
+}
+
+/// One-tap demo sign-in for judges. Only works when the server runs in demo
+/// mode (`demoAccountPassword` is set), so a real deployment can switch it off.
+///
+/// Every "try as a student" gets a fresh guest student: a shared account would
+/// let one judge's claim (once a week per place) or strikes block the next.
+/// The business side signs into the shared demo shop, which can serve many
+/// students at once.
+/// {@category Endpoint}
+class EndpointDemo extends _isc.EndpointRef {
+  EndpointDemo(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'demo';
+
+  _ida.Future<bool> enabled() => caller.callServerEndpoint<bool>(
+    'demo',
+    'enabled',
+    {},
+  );
+
+  _ida.Future<_iacc.AuthSuccess> signInAsGuestStudent() =>
+      caller.callServerEndpoint<_iacc.AuthSuccess>(
+        'demo',
+        'signInAsGuestStudent',
+        {},
+      );
+
+  _ida.Future<_iacc.AuthSuccess> signInAsDemoShop() =>
+      caller.callServerEndpoint<_iacc.AuthSuccess>(
+        'demo',
+        'signInAsDemoShop',
         {},
       );
 }
@@ -618,6 +669,7 @@ class Client extends _isc.ServerpodClientShared {
     emailIdp = EndpointEmailIdp(this);
     jwtRefresh = EndpointJwtRefresh(this);
     claim = EndpointClaim(this);
+    demo = EndpointDemo(this);
     leaderboard = EndpointLeaderboard(this);
     offer = EndpointOffer(this);
     profile = EndpointProfile(this);
@@ -632,6 +684,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointJwtRefresh jwtRefresh;
 
   late final EndpointClaim claim;
+
+  late final EndpointDemo demo;
 
   late final EndpointLeaderboard leaderboard;
 
@@ -652,6 +706,7 @@ class Client extends _isc.ServerpodClientShared {
     'emailIdp': emailIdp,
     'jwtRefresh': jwtRefresh,
     'claim': claim,
+    'demo': demo,
     'leaderboard': leaderboard,
     'offer': offer,
     'profile': profile,

@@ -166,6 +166,9 @@ String errorMessage(Object error, AppLocalizations l) {
       'drop_not_editable' => l.err_drop_not_editable,
       'not_approved' => l.err_not_approved,
       'note_too_long' => l.err_note_too_long,
+      'demo_off' => l.err_demo_off,
+      'demo_busy' => l.err_demo_busy,
+      'no_sample' => l.err_no_sample,
       // The server sends the eligibility reason as the message.
       'ineligible' =>
         lockMessage(

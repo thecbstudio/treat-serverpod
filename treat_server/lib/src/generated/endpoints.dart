@@ -24,6 +24,7 @@ import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/claim_endpoint.dart' as _i0cek2rs;
+import '../endpoints/demo_endpoint.dart' as _irow5ity;
 import '../endpoints/leaderboard_endpoint.dart' as _iy80ldha;
 import '../endpoints/offer_endpoint.dart' as _i96ujqr4;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
@@ -52,6 +53,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'claim',
+          null,
+        ),
+      'demo': _irow5ity.DemoEndpoint()
+        ..initialize(
+          server,
+          'demo',
           null,
         ),
       'leaderboard': _iy80ldha.LeaderboardEndpoint()
@@ -375,6 +382,37 @@ class Endpoints extends _is.EndpointDispatch {
                     shareOnWall: params['shareOnWall'],
                   ),
         ),
+        'submitSampleProof': _is.MethodConnector(
+          name: 'submitSampleProof',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'good': _is.ParameterDescription(
+              name: 'good',
+              type: _is.getType<bool>(),
+              nullable: false,
+            ),
+            'shareOnWall': _is.ParameterDescription(
+              name: 'shareOnWall',
+              type: _is.getType<bool?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint)
+                  .submitSampleProof(
+                    session,
+                    params['claimId'],
+                    params['good'],
+                    shareOnWall: params['shareOnWall'],
+                  ),
+        ),
         'thank': _is.MethodConnector(
           name: 'thank',
           params: {
@@ -453,6 +491,43 @@ class Endpoints extends _is.EndpointDispatch {
                 session,
                 params['claimId'],
               ),
+        ),
+      },
+    );
+    connectors['demo'] = _is.EndpointConnector(
+      name: 'demo',
+      endpoint: endpoints['demo']!,
+      methodConnectors: {
+        'enabled': _is.MethodConnector(
+          name: 'enabled',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['demo'] as _irow5ity.DemoEndpoint).enabled(
+                session,
+              ),
+        ),
+        'signInAsGuestStudent': _is.MethodConnector(
+          name: 'signInAsGuestStudent',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['demo'] as _irow5ity.DemoEndpoint)
+                  .signInAsGuestStudent(session),
+        ),
+        'signInAsDemoShop': _is.MethodConnector(
+          name: 'signInAsDemoShop',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['demo'] as _irow5ity.DemoEndpoint)
+                  .signInAsDemoShop(session),
         ),
       },
     );

@@ -18,7 +18,6 @@
   "welcomeLogin": "Log in",
   "welcomeRegister": "Create account",
   "welcomeForShops": "Are you a business? Sign up the same way and pick “Business”.",
-  "welcomeDemoHint": "Judging? Demo logins are in the project README.",
   "authLoginTitle": "Welcome back",
   "authRegisterTitle": "Create account",
   "authEduHint": "Students: sign up with your university email (.edu / .edu.tr) to get verified instantly.",
@@ -485,5 +484,23 @@
   "err_invalid_duration": "Pick between 10 and 180 minutes.",
   "err_drop_not_editable": "Drops can't be edited — end it and start a new one.",
   "err_not_approved": "You can thank the place after your post is approved.",
-  "err_note_too_long": "Keep it under 280 characters."
+  "err_note_too_long": "Keep it under 280 characters.",
+  "err_demo_off": "Demo sign-in is turned off on this server.",
+  "err_demo_busy": "Lots of people are trying the demo right now. Try again in a few minutes.",
+  "err_no_sample": "There's no sample screenshot for this offer. Upload your own.",
+  "demoTitle": "Judging? Try it in one tap",
+  "demoHint": "Open the student here and the business in a second window — watch both update live.",
+  "demoStudent": "Student",
+  "demoShop": "Business",
+  "proofSampleTitle": "Demo: no post handy?",
+  "proofSampleHint": "Send a ready-made story screenshot. Claude checks it for real — try both.",
+  "proofSampleGood": "Send a story that tags {shop}",
+  "@proofSampleGood": {
+    "placeholders": {
+      "shop": {
+        "type": "String"
+      }
+    }
+  },
+  "proofSampleBad": "Send one that tags nobody"
 }

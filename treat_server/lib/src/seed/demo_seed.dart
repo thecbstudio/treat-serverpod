@@ -351,7 +351,7 @@ const _offers = [
     dailyCap: 2,
     totalCap: 40,
     featured: true,
-    proofTypes: [ProofType.igPost, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.igPost, ProofType.googleReview],
     ageDays: 14,
   ),
   _SeedOffer(
@@ -435,7 +435,7 @@ const _offers = [
     startHour: 10,
     endHour: 20,
     dailyCap: 3,
-    proofTypes: [ProofType.igPost, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.igPost, ProofType.googleReview],
     ageDays: 3,
   ),
 ];

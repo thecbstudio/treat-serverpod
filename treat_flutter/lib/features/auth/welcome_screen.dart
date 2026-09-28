@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/theme.dart';
 import '../../ui/widgets.dart';
 import 'auth_hero.dart';
+import 'demo_box.dart';
 import 'onboarding_screen.dart' show RoleTile;
 
 /// First screen: what treat is, then "who are you?" — student or business —
@@ -51,6 +52,7 @@ class WelcomeScreen extends StatelessWidget {
             const SizedBox(height: 12),
           ],
           const SizedBox(height: 8),
+          const DemoBox(),
           Text(l.welcomeWho, style: context.text.titleMedium),
           const SizedBox(height: 10),
           RoleTile(
@@ -81,11 +83,6 @@ class WelcomeScreen extends StatelessWidget {
                 child: Text(l.welcomeLogin),
               ),
             ],
-          ),
-          Text(
-            l.welcomeDemoHint,
-            textAlign: TextAlign.center,
-            style: context.text.bodySmall?.copyWith(color: T.inkTertiary),
           ),
         ],
       ),

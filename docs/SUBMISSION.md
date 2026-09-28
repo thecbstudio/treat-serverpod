@@ -25,7 +25,7 @@ One user, one problem, one flow: *show QR → get scanned → post → get appro
 - **File uploads:** proof screenshots go to private cloud storage via upload descriptions; the server chooses the path and validates the file; businesses get short-lived links.
 - **Auth:** Serverpod's e-mail identity provider; `.edu` addresses are verified automatically.
 - **AI:** Claude via the Anthropic Messages API; the verdict is forced through a tool call (structured JSON, no text parsing).
-- **Tests:** 68 `serverpod_test` tests (rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes & appeals).
+- **Tests:** 92 `serverpod_test` tests (rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes & appeals, drops, demo sign-in).
 
 ## 4. AI disclosure
 
@@ -43,7 +43,7 @@ The idea was explored earlier as a React/Firebase prototype. This submission is 
 - Demo logins (password: `TODO prod demo password`):
   - Student: `student@demo.treat`
   - Business: `pixel@demo.treat` (Pixel Oyun Kafe, open 13:00–23:00 Istanbul), `kirlangic@demo.treat` (09:00–18:00)
-- Test tip: open the student in one browser and the business in another (or incognito). Claim → type the 6-character code on the business's **Scan** tab → upload a screenshot on the student side → watch both screens.
+- Test tip: no sign-up needed — on the welcome screen tap **Student** in one window and **Business** in another (incognito). Claim the live drop → type the 6-character code on the business's **Scan** tab → on the student side send the sample story that tags nobody (Claude rejects), then appeal with the one that tags the place (Claude approves) → watch both screens.
 
 ## 7. Build & run
 

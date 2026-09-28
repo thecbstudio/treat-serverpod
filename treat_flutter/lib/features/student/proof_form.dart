@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:treat_client/treat_client.dart';
 
+import '../../app/session.dart';
 import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
@@ -80,6 +81,27 @@ class _ProofFormState extends State<ProofForm> {
     }
   }
 
+  Future<void> _submitSample(bool good) async {
+    setState(() => _busy = true);
+    try {
+      await client.claim.submitSampleProof(
+        widget.claimId,
+        good,
+        shareOnWall: _share,
+      );
+    } catch (e) {
+      if (mounted) context.toast(errorMessage(e, context.l));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// Demo accounts can send a ready-made story instead of a real post; the
+  /// samples are IG stories, so only where a story is accepted.
+  bool get _offerSamples =>
+      (appSession.me?.student?.email.endsWith('@demo.treat') ?? false) &&
+      widget.proofTypes.contains(ProofType.igStory);
+
   @override
   Widget build(BuildContext context) {
     final l = context.l;
@@ -145,6 +167,45 @@ class _ProofFormState extends State<ProofForm> {
               : const Icon(Icons.send_rounded),
           label: Text(_busy ? l.proofUploading : widget.submitLabel),
         ),
+        if (_offerSamples) ...[
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: T.bgHover,
+              borderRadius: BorderRadius.circular(T.radiusMd),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(l.proofSampleTitle, style: context.text.titleSmall),
+                const SizedBox(height: 2),
+                Text(
+                  l.proofSampleHint,
+                  style: context.text.bodySmall?.copyWith(
+                    color: T.inkSecondary,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  onPressed: _busy ? null : () => _submitSample(true),
+                  icon: const Icon(Icons.alternate_email_rounded),
+                  label: Text(
+                    l.proofSampleGood(widget.shopName),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: _busy ? null : () => _submitSample(false),
+                  icon: const Icon(Icons.do_not_disturb_alt_rounded),
+                  label: Text(l.proofSampleBad),
+                ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
