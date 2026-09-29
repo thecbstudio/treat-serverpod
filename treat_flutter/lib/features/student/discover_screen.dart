@@ -104,7 +104,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       );
                     }
                     if (!snap.hasData) {
-                      return const SliverToBoxAdapter(child: LoadingView());
+                      return SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                        sliver: SliverCardGrid(
+                          itemCount: 6,
+                          itemBuilder: (_, _) => const OfferTileSkeleton(),
+                        ),
+                      );
                     }
                     final cards = _filter(snap.data!);
                     if (cards.isEmpty) {

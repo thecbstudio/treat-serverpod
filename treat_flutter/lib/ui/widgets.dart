@@ -197,6 +197,92 @@ class LoadingView extends StatelessWidget {
   );
 }
 
+/// Gently pulsing placeholder while a list loads, shaped like the content.
+class Skeleton extends StatefulWidget {
+  const Skeleton({super.key, required this.child});
+  final Widget child;
+
+  @override
+  State<Skeleton> createState() => _SkeletonState();
+}
+
+class _SkeletonState extends State<Skeleton>
+    with SingleTickerProviderStateMixin {
+  late final _pulse = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  )..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(
+    opacity: Tween(begin: 0.45, end: 1.0).animate(_pulse),
+    child: widget.child,
+  );
+}
+
+/// A grey block for [Skeleton] layouts.
+class SkeletonBlock extends StatelessWidget {
+  const SkeletonBlock({super.key, this.width, required this.height});
+  final double? width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: width,
+    height: height,
+    decoration: BoxDecoration(
+      color: T.bgHover,
+      borderRadius: BorderRadius.circular(T.radiusSm),
+    ),
+  );
+}
+
+/// Loading state of an offer card (photo, place, title, pills).
+class OfferTileSkeleton extends StatelessWidget {
+  const OfferTileSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) => Skeleton(
+    child: TreatCard(
+      padding: EdgeInsets.zero,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AspectRatio(
+            aspectRatio: 16 / 8,
+            child: ColoredBox(color: T.bgHover),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                SkeletonBlock(width: 110, height: 12),
+                SizedBox(height: 8),
+                SkeletonBlock(width: 200, height: 16),
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    SkeletonBlock(width: 80, height: 24),
+                    SizedBox(width: 6),
+                    SkeletonBlock(width: 96, height: 24),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 /// Error state with a retry button. Used on every screen that loads data.
 class ErrorView extends StatelessWidget {
   const ErrorView({super.key, required this.error, required this.onRetry});
