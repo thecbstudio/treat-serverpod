@@ -137,6 +137,12 @@ void main() {
         expect(fake.seen.single.image, pixelStory);
         final after = await endpoints.claim.get(guest, claimId);
         expect(after.claim.status, ClaimStatus.approved);
+
+        // Someone else's screenshot never goes on the public wall.
+        final thanked = await endpoints.claim.thank(guest, claimId, 'Hi', true);
+        expect(thanked.claim.shareOnWall, isFalse);
+        final page = await endpoints.social.shopPage(guest, after.shop.id!);
+        expect(page.wall, isEmpty);
       });
 
       test('when the bad sample is sent then Claude sees a story that tags '

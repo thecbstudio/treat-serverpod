@@ -423,6 +423,8 @@
   },
   "lockDropEnded": "This drop has ended.",
   "lockAlreadyClaimed": "You already got one from this drop.",
+  "shopDropsSection": "Drops",
+  "shopRegularSection": "Regular offers",
   "shopStartDropCta": "Got leftovers? Start a drop",
   "shopStartDropHint": "Surplus pastries, the last seats, an empty hour — students nearby see it live.",
   "dropFormTitle": "Start a drop",

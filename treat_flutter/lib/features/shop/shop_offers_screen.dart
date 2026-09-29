@@ -127,20 +127,22 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
                 }
                 if (!snap.hasData) return const LoadingView();
                 final now = DateTime.now().toUtc();
-                // Drops first (live ones on top); drops over a day old drop off.
-                final drops =
+                // Drops first (live ones on top), then only the last few
+                // ended ones so the list doesn't fill up with history.
+                final allDrops =
                     snap.data!
-                        .where(
-                          (c) =>
-                              c.offer.kind == OfferKind.drop &&
-                              c.offer.endsAt!.isAfter(
-                                now.subtract(const Duration(days: 1)),
-                              ),
-                        )
+                        .where((c) => c.offer.kind == OfferKind.drop)
                         .toList()
                       ..sort(
                         (a, b) => b.offer.endsAt!.compareTo(a.offer.endsAt!),
                       );
+                bool live(OfferCard c) =>
+                    c.offer.status == OfferStatus.active &&
+                    c.offer.endsAt!.isAfter(now);
+                final drops = [
+                  ...allDrops.where(live),
+                  ...allDrops.where((c) => !live(c)).take(3),
+                ];
                 final cards = snap.data!
                     .where((c) => c.offer.kind == OfferKind.regular)
                     .toList();
@@ -155,14 +157,24 @@ class _ShopOffersScreenState extends State<ShopOffersScreen> {
                     if (drops.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                        child: CardGrid(
-                          itemCount: drops.length,
-                          itemBuilder: (context, i) => _ShopDropTile(
-                            card: drops[i],
-                            onEnd: () => _endDrop(drops[i].offer),
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SectionTitle(l.shopDropsSection),
+                            CardGrid(
+                              itemCount: drops.length,
+                              itemBuilder: (context, i) => _ShopDropTile(
+                                card: drops[i],
+                                onEnd: () => _endDrop(drops[i].offer),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SectionTitle(l.shopRegularSection),
+                    ),
                     if (cards.isEmpty)
                       EmptyView(
                         icon: Icons.local_offer_outlined,

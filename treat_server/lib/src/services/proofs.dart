@@ -167,7 +167,6 @@ Future<ClaimView> submitSampleProofFor(
   Session session,
   int claimId, {
   required bool good,
-  bool shareOnWall = false,
 }) async {
   requireDemoMode(session);
   final student = await requireStudent(session);
@@ -189,19 +188,15 @@ Future<ClaimView> submitSampleProofFor(
   if (bytes == null) {
     throw treatError('no_sample', 'No sample screenshot for this offer.');
   }
-  final path = 'proofs/$claimId/${clock().millisecondsSinceEpoch}.img';
+  final path =
+      'proofs/$claimId$sampleProofMarker${clock().millisecondsSinceEpoch}.img';
   await session.storage.storeFile(
     storageId: proofStorage,
     path: path,
     byteData: ByteData.sublistView(Uint8List.fromList(bytes)),
   );
-  return submitProofFor(
-    session,
-    claimId,
-    ProofType.igStory,
-    path,
-    shareOnWall: shareOnWall,
-  );
+  // Someone else's screenshot: verified for real, never shown on a wall.
+  return submitProofFor(session, claimId, ProofType.igStory, path);
 }
 
 /// Run by the VerifyProof future call. Asks the AI, then applies the verdict:

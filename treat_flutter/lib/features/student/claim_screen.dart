@@ -549,14 +549,17 @@ class _ThanksCardState extends State<_ThanksCard> {
             maxLines: 4,
             decoration: InputDecoration(hintText: l.thanksHint(shop)),
           ),
-          CheckboxListTile(
-            value: _share,
-            onChanged: (v) => setState(() => _share = v ?? false),
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: T.accent,
-            title: Text(l.proofShareOnWall(shop)),
-          ),
+          // Demo samples are someone else's screenshot: the server never
+          // shows them on a wall, so don't offer it.
+          if (!(widget.view.claim.proofPath?.contains('/sample-') ?? false))
+            CheckboxListTile(
+              value: _share,
+              onChanged: (v) => setState(() => _share = v ?? false),
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+              activeColor: T.accent,
+              title: Text(l.proofShareOnWall(shop)),
+            ),
           FilledButton(
             onPressed: _busy ? null : _send,
             child: Text(_sent ? l.thanksUpdate : l.thanksSend),

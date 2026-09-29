@@ -1702,6 +1702,18 @@ abstract class AppLocalizations {
   /// **'You already got one from this drop.'**
   String get lockAlreadyClaimed;
 
+  /// No description provided for @shopDropsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Drops'**
+  String get shopDropsSection;
+
+  /// No description provided for @shopRegularSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular offers'**
+  String get shopRegularSection;
+
   /// No description provided for @shopStartDropCta.
   ///
   /// In en, this message translates to:

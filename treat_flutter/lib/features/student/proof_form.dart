@@ -84,11 +84,7 @@ class _ProofFormState extends State<ProofForm> {
   Future<void> _submitSample(bool good) async {
     setState(() => _busy = true);
     try {
-      await client.claim.submitSampleProof(
-        widget.claimId,
-        good,
-        shareOnWall: _share,
-      );
+      await client.claim.submitSampleProof(widget.claimId, good);
     } catch (e) {
       if (mounted) context.toast(errorMessage(e, context.l));
     } finally {

@@ -395,11 +395,6 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<bool>(),
               nullable: false,
             ),
-            'shareOnWall': _is.ParameterDescription(
-              name: 'shareOnWall',
-              type: _is.getType<bool?>(),
-              nullable: true,
-            ),
           },
           call:
               (
@@ -410,7 +405,6 @@ class Endpoints extends _is.EndpointDispatch {
                     session,
                     params['claimId'],
                     params['good'],
-                    shareOnWall: params['shareOnWall'],
                   ),
         ),
         'thank': _is.MethodConnector(

@@ -19,6 +19,14 @@ void requireDemoMode(Session session) {
   }
 }
 
+/// File-name marker for demo sample proofs (see [isSampleProof]).
+const sampleProofMarker = '/sample-';
+
+/// Sample proofs are ready-made screenshots, not the student's own post, so
+/// they are verified like any proof but never shown on a public wall.
+bool isSampleProof(Claim c) =>
+    c.proofPath?.contains(sampleProofMarker) ?? false;
+
 /// Demo students: the seeded jury student and every one-tap guest.
 bool isDemoStudent(StudentProfile s) => s.email.endsWith('@demo.treat');
 

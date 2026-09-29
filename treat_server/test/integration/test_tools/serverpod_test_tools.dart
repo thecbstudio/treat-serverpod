@@ -679,9 +679,8 @@ class _ClaimEndpoint {
   _ida.Future<_iuhj4d1o.ClaimView> submitSampleProof(
     _ist.TestSessionBuilder sessionBuilder,
     int claimId,
-    bool good, {
-    bool? shareOnWall,
-  }) async {
+    bool good,
+  ) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
@@ -696,7 +695,6 @@ class _ClaimEndpoint {
           parameters: _ist.testObjectToJson({
             'claimId': claimId,
             'good': good,
-            'shareOnWall': shareOnWall,
           }),
           serializationManager: _serializationManager,
         );

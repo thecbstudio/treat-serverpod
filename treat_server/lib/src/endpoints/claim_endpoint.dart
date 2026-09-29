@@ -6,6 +6,7 @@ import '../domain/clock.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
 import '../services/claims.dart';
+import '../services/demo.dart';
 import '../services/proofs.dart';
 
 /// A student's claims: create, list, open, and watch one live.
@@ -43,18 +44,13 @@ class ClaimEndpoint extends Endpoint {
   );
 
   /// Demo accounts only: submits a ready-made story screenshot that tags the
-  /// place ([good]) or tags nobody, through the same verification.
+  /// place ([good]) or tags nobody, through the same verification. Never
+  /// shared on a wall — it isn't the student's own post.
   Future<ClaimView> submitSampleProof(
     Session session,
     int claimId,
-    bool good, {
-    bool? shareOnWall,
-  }) => submitSampleProofFor(
-    session,
-    claimId,
-    good: good,
-    shareOnWall: shareOnWall ?? false,
-  );
+    bool good,
+  ) => submitSampleProofFor(session, claimId, good: good);
 
   /// After approval: a short thank-you note to the place (shown on its page
   /// and in its panel) and whether the post may appear on its public wall.
@@ -77,7 +73,8 @@ class ClaimEndpoint extends Endpoint {
       session,
       claim.copyWith(
         thanksNote: (text == null || text.isEmpty) ? null : text,
-        shareOnWall: shareOnWall,
+        // A demo sample is someone else's screenshot: never public.
+        shareOnWall: shareOnWall && !isSampleProof(claim),
       ),
     );
     await notifyClaimChanged(session, updated);

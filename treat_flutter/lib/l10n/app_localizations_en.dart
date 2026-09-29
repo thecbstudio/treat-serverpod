@@ -911,6 +911,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lockAlreadyClaimed => 'You already got one from this drop.';
 
   @override
+  String get shopDropsSection => 'Drops';
+
+  @override
+  String get shopRegularSection => 'Regular offers';
+
+  @override
   String get shopStartDropCta => 'Got leftovers? Start a drop';
 
   @override

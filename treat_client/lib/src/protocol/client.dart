@@ -304,18 +304,17 @@ class EndpointClaim extends _isc.EndpointRef {
   );
 
   /// Demo accounts only: submits a ready-made story screenshot that tags the
-  /// place ([good]) or tags nobody, through the same verification.
+  /// place ([good]) or tags nobody, through the same verification. Never
+  /// shared on a wall — it isn't the student's own post.
   _ida.Future<_iq1pcdgl.ClaimView> submitSampleProof(
     int claimId,
-    bool good, {
-    bool? shareOnWall,
-  }) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+    bool good,
+  ) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
     'claim',
     'submitSampleProof',
     {
       'claimId': claimId,
       'good': good,
-      'shareOnWall': shareOnWall,
     },
   );
 
