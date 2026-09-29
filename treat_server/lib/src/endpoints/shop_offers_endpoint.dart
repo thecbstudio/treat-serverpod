@@ -3,8 +3,10 @@ import 'package:serverpod/serverpod.dart';
 import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
+import '../seed/demo_history.dart' show ensureDemoDrop;
 import '../services/accounts.dart';
 import '../services/claims.dart';
+import '../services/demo.dart';
 import '../services/offer_cards.dart';
 
 /// A business managing its own offers.
@@ -80,6 +82,7 @@ class ShopOffersEndpoint extends Endpoint {
     if (offer.kind == OfferKind.drop) {
       throw treatError('drop_not_editable', 'Drops cannot be edited.');
     }
+    requireNotDemoLocked(session, offer: offer);
     _validate(input);
     return Offer.db.updateRow(
       session,
@@ -107,12 +110,15 @@ class ShopOffersEndpoint extends Endpoint {
     if (offer.status == OfferStatus.ended) {
       throw treatError('offer_ended', 'This offer was deleted.');
     }
+    requireNotDemoLocked(session, offer: offer);
     final updated = await Offer.db.updateRow(
       session,
       offer.copyWith(status: status),
     );
     if (updated.kind == OfferKind.drop) {
       await notifyDropChanged(session, updated.id!);
+      // Demo: a judge ended the shared drop — open the next one right away.
+      if (demoModeOn(session)) await ensureDemoDrop(session);
     }
     return updated;
   }

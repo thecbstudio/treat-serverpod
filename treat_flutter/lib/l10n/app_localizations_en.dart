@@ -1041,6 +1041,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get err_demo_off => 'Demo sign-in is turned off on this server.';
 
   @override
+  String get err_demo_locked =>
+      'This demo place is shared by everyone trying the app, so its profile and seeded offers are read-only. Create your own offer to try editing — or start a drop.';
+
+  @override
   String get err_demo_busy =>
       'Lots of people are trying the demo right now. Try again in a few minutes.';
 

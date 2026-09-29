@@ -118,11 +118,13 @@ void run(List<String> args) async {
       );
       await resumePendingVerifications(session);
       if (pod.getPassword('demoAccountPassword') != null) {
-        // Demo mode: keep a live drop around for anyone trying the app.
-        Timer.periodic(const Duration(minutes: 5), (_) async {
+        // Demo mode: keep a live drop with stock around for anyone trying
+        // the app, and clear offers judges created hours ago.
+        Timer.periodic(const Duration(minutes: 1), (_) async {
           final s = await pod.createSession(enableLogging: false);
           try {
             await ensureDemoDrop(s);
+            await cleanUpJudgeOffers(s);
           } catch (e, st) {
             s.log(
               'Demo drop failed',

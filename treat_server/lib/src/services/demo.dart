@@ -19,6 +19,28 @@ void requireDemoMode(Session session) {
   }
 }
 
+/// In demo mode the seeded places are shared by every judge: their profile
+/// and seeded offers are read-only, so one visitor can't rename or pause
+/// what the next one is about to try. Judges' own offers stay editable.
+void requireNotDemoLocked(Session session, {Shop? shop, Offer? offer}) {
+  if (!demoModeOn(session)) return;
+  if (shop?.seedKey != null || offer?.seedKey != null) {
+    throw treatError(
+      'demo_locked',
+      'This demo place is shared by everyone trying the app, so its seeded '
+          'offers and profile are read-only. Create your own offer to try '
+          'editing.',
+    );
+  }
+}
+
+/// One-tap guest students (not the seeded ones). Kept off public lists
+/// (leaderboard, top students, walls) so a busy judging day doesn't fill
+/// them with "Guest 1234".
+bool isGuest(StudentProfile s) => s.university == guestUniversity;
+
+const guestUniversity = 'Demo University';
+
 /// File-name marker for demo sample proofs (see [isSampleProof]).
 const sampleProofMarker = '/sample-';
 

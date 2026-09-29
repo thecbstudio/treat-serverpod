@@ -18,7 +18,6 @@ import '../services/demo.dart';
 class DemoEndpoint extends Endpoint {
   /// Guard against someone scripting thousands of guest accounts.
   static const maxGuestsPerHour = 120;
-  static const guestUniversity = 'Demo University';
   static const demoShopEmail = 'pixel@demo.treat';
 
   Future<bool> enabled(Session session) async => demoModeOn(session);

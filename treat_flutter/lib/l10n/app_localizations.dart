@@ -1924,6 +1924,12 @@ abstract class AppLocalizations {
   /// **'Demo sign-in is turned off on this server.'**
   String get err_demo_off;
 
+  /// No description provided for @err_demo_locked.
+  ///
+  /// In en, this message translates to:
+  /// **'This demo place is shared by everyone trying the app, so its profile and seeded offers are read-only. Create your own offer to try editing — or start a drop.'**
+  String get err_demo_locked;
+
   /// No description provided for @err_demo_busy.
   ///
   /// In en, this message translates to:

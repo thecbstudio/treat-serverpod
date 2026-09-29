@@ -64,7 +64,7 @@ void main() {
       );
       expect(me.role, UserRole.student);
       expect(me.student!.verification, StudentVerification.verified);
-      expect(me.student!.university, DemoEndpoint.guestUniversity);
+      expect(me.student!.university, guestUniversity);
     });
 
     test('when the demo shop is not seeded then demo_off', () async {

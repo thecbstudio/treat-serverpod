@@ -4,6 +4,7 @@ import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
+import '../services/demo.dart';
 
 /// The signed-in user's own profile and onboarding (role choice).
 class ProfileEndpoint extends Endpoint {
@@ -111,6 +112,7 @@ class ProfileEndpoint extends Endpoint {
 
   Future<Shop> updateShop(Session session, ShopInput input) async {
     final shop = await requireShop(session);
+    requireNotDemoLocked(session, shop: shop);
     final clean = _validShopInput(input);
     // Category is fixed once offers exist: offers copy it.
     return Shop.db.updateRow(

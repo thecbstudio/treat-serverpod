@@ -6,6 +6,7 @@ import '../domain/clock.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
 import '../services/claims.dart';
+import '../services/demo.dart';
 import '../services/proofs.dart';
 
 /// Business-side actions at the counter and the live panel.
@@ -49,6 +50,7 @@ class ShopEndpoint extends Endpoint {
     );
     final counts = <int, ({StudentProfile s, int n})>{};
     for (final c in approved) {
+      if (isGuest(c.student!)) continue; // demo guests aren't "regulars"
       final prev = counts[c.studentId];
       counts[c.studentId] = (s: c.student!, n: (prev?.n ?? 0) + 1);
     }

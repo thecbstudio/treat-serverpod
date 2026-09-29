@@ -3,6 +3,7 @@ import 'package:serverpod/serverpod.dart';
 import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
+import 'demo.dart';
 import 'proofs.dart';
 
 /// Claims that handed a treat over (everything after the scan).
@@ -24,8 +25,11 @@ Future<List<WallPost>> wallPosts(
   final claims = await Claim.db.find(
     session,
     where: (t) {
+      // Demo guests' uploads are never public: nobody moderates them.
       var w =
-          t.status.equals(ClaimStatus.approved) & t.shareOnWall.equals(true);
+          t.status.equals(ClaimStatus.approved) &
+          t.shareOnWall.equals(true) &
+          t.student.university.notEquals(guestUniversity);
       if (shopId != null) w = w & t.shopId.equals(shopId);
       if (studentId != null) w = w & t.studentId.equals(studentId);
       return w;

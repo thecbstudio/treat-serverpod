@@ -156,8 +156,13 @@ Future<StudentProfile> _addHistoryClaim(
   );
 }
 
-/// Keeps one live drop at Pixel Oyun Kafe (the jury's business login) so a
-/// drop can be tried at any time. Called on boot and every few minutes.
+/// Stock of the always-on demo drop: enough for a busy judging hour.
+const demoDropStock = 20;
+
+/// Keeps one live drop with stock left at Pixel Oyun Kafe (the jury's
+/// business login) so a drop can be tried at any time — also right after a
+/// judge ended it or the last slot was taken. Called on boot, every minute,
+/// and when a demo drop is ended.
 Future<void> ensureDemoDrop(Session session) async {
   final pixel = await Shop.db.findFirstRow(
     session,
@@ -165,7 +170,7 @@ Future<void> ensureDemoDrop(Session session) async {
   );
   if (pixel == null) return;
   final now = clock();
-  final live = await Offer.db.findFirstRow(
+  final live = await Offer.db.find(
     session,
     where: (t) =>
         t.shopId.equals(pixel.id!) &
@@ -173,7 +178,14 @@ Future<void> ensureDemoDrop(Session session) async {
         t.status.equals(OfferStatus.active) &
         (t.endsAt > now.add(const Duration(minutes: 5))),
   );
-  if (live != null) return;
+  for (final drop in live) {
+    final taken = await Claim.db.count(
+      session,
+      where: (t) =>
+          t.offerId.equals(drop.id!) & t.status.notEquals(ClaimStatus.expired),
+    );
+    if (taken < (drop.totalCap ?? 0)) return;
+  }
   const titles = [
     (
       'Free 30 minutes on the PS5',
@@ -200,7 +212,7 @@ Future<void> ensureDemoDrop(Session session) async {
       frequency: OfferFrequency.weekly,
       activeStartMin: 0,
       activeEndMin: 24 * 60,
-      totalCap: 8,
+      totalCap: demoDropStock,
       proofTypes: const [ProofType.igStory, ProofType.tiktok],
       featured: true,
       createdAt: now,
@@ -287,3 +299,27 @@ const _students = [
     _H('tostcu:toast', null, 3),
   ]),
 ];
+
+/// Demo mode: offers judges create on the shared seeded places are removed
+/// after a few hours, so the next judge sees the places as seeded.
+Future<void> cleanUpJudgeOffers(Session session) async {
+  final seeded = await Shop.db.find(
+    session,
+    where: (t) => t.seedKey.notEquals(null),
+  );
+  if (seeded.isEmpty) return;
+  final old = await Offer.db.find(
+    session,
+    where: (t) =>
+        t.shopId.inSet({for (final s in seeded) s.id!}) &
+        t.seedKey.equals(null) &
+        t.kind.equals(OfferKind.regular) &
+        t.status.notEquals(OfferStatus.ended) &
+        (t.createdAt < clock().subtract(judgeOfferLifetime)),
+  );
+  for (final o in old) {
+    await Offer.db.updateRow(session, o.copyWith(status: OfferStatus.ended));
+  }
+}
+
+const judgeOfferLifetime = Duration(hours: 6);
