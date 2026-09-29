@@ -11,6 +11,12 @@ Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web)
 
 ---
 
+| Welcome — one-tap demo | Student: Discover |
+|---|---|
+| ![Welcome screen](docs/screenshots/welcome-desktop.png) | ![Discover](docs/screenshots/discover-desktop.png) |
+| **Business: live Panel** | **On a phone** |
+| ![Business panel](docs/screenshots/panel-desktop.png) | <img src="docs/screenshots/discover-phone.png" alt="Discover on a phone" width="260"> |
+
 ## The loop
 
 | Student | Business |
