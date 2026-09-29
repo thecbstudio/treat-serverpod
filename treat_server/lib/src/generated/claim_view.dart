@@ -23,12 +23,14 @@ abstract class ClaimView
     required this.claim,
     required this.offer,
     required this.shop,
-  });
+    bool? sampleProof,
+  }) : sampleProof = sampleProof ?? false;
 
   factory ClaimView({
     required _iywv5oz4.Claim claim,
     required _iqlmmtnc.Offer offer,
     required _isgf2ncs.Shop shop,
+    bool? sampleProof,
   }) = _ClaimViewImpl;
 
   factory ClaimView.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -42,6 +44,9 @@ abstract class ClaimView
       shop: _iegszk5h.Protocol().deserialize<_isgf2ncs.Shop>(
         jsonSerialization['shop'],
       ),
+      sampleProof: jsonSerialization['sampleProof'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['sampleProof']),
     );
   }
 
@@ -51,6 +56,9 @@ abstract class ClaimView
 
   _isgf2ncs.Shop shop;
 
+  /// The proof is a demo sample (someone else's screenshot): never public.
+  bool sampleProof;
+
   /// Returns a shallow copy of this [ClaimView]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -58,6 +66,7 @@ abstract class ClaimView
     _iywv5oz4.Claim? claim,
     _iqlmmtnc.Offer? offer,
     _isgf2ncs.Shop? shop,
+    bool? sampleProof,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -66,6 +75,7 @@ abstract class ClaimView
       'claim': claim.toJson(),
       'offer': offer.toJson(),
       'shop': shop.toJson(),
+      'sampleProof': sampleProof,
     };
   }
 
@@ -76,6 +86,7 @@ abstract class ClaimView
       'claim': claim.toJsonForProtocol(),
       'offer': offer.toJsonForProtocol(),
       'shop': shop.toJsonForProtocol(),
+      'sampleProof': sampleProof,
     };
   }
 
@@ -90,10 +101,12 @@ class _ClaimViewImpl extends ClaimView {
     required _iywv5oz4.Claim claim,
     required _iqlmmtnc.Offer offer,
     required _isgf2ncs.Shop shop,
+    bool? sampleProof,
   }) : super._(
          claim: claim,
          offer: offer,
          shop: shop,
+         sampleProof: sampleProof,
        );
 
   /// Returns a shallow copy of this [ClaimView]
@@ -104,11 +117,13 @@ class _ClaimViewImpl extends ClaimView {
     _iywv5oz4.Claim? claim,
     _iqlmmtnc.Offer? offer,
     _isgf2ncs.Shop? shop,
+    bool? sampleProof,
   }) {
     return ClaimView(
       claim: claim ?? this.claim.copyWith(),
       offer: offer ?? this.offer.copyWith(),
       shop: shop ?? this.shop.copyWith(),
+      sampleProof: sampleProof ?? this.sampleProof,
     );
   }
 }

@@ -128,6 +128,7 @@ void main() {
         );
         expect(view.claim.status, ClaimStatus.proofPending);
         expect(view.claim.proofType, ProofType.igStory);
+        expect(view.sampleProof, isTrue);
 
         fake.answers.add(const ProofVerdict.approved());
         await runProofVerification(sessionBuilder.build(), claimId);

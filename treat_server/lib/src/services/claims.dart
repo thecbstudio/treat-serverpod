@@ -4,6 +4,7 @@ import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
 import 'accounts.dart';
+import 'demo.dart';
 import 'jobs.dart';
 
 String claimChannel(int claimId) => 'claim:$claimId';
@@ -46,6 +47,7 @@ Future<ClaimView> claimViewOf(
     claim: presentable(claim, clock()),
     offer: offer!.copyWith(shop: null),
     shop: offer.shop!,
+    sampleProof: isSampleProof(claim),
   );
 }
 

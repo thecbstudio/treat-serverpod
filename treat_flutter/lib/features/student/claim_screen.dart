@@ -551,7 +551,7 @@ class _ThanksCardState extends State<_ThanksCard> {
           ),
           // Demo samples are someone else's screenshot: the server never
           // shows them on a wall, so don't offer it.
-          if (!(widget.view.claim.proofPath?.contains('/sample-') ?? false))
+          if (!widget.view.sampleProof)
             CheckboxListTile(
               value: _share,
               onChanged: (v) => setState(() => _share = v ?? false),

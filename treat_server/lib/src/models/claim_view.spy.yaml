@@ -4,3 +4,5 @@ fields:
   claim: Claim
   offer: Offer
   shop: Shop
+  ### The proof is a demo sample (someone else's screenshot): never public.
+  sampleProof: bool, default=false
