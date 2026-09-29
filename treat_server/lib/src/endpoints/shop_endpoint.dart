@@ -90,6 +90,10 @@ class ShopEndpoint extends Endpoint {
   }
 
   /// Short-lived link to a claim's proof screenshot, for this shop only.
+  /// Report an approved post as taken down (within 48 h, once, no appeal).
+  Future<ClaimView> flagProof(Session session, int claimId) =>
+      flagApprovedProof(session, claimId);
+
   Future<ProofLink> proofLink(Session session, int claimId) async {
     final shop = await requireShop(session);
     final claim = await Claim.db.findById(session, claimId);

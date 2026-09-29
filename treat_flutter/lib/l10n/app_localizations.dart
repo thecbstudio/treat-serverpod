@@ -1372,6 +1372,12 @@ abstract class AppLocalizations {
   /// **'Couldn\'t find the business tag or name in the post.'**
   String get rejectNoMention;
 
+  /// No description provided for @rejectFlagged.
+  ///
+  /// In en, this message translates to:
+  /// **'The place reported that this post was taken down, so the treat was taken back. Reported posts can\'t be appealed — keep your posts up.'**
+  String get rejectFlagged;
+
   /// No description provided for @rejectNoDisclosure.
   ///
   /// In en, this message translates to:
@@ -1497,6 +1503,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'rough benchmark: ₺0.15 per view'**
   String get dashEstValueNote;
+
+  /// No description provided for @flagHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Post taken down after approval? You can report it once, within 48 hours.'**
+  String get flagHint;
+
+  /// No description provided for @flagAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Report removed post'**
+  String get flagAction;
+
+  /// No description provided for @flagConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this post as removed?'**
+  String get flagConfirmTitle;
+
+  /// No description provided for @flagConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} loses this treat and gets a strike. Reports can\'t be undone or appealed — only report posts that are really gone.'**
+  String flagConfirmBody(String name);
+
+  /// No description provided for @flagDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Reported. The treat was taken back.'**
+  String get flagDone;
 
   /// No description provided for @dashCompliance.
   ///
@@ -1947,6 +1983,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Demo sign-in is turned off on this server.'**
   String get err_demo_off;
+
+  /// No description provided for @err_flag_window_over.
+  ///
+  /// In en, this message translates to:
+  /// **'Posts can only be reported within 48 hours of approval.'**
+  String get err_flag_window_over;
 
   /// No description provided for @err_demo_locked.
   ///

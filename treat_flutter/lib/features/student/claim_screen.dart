@@ -446,8 +446,12 @@ class _Rejected extends StatelessWidget {
             tone: PillTone.red,
             icon: Icons.error_outline,
           ),
-        SectionTitle(l.appealTitle),
-        if (claim.appealed)
+        // A place's "post removed" report has no appeal; the notice says so.
+        if (claim.verdictReason != 'flagged_by_place')
+          SectionTitle(l.appealTitle),
+        if (claim.verdictReason == 'flagged_by_place')
+          const SizedBox.shrink()
+        else if (claim.appealed)
           Text(l.appealUsed, style: context.text.bodyMedium)
         else ...[
           Text(l.appealExplain, style: context.text.bodyMedium),

@@ -1327,6 +1327,37 @@ class _ShopEndpoint {
     return _localTestStreamManager.outputStreamController.stream;
   }
 
+  _ida.Future<_iuhj4d1o.ClaimView> flagProof(
+    _ist.TestSessionBuilder sessionBuilder,
+    int claimId,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'shop',
+            method: 'flagProof',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'shop',
+          methodName: 'flagProof',
+          parameters: _ist.testObjectToJson({'claimId': claimId}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_iuhj4d1o.ClaimView>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
   _ida.Future<_inds3c7u.ProofLink> proofLink(
     _ist.TestSessionBuilder sessionBuilder,
     int claimId,

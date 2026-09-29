@@ -323,6 +323,87 @@ Future<void> runProofVerification(Session session, int claimId) async {
   if (updated != null) await notifyClaimChanged(session, updated);
 }
 
+/// Verdict reason when the place reported an approved post as taken down.
+const flaggedReason = 'flagged_by_place';
+
+/// How long after approval a place can report that the post is gone.
+const flagWindow = Duration(hours: 48);
+
+/// The place reports that an approved post was deleted (the "post a story,
+/// screenshot it, delete it" trick no screenshot check can catch). Once per
+/// claim, within [flagWindow]: the treat is taken back, the student gets the
+/// claim's strike, and there is no appeal — a second screenshot can't prove
+/// the post is still up.
+Future<ClaimView> flagApprovedProof(Session session, int claimId) async {
+  final shop = await requireShop(session);
+  final updated = await session.db.transaction((tx) async {
+    final c = await Claim.db.findById(
+      session,
+      claimId,
+      lockMode: LockMode.forUpdate,
+      transaction: tx,
+    );
+    if (c == null || c.shopId != shop.id) {
+      throw treatError('claim_not_found', 'Claim not found.');
+    }
+    if (c.status != ClaimStatus.approved) {
+      throw treatError('not_approved', 'Only approved posts can be reported.');
+    }
+    final decided = c.decidedAt ?? c.createdAt;
+    if (clock().difference(decided) > flagWindow) {
+      throw treatError(
+        'flag_window_over',
+        'Posts can be reported within 48 hours of approval.',
+      );
+    }
+    final student = await StudentProfile.db.findById(
+      session,
+      c.studentId,
+      lockMode: LockMode.forUpdate,
+      transaction: tx,
+    );
+    // Demo: the shared place can't rewrite seeded students' history.
+    if (!isGuest(student!)) requireNotDemoLocked(session, shop: shop);
+    await StudentProfile.db.updateRow(
+      session,
+      student.copyWith(
+        treats: student.treats > 0 ? student.treats - 1 : 0,
+        strikes: c.strikeGiven ? student.strikes : student.strikes + 1,
+      ),
+      transaction: tx,
+    );
+    final lockedShop = await Shop.db.findById(
+      session,
+      shop.id!,
+      lockMode: LockMode.forUpdate,
+      transaction: tx,
+    );
+    await Shop.db.updateRow(
+      session,
+      lockedShop!.copyWith(
+        approvedProofs: lockedShop.approvedProofs > 0
+            ? lockedShop.approvedProofs - 1
+            : 0,
+      ),
+      transaction: tx,
+    );
+    return Claim.db.updateRow(
+      session,
+      c.copyWith(
+        status: ClaimStatus.rejected,
+        decidedAt: clock(),
+        verdictReason: flaggedReason,
+        strikeGiven: true,
+        appealed: true, // no appeal after a report
+        shareOnWall: false,
+      ),
+      transaction: tx,
+    );
+  });
+  await notifyClaimChanged(session, updated);
+  return claimViewOf(session, updated);
+}
+
 Future<void> _retryOrGiveUp(Session session, int claimId) async {
   final result = await session.db.transaction((tx) async {
     final c = await Claim.db.findById(

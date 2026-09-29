@@ -313,6 +313,7 @@
     }
   },
   "rejectNoMention": "Couldn't find the business tag or name in the post.",
+  "rejectFlagged": "The place reported that this post was taken down, so the treat was taken back. Reported posts can't be appealed — keep your posts up.",
   "rejectNoDisclosure": "The place is tagged, but the post doesn't say it was a gift. Add #işbirliği (or #reklam) — Turkey's ad rules require it for free products — and appeal with the new screenshot.",
   "rejectNotAPost": "The image doesn't look like that kind of post.",
   "rejectUnreadable": "Couldn't read the image — try a clearer screenshot.",
@@ -341,6 +342,18 @@
   "dashEstReachNote": "approved posts × ~180 avg. views",
   "dashEstValue": "Estimated marketing value",
   "dashEstValueNote": "rough benchmark: ₺0.15 per view",
+  "flagHint": "Post taken down after approval? You can report it once, within 48 hours.",
+  "flagAction": "Report removed post",
+  "flagConfirmTitle": "Report this post as removed?",
+  "flagConfirmBody": "{name} loses this treat and gets a strike. Reports can't be undone or appealed — only report posts that are really gone.",
+  "@flagConfirmBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "flagDone": "Reported. The treat was taken back.",
   "dashCompliance": "Every approved post tags you and carries an ad disclosure (#işbirliği), as Turkey's influencer-ad guidelines require for gifted products.",
   "proofCopyTags": "Copy “{tags}”",
   "@proofCopyTags": {
@@ -499,6 +512,7 @@
   "err_not_approved": "You can thank the place after your post is approved.",
   "err_note_too_long": "Keep it under 280 characters.",
   "err_demo_off": "Demo sign-in is turned off on this server.",
+  "err_flag_window_over": "Posts can only be reported within 48 hours of approval.",
   "err_demo_locked": "This demo place is shared by everyone trying the app, so its profile and seeded offers are read-only. Create your own offer to try editing — or start a drop.",
   "err_demo_busy": "Lots of people are trying the demo right now. Try again in a few minutes.",
   "err_no_sample": "There's no sample screenshot for this offer. Upload your own.",

@@ -714,6 +714,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t find the business tag or name in the post.';
 
   @override
+  String get rejectFlagged =>
+      'The place reported that this post was taken down, so the treat was taken back. Reported posts can\'t be appealed — keep your posts up.';
+
+  @override
   String get rejectNoDisclosure =>
       'The place is tagged, but the post doesn\'t say it was a gift. Add #işbirliği (or #reklam) — Turkey\'s ad rules require it for free products — and appeal with the new screenshot.';
 
@@ -788,6 +792,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashEstValueNote => 'rough benchmark: ₺0.15 per view';
+
+  @override
+  String get flagHint =>
+      'Post taken down after approval? You can report it once, within 48 hours.';
+
+  @override
+  String get flagAction => 'Report removed post';
+
+  @override
+  String get flagConfirmTitle => 'Report this post as removed?';
+
+  @override
+  String flagConfirmBody(String name) {
+    return '$name loses this treat and gets a strike. Reports can\'t be undone or appealed — only report posts that are really gone.';
+  }
+
+  @override
+  String get flagDone => 'Reported. The treat was taken back.';
 
   @override
   String get dashCompliance =>
@@ -1055,6 +1077,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_demo_off => 'Demo sign-in is turned off on this server.';
+
+  @override
+  String get err_flag_window_over =>
+      'Posts can only be reported within 48 hours of approval.';
 
   @override
   String get err_demo_locked =>

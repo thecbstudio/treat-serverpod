@@ -702,6 +702,25 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['shop'] as _i4fqeydl.ShopEndpoint)
                   .dashboard(session),
         ),
+        'flagProof': _is.MethodConnector(
+          name: 'flagProof',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['shop'] as _i4fqeydl.ShopEndpoint).flagProof(
+                    session,
+                    params['claimId'],
+                  ),
+        ),
         'proofLink': _is.MethodConnector(
           name: 'proofLink',
           params: {

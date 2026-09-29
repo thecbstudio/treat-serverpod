@@ -83,6 +83,7 @@ extension ProofTodo on ProofType {
 String rejectReasonText(String? key, AppLocalizations l) => switch (key) {
   'no_mention' => l.rejectNoMention,
   'no_disclosure' => l.rejectNoDisclosure,
+  'flagged_by_place' => l.rejectFlagged,
   'not_a_post' => l.rejectNotAPost,
   _ => l.rejectUnreadable,
 };
@@ -185,6 +186,7 @@ String errorMessage(Object error, AppLocalizations l) {
       'note_too_long' => l.err_note_too_long,
       'demo_off' => l.err_demo_off,
       'demo_locked' => l.err_demo_locked,
+      'flag_window_over' => l.err_flag_window_over,
       'demo_busy' => l.err_demo_busy,
       'no_sample' => l.err_no_sample,
       // The server sends the eligibility reason as the message.

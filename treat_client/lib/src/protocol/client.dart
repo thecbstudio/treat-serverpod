@@ -530,6 +530,14 @@ class EndpointShop extends _isc.EndpointRef {
       );
 
   /// Short-lived link to a claim's proof screenshot, for this shop only.
+  /// Report an approved post as taken down (within 48 h, once, no appeal).
+  _ida.Future<_iq1pcdgl.ClaimView> flagProof(int claimId) =>
+      caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+        'shop',
+        'flagProof',
+        {'claimId': claimId},
+      );
+
   _ida.Future<_islgq58o.ProofLink> proofLink(int claimId) =>
       caller.callServerEndpoint<_islgq58o.ProofLink>(
         'shop',

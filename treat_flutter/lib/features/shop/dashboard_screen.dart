@@ -80,15 +80,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
     try {
       final link = await client.shop.proofLink(v.claim.id!);
       if (!mounted) return;
-      await showDialog<void>(
+      final decided = v.claim.decidedAt;
+      // Mirrors the server's 48-hour window for reporting a removed post.
+      final canReport =
+          v.claim.status == ClaimStatus.approved &&
+          decided != null &&
+          DateTime.now().toUtc().difference(decided) <
+              const Duration(hours: 48);
+      final report = await showDialog<bool>(
         context: context,
         builder: (context) => Dialog(
           clipBehavior: Clip.antiAlias,
-          child: InteractiveViewer(child: Image.network(link.url)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Flexible(
+                child: InteractiveViewer(child: Image.network(link.url)),
+              ),
+              if (canReport)
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        context.l.flagHint,
+                        style: context.text.bodySmall?.copyWith(
+                          color: T.inkSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      OutlinedButton.icon(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        icon: const Icon(Icons.flag_outlined),
+                        label: Text(context.l.flagAction),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       );
+      if (report == true && mounted) await _flag(v);
     } catch (e) {
       if (mounted) context.toast(errorMessage(e, context.l));
+    }
+  }
+
+  Future<void> _flag(ClaimView v) async {
+    final l = context.l;
+    final sure = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l.flagConfirmTitle),
+        content: Text(l.flagConfirmBody(v.claim.student?.name ?? '')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l.flagAction),
+          ),
+        ],
+      ),
+    );
+    if (sure != true) return;
+    try {
+      await client.shop.flagProof(v.claim.id!);
+      if (mounted) context.toast(l.flagDone);
+      _load();
+    } catch (e) {
+      if (mounted) context.toast(errorMessage(e, l));
     }
   }
 

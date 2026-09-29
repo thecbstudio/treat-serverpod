@@ -134,6 +134,46 @@ void main() {
       },
     );
 
+    test('when the place reports an approved post as removed then the treat '
+        'is taken back, a strike is given and there is no appeal', () async {
+      final claim = await approvedClaim(share: true);
+      final view = await endpoints.shop.flagProof(shop, claim.id!);
+      expect(view.claim.status, ClaimStatus.rejected);
+      expect(view.claim.verdictReason, flaggedReason);
+      expect(view.claim.appealed, isTrue);
+
+      final s = sessionBuilder.build();
+      final student = await StudentProfile.db.findById(s, claim.studentId);
+      expect(student!.treats, 0);
+      expect(student.strikes, 1);
+      expect(
+        (await Shop.db.findById(s, claim.shopId))!.approvedProofs,
+        0,
+      );
+      expect(
+        (await endpoints.social.shopPage(bea, claim.shopId)).wall,
+        isEmpty,
+      );
+      await expectLater(
+        endpoints.shop.flagProof(shop, claim.id!),
+        throwsTreat('not_approved'),
+      );
+      await expectLater(
+        endpoints.claim.proofUpload(ali, claim.id!),
+        throwsTreat('proof_not_allowed'),
+      );
+    });
+
+    test('when more than 48 hours passed then the post can no longer be '
+        'reported', () async {
+      final claim = await approvedClaim(share: false);
+      now = now.add(flagWindow + const Duration(hours: 1));
+      await expectLater(
+        endpoints.shop.flagProof(shop, claim.id!),
+        throwsTreat('flag_window_over'),
+      );
+    });
+
     test('when an approved post is shared then it shows on the shop page, '
         'the student profile and the feed, with the thank-you note', () async {
       final claim = await approvedClaim(share: true);
