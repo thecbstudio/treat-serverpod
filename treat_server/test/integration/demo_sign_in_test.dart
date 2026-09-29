@@ -34,7 +34,17 @@ void main() {
     setUp(() {
       demoOverride = true;
       // Issuing tokens needs the auth services, which only `run()` sets up.
-      AuthServices.set(tokenManagerBuilders: [JwtConfigFromPasswords()]);
+      // Fixed test-only keys: CI has no passwords.yaml.
+      AuthServices.set(
+        tokenManagerBuilders: [
+          JwtConfig(
+            algorithm: JwtAlgorithm.hmacSha512(
+              SecretKey('test-only-jwt-signing-key-not-a-secret-0123456789'),
+            ),
+            refreshTokenHashPepper: 'test-only-refresh-pepper-0123456789',
+          ),
+        ],
+      );
     });
 
     test('when two judges try as a student then each gets a fresh, verified '

@@ -42,3 +42,18 @@ Environment: Windows 11 Home (26200), Flutter 3.47.5, Dart 3.13.4, serverpod_cli
 - **Impact:** Contradicts the backward-compatibility advice ("add new optional named parameters") — adding a parameter this way breaks old clients' code and all existing tests.
 - **Workaround:** Declare it nullable (`{bool? shareOnWall}`) and apply the default inside the method.
 - **Suggestion:** Carry the default value over to the generated client (it's a constant), or at least generate it as nullable/optional.
+
+## 9. Incremental generation while `serverpod start` runs can leave half-written test tools
+- **What:** Editing an endpoint file (adding a `where` clause to `ShopEndpoint.dashboard`) while `serverpod start --no-tui` was running triggered the watcher's incremental generation. It rewrote `lib/src/generated/endpoints.dart`, `protocol.yaml`, the client and `test/integration/test_tools/serverpod_test_tools.dart` with the **whole `shop` endpoint missing**. `dart analyze` then showed 14 `The getter 'shop' isn't defined for the type 'TestEndpoints'` errors and every integration test file failed to load. Stopping the server and running `serverpod generate` restored everything. It happened twice in this project.
+- **Impact:** Looks like the developer broke something; the real cause (a generation pass on a mid-save file) is invisible, and the broken generated files can get committed.
+- **Suggestion:** When an endpoint file can't be fully parsed, keep its previous generated output instead of dropping the endpoint and print a warning ("skipped ShopEndpoint: parse error at line N"). A full generation pass on shutdown would also help.
+
+## 10. Issuing a token for a user without an identity provider isn't documented; tests need `AuthServices.set`
+- **What:** For a one-tap demo sign-in we create a guest user server-side and hand the client an `AuthSuccess`. It works with `AuthServices.instance.authUsers.create(...)`, `AuthServices.instance.tokenManager.issueToken(session, authUserId:, method:, scopes:)` and `client.auth.updateSignedInUser(authSuccess)` on the client, but we found all three by reading package source. In `withServerpod` tests the endpoint throws `Bad state: AuthServices is not set` because only `run()` initializes auth. `AuthServices.set(tokenManagerBuilders: [JwtConfigFromPasswords()])` fixes it locally but fails on CI (`PasswordNotFoundException: jwtRefreshTokenHashPepper`), because `passwords.yaml` is git-ignored; we ended up building a `JwtConfig` with fixed test-only keys.
+- **Impact:** Guest accounts, demo logins and admin "sign in as" tools are common; each team rediscovers this, and tests that pass locally go red on CI.
+- **Suggestion:** Document the "custom sign-in" path (create user → `issueToken` → `updateSignedInUser`), and have `withServerpod` set up the auth services with throwaway test keys automatically.
+
+## 11. The generated CI workflows pin an older Flutter than the one the project was created with
+- **What:** `.github/workflows/*.yml` pin `flutter-version: '3.44.4'`; the project was created and developed with Flutter 3.47.5 and depends on `intl ^0.20.3`. On CI, 3.44.4's `flutter_localizations` pins `intl 0.20.2`, so `flutter pub get` fails and **all three** workflows (Tests, Analyze, Format) went red on every push before any of our code ran.
+- **Impact:** A healthy project looks broken on GitHub — the first thing reviewers see.
+- **Suggestion:** Write the Flutter version `serverpod create` ran with into the workflows (or use `channel: stable` without a pin), and mention the pin in the create output.
