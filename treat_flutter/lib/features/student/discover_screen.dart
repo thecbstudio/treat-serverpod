@@ -188,7 +188,7 @@ class OfferTile extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 16 / 8,
                 child: Image.asset(
-                  offer.category.imageAsset,
+                  shopPhoto(card.shop),
                   fit: BoxFit.cover,
                 ),
               ),

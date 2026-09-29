@@ -21,6 +21,22 @@ String istanbulTime(DateTime instant) =>
 String istanbulDate(DateTime instant) =>
     DateFormat('d MMM yyyy').format(instant.toUtc().add(_istanbulOffset));
 
+/// Seeded places with their own cover photo (Unsplash, see README credits);
+/// every other place uses its category's photo.
+const _shopPhotos = {
+  'bowling',
+  'firin',
+  'ferah',
+  'glow',
+  'mavikitap',
+  'tostcu',
+};
+
+/// Cover photo for a place and its offers.
+String shopPhoto(Shop shop) => _shopPhotos.contains(shop.seedKey)
+    ? 'assets/shop/${shop.seedKey}.jpg'
+    : shop.category.imageAsset;
+
 extension CategoryLabel on OfferCategory {
   String label(AppLocalizations l) => switch (this) {
     OfferCategory.coffee => l.categoryCoffee,

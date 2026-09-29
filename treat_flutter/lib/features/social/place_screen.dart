@@ -90,7 +90,7 @@ class _Page extends StatelessWidget {
           ),
           flexibleSpace: FlexibleSpaceBar(
             background: Image.asset(
-              shop.category.imageAsset,
+              shopPhoto(shop),
               fit: BoxFit.cover,
             ),
           ),

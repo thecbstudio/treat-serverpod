@@ -92,4 +92,5 @@ FEEDBACK.md     Serverpod 4 friction points found while building (with suggestio
 
 - **Prior prototype:** the idea was tried before as a React/Firebase prototype. This is a new implementation written from scratch during the hackathon in Flutter + Serverpod; no code was copied (design tokens, copy and category photos were reused).
 - **AI use:** built with Claude Code (Anthropic) as a pair programmer; all product decisions, testing and review by the author. At runtime the app uses Claude to verify proof screenshots.
+- **Photos:** place cover photos are from [Unsplash](https://unsplash.com) under the Unsplash License — [bowling](https://unsplash.com/photos/YxiW_hx3lyA), [toastie](https://unsplash.com/photos/ZB8NK8cB4EE), [simit](https://unsplash.com/photos/8PV0DwdS4nU), [bookshop](https://unsplash.com/photos/ju_8CFxk6_o), [ice cream](https://unsplash.com/photos/3D0HUHFcRrk), [manicure](https://unsplash.com/photos/gb6gtiTZKB8). The demo "story" screenshots are mock-ups made from these photos for the seed data.
 - Camera scanning on the web uses the browser's barcode detector (Chrome on Android); the typed 6-character code always works as a fallback.

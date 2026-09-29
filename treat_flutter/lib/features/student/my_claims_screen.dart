@@ -104,7 +104,7 @@ class _MyClaimsScreenState extends State<MyClaimsScreen> {
           ClipRRect(
             borderRadius: BorderRadius.circular(T.radiusSm),
             child: Image.asset(
-              v.offer.category.imageAsset,
+              shopPhoto(v.shop),
               width: 56,
               height: 56,
               fit: BoxFit.cover,

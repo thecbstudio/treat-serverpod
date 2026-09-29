@@ -103,7 +103,7 @@ class _Detail extends StatelessWidget {
           ),
           flexibleSpace: FlexibleSpaceBar(
             background: Image.asset(
-              offer.category.imageAsset,
+              shopPhoto(shop),
               fit: BoxFit.cover,
             ),
           ),

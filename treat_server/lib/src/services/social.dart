@@ -37,14 +37,21 @@ Future<List<WallPost>> wallPosts(
       student: StudentProfile.include(),
     ),
   );
+  // Short-lived links for all images at once, not one round-trip each.
+  final withImage = [
+    for (final c in claims)
+      if (c.proofPath != null) c,
+  ];
+  final urls = await Future.wait([
+    for (final c in withImage)
+      session.storage.temporaryDownloadUrl(
+        storageId: proofStorage,
+        path: c.proofPath!,
+      ),
+  ]);
   final posts = <WallPost>[];
-  for (final c in claims) {
-    final path = c.proofPath;
-    if (path == null) continue;
-    final url = await session.storage.temporaryDownloadUrl(
-      storageId: proofStorage,
-      path: path,
-    );
+  for (final (i, c) in withImage.indexed) {
+    final url = urls[i];
     posts.add(
       WallPost(
         claimId: c.id!,

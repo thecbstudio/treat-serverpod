@@ -241,7 +241,7 @@ class DropCard extends StatelessWidget {
           child: Ink(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(offer.category.imageAsset),
+                image: AssetImage(shopPhoto(card.shop)),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withValues(alpha: 0.45),
