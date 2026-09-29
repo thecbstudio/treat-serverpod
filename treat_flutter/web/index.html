@@ -1,46 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
+  <!-- Replaced by the value of `--base-href` at build time. -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>treat. — free treats for students, real local reach for places</title>
+  <meta name="description" content="Students get free treats from local places, post about them, and Claude checks the post. Places get real local reach. Built with Flutter + Serverpod.">
+  <meta name="theme-color" content="#E8532B">
+
+  <!-- Link previews (WhatsApp, Instagram DMs, Slack, X) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="treat. — free treats, real local reach">
+  <meta property="og:description" content="Claim a free treat, post about the place, Claude verifies it — live on both phones.">
+  <meta property="og:image" content="og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="treat_flutter">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="treat.">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>treat_flutter</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body { margin: 0; height: 100%; background: #FAF6F0; }
+    /* Branded splash until Flutter draws its first frame. */
+    #splash {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #EF6A3F, #E8532B 55%, #CF4522);
+      color: #FFFAF5; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      transition: opacity .35s ease;
+    }
+    #splash .mark { font-size: 64px; font-weight: 900; letter-spacing: -2px; }
+    #splash .tag { margin-top: 6px; font-size: 15px; opacity: .88; }
+    #splash .dots { margin-top: 28px; display: flex; gap: 8px; }
+    #splash .dots span {
+      width: 9px; height: 9px; border-radius: 50%; background: #FFFAF5;
+      animation: pulse 1s infinite ease-in-out;
+    }
+    #splash .dots span:nth-child(2) { animation-delay: .15s; }
+    #splash .dots span:nth-child(3) { animation-delay: .3s; }
+    @keyframes pulse { 0%, 100% { opacity: .3; transform: scale(.8); } 50% { opacity: 1; transform: scale(1); } }
+    #splash.gone { opacity: 0; pointer-events: none; }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <div id="splash" aria-label="Loading treat">
+    <div class="mark">treat.</div>
+    <div class="tag">free treats · real local reach</div>
+    <div class="dots"><span></span><span></span><span></span></div>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var s = document.getElementById('splash');
+      if (!s) return;
+      s.classList.add('gone');
+      setTimeout(function () { s.remove(); }, 400);
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

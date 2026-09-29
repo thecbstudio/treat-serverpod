@@ -10,6 +10,7 @@ import 'src/generated/serverpod.dart';
 import 'src/seed/demo_history.dart';
 import 'src/seed/demo_seed.dart';
 import 'src/services/jobs.dart';
+import 'src/web/gzip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
 
 /// The starting point of the Serverpod server.
@@ -57,6 +58,8 @@ void run(List<String> args) async {
   // Checks if the flutter web app has been built and serves it if it has.
   final appDir = Directory(Uri(path: 'web/app').toFilePath());
   if (appDir.existsSync()) {
+    // ~4 MB of JavaScript: gzip it (Relic has no built-in compression).
+    pod.webServer.addMiddleware(gzipStaticFiles(), '/');
     // Serve the flutter web app under /.
     pod.webServer.addRoute(
       FlutterRoute(

@@ -1,11 +1,11 @@
 {
-    "name": "treat_flutter",
-    "short_name": "treat_flutter",
+    "name": "treat.",
+    "short_name": "treat.",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#E8532B",
+    "theme_color": "#E8532B",
+    "description": "Free treats for students, real local reach for places — verified by AI.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
