@@ -21,11 +21,45 @@ Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web)
 | Uploads a screenshot of the post → **Under review** → **Approved (+1 treat)** or **Rejected** (reason + one appeal). | Sees the proof screenshots, totals and an estimated reach / marketing value. |
 | Profile: treats, week streak, badges, strikes. Leaderboard (name + university only). | |
 
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Phones["Flutter web app (one link)"]
+    S["Student<br/>Discover · QR · proof upload"]
+    B["Business<br/>Scan · live Panel · Offers/Drops"]
+  end
+  subgraph SP["Serverpod 4 server"]
+    EP["Endpoints<br/>claim · shop · offer · shopOffers<br/>social · leaderboard · profile · demo"]
+    R["rules.dart<br/>eligibility, caps, streaks<br/>(Europe/Istanbul)"]
+    MSG["Server events<br/>claim:&lt;id&gt; · shop:&lt;id&gt; · drops"]
+    FC["Future calls<br/>ExpireClaim · VerifyProof"]
+    AI["proof_verifier.dart"]
+  end
+  DB[("PostgreSQL<br/>ORM, row locks")]
+  ST[("Private file storage<br/>proof screenshots")]
+  CL["Claude<br/>(Anthropic Messages API,<br/>forced tool call)"]
+
+  S -- "RPC (generated client)" --> EP
+  B -- "RPC" --> EP
+  EP --> R
+  EP -- "transactions" --> DB
+  S -- "upload description" --> ST
+  EP -- "postMessage" --> MSG
+  MSG -- "WebSocket streams<br/>claim.watch · shop.watchFeed · offer.watchDrops" --> S
+  MSG --> B
+  EP -- "schedule" --> FC
+  FC --> AI
+  AI -- "screenshot + place + post type" --> CL
+  CL -- "verdict JSON" --> AI
+  AI -- "approve / strike" --> DB
+```
+
 ## How Serverpod is used
 
 | Feature | Where |
 |---|---|
-| **Endpoints + generated client** | `profile`, `offer`, `shopOffers`, `claim`, `shop`, `leaderboard` — all rules and authorization run on the server. |
+| **Endpoints + generated client** | `profile`, `offer`, `shopOffers`, `claim`, `shop`, `social`, `leaderboard`, `demo` — all rules and authorization run on the server. |
 | **Models + ORM + migrations** | `student_profile`, `shop`, `offer`, `claim` tables (`lib/src/models/*.spy.yaml`), relations to the auth user, indexes, includes. |
 | **Transactions + row locks** | Claiming locks the student and the offer (`LockMode.forUpdate`) so double taps and concurrent students can't beat caps or the frequency rule. Redeem is idempotent inside a locked transaction. |
 | **Streams (WebSockets)** | `claim.watch(id)` pushes the student's claim state; `shop.watchFeed()` pushes the business panel. |
