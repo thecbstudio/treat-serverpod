@@ -43,14 +43,14 @@ class ClaimEndpoint extends Endpoint {
     shareOnWall: shareOnWall ?? false,
   );
 
-  /// Demo accounts only: submits a ready-made story screenshot that tags the
-  /// place ([good]) or tags nobody, through the same verification. Never
-  /// shared on a wall — it isn't the student's own post.
+  /// Demo accounts only: submits a ready-made story screenshot ([kind])
+  /// through the same verification. Never shared on a wall — it isn't the
+  /// student's own post.
   Future<ClaimView> submitSampleProof(
     Session session,
     int claimId,
-    bool good,
-  ) => submitSampleProofFor(session, claimId, good: good);
+    SampleProof kind,
+  ) => submitSampleProofFor(session, claimId, kind);
 
   /// After approval: a short thank-you note to the place (shown on its page
   /// and in its panel) and whether the post may appear on its public wall.

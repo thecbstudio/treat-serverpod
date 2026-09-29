@@ -52,12 +52,19 @@ bool isSampleProof(Claim c) =>
 /// Demo students: the seeded jury student and every one-tap guest.
 bool isDemoStudent(StudentProfile s) => s.email.endsWith('@demo.treat');
 
-/// A story screenshot that tags [shop] (for seeded places), or one that tags
-/// nobody. Real Claude verifies either one like any upload.
-Future<List<int>?> sampleProofBytes(Shop shop, {required bool good}) async {
-  if (!good) return File('seed_assets/samples/no_mention.jpg').readAsBytes();
+/// A story screenshot for [kind]: tags [shop] with an ad disclosure, tags it
+/// without one, or tags nobody. The first two exist for seeded places only.
+/// Real Claude verifies it like any upload.
+Future<List<int>?> sampleProofBytes(Shop shop, SampleProof kind) async {
+  if (kind == SampleProof.tagsNobody) {
+    return File('seed_assets/samples/no_mention.jpg').readAsBytes();
+  }
   final key = shop.seedKey;
   if (key == null) return null;
+  if (kind == SampleProof.noDisclosure) {
+    final f = File('seed_assets/samples/undisclosed/$key.jpg');
+    return f.existsSync() ? f.readAsBytes() : null;
+  }
   final dir = Directory('seed_assets/proofs');
   if (!dir.existsSync()) return null;
   final files =

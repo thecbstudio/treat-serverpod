@@ -30,6 +30,7 @@ import 'package:treat_client/src/protocol/proof_type.dart' as _i99q6qgz;
 import 'package:treat_client/src/protocol/proof_upload.dart' as _iu72foho;
 import 'package:treat_client/src/protocol/public_student.dart' as _ihfjemru;
 import 'package:treat_client/src/protocol/redeem_result.dart' as _i8ej1owz;
+import 'package:treat_client/src/protocol/sample_proof.dart' as _ij1gidu7;
 import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
 import 'package:treat_client/src/protocol/shop_dashboard.dart' as _iqqmplla;
 import 'package:treat_client/src/protocol/shop_input.dart' as _inznu32h;
@@ -303,18 +304,18 @@ class EndpointClaim extends _isc.EndpointRef {
     },
   );
 
-  /// Demo accounts only: submits a ready-made story screenshot that tags the
-  /// place ([good]) or tags nobody, through the same verification. Never
-  /// shared on a wall — it isn't the student's own post.
+  /// Demo accounts only: submits a ready-made story screenshot ([kind])
+  /// through the same verification. Never shared on a wall — it isn't the
+  /// student's own post.
   _ida.Future<_iq1pcdgl.ClaimView> submitSampleProof(
     int claimId,
-    bool good,
+    _ij1gidu7.SampleProof kind,
   ) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
     'claim',
     'submitSampleProof',
     {
       'claimId': claimId,
-      'good': good,
+      'kind': kind,
     },
   );
 

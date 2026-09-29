@@ -287,10 +287,10 @@
   "navLeaderboard": "Leaderboard",
   "navPanel": "Panel",
   "proofPickOne": "Which one did you post?",
-  "proofTodoIgStory": "Share an Instagram story tagging the place, then upload a screenshot.",
-  "proofTodoIgPost": "Share an Instagram post tagging the place, then upload a screenshot.",
+  "proofTodoIgStory": "Share an Instagram story that tags the place and says it was a gift (#işbirliği), then upload a screenshot.",
+  "proofTodoIgPost": "Share an Instagram post that tags the place and says it was a gift (#işbirliği), then upload a screenshot.",
   "proofTodoGoogleReview": "Leave the business a Google review, then upload a screenshot.",
-  "proofTodoTiktok": "Post a TikTok mentioning the place, then upload a screenshot.",
+  "proofTodoTiktok": "Post a TikTok that mentions the place and says it was a gift (#işbirliği), then upload a screenshot.",
   "proofChoose": "Choose screenshot",
   "proofChange": "Change image",
   "proofSubmit": "Submit proof",
@@ -313,6 +313,7 @@
     }
   },
   "rejectNoMention": "Couldn't find the business tag or name in the post.",
+  "rejectNoDisclosure": "The place is tagged, but the post doesn't say it was a gift. Add #işbirliği (or #reklam) — Turkey's ad rules require it for free products — and appeal with the new screenshot.",
   "rejectNotAPost": "The image doesn't look like that kind of post.",
   "rejectUnreadable": "Couldn't read the image — try a clearer screenshot.",
   "appealExplain": "If your post genuinely qualifies, you can appeal once with the same or a clearer screenshot. If the appeal is approved, the strike is removed.",
@@ -340,6 +341,16 @@
   "dashEstReachNote": "approved posts × ~180 avg. views",
   "dashEstValue": "Estimated marketing value",
   "dashEstValueNote": "rough benchmark: ₺0.15 per view",
+  "dashCompliance": "Every approved post tags you and carries an ad disclosure (#işbirliği), as Turkey's influencer-ad guidelines require for gifted products.",
+  "proofCopyTags": "Copy “{tags}”",
+  "@proofCopyTags": {
+    "placeholders": {
+      "tags": {
+        "type": "String"
+      }
+    }
+  },
+  "proofCopied": "Copied — paste it into your post",
   "dashLive": "Live activity",
   "dashTopStudents": "Most active students",
   "dashEmpty": "No activity yet — create an offer and students will show up here.",
@@ -496,8 +507,8 @@
   "demoStudent": "Student",
   "demoShop": "Business",
   "proofSampleTitle": "Demo: no post handy?",
-  "proofSampleHint": "Send a ready-made story screenshot. Claude checks it for real — try both.",
-  "proofSampleGood": "Send a story that tags {shop}",
+  "proofSampleHint": "Send a ready-made story screenshot. Claude checks it for real — try a failing one first, then appeal with the good one.",
+  "proofSampleGood": "Tags {shop} + #işbirliği",
   "@proofSampleGood": {
     "placeholders": {
       "shop": {
@@ -505,5 +516,6 @@
       }
     }
   },
-  "proofSampleBad": "Send one that tags nobody"
+  "proofSampleUndisclosed": "Tags the place, no #işbirliği",
+  "proofSampleBad": "Tags nobody"
 }

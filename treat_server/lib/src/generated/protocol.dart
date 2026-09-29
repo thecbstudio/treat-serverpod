@@ -47,6 +47,7 @@ import 'proof_type.dart' as _i671eu65;
 import 'proof_upload.dart' as _idi75cqx;
 import 'public_student.dart' as _i377gh4k;
 import 'redeem_result.dart' as _iggnnz44;
+import 'sample_proof.dart' as _iyeld2s2;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_dashboard.dart' as _iqgdamt7;
 import 'shop_input.dart' as _i5vfstp6;
@@ -79,6 +80,7 @@ export 'proof_type.dart';
 export 'proof_upload.dart';
 export 'public_student.dart';
 export 'redeem_result.dart';
+export 'sample_proof.dart';
 export 'shop.dart';
 export 'shop_dashboard.dart';
 export 'shop_input.dart';
@@ -858,6 +860,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _iggnnz44.RedeemResult) {
       return _iggnnz44.RedeemResult.fromJson(data) as T;
     }
+    if (t == _iyeld2s2.SampleProof) {
+      return _iyeld2s2.SampleProof.fromJson(data) as T;
+    }
     if (t == _isgf2ncs.Shop) {
       return _isgf2ncs.Shop.fromJson(data) as T;
     }
@@ -970,6 +975,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_iggnnz44.RedeemResult?>()) {
       return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iyeld2s2.SampleProof?>()) {
+      return (data != null ? _iyeld2s2.SampleProof.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_isgf2ncs.Shop?>()) {
       return (data != null ? _isgf2ncs.Shop.fromJson(data) : null) as T;
@@ -1111,6 +1119,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _idi75cqx.ProofUpload => 'ProofUpload',
       _i377gh4k.PublicStudent => 'PublicStudent',
       _iggnnz44.RedeemResult => 'RedeemResult',
+      _iyeld2s2.SampleProof => 'SampleProof',
       _isgf2ncs.Shop => 'Shop',
       _iqgdamt7.ShopDashboard => 'ShopDashboard',
       _i5vfstp6.ShopInput => 'ShopInput',
@@ -1183,6 +1192,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PublicStudent';
       case _iggnnz44.RedeemResult():
         return 'RedeemResult';
+      case _iyeld2s2.SampleProof():
+        return 'SampleProof';
       case _isgf2ncs.Shop():
         return 'Shop';
       case _iqgdamt7.ShopDashboard():
@@ -1303,6 +1314,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'RedeemResult') {
       return deserialize<_iggnnz44.RedeemResult>(data['data']);
+    }
+    if (dataClassName == 'SampleProof') {
+      return deserialize<_iyeld2s2.SampleProof>(data['data']);
     }
     if (dataClassName == 'Shop') {
       return deserialize<_isgf2ncs.Shop>(data['data']);

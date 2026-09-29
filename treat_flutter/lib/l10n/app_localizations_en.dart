@@ -657,11 +657,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proofTodoIgStory =>
-      'Share an Instagram story tagging the place, then upload a screenshot.';
+      'Share an Instagram story that tags the place and says it was a gift (#işbirliği), then upload a screenshot.';
 
   @override
   String get proofTodoIgPost =>
-      'Share an Instagram post tagging the place, then upload a screenshot.';
+      'Share an Instagram post that tags the place and says it was a gift (#işbirliği), then upload a screenshot.';
 
   @override
   String get proofTodoGoogleReview =>
@@ -669,7 +669,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proofTodoTiktok =>
-      'Post a TikTok mentioning the place, then upload a screenshot.';
+      'Post a TikTok that mentions the place and says it was a gift (#işbirliği), then upload a screenshot.';
 
   @override
   String get proofChoose => 'Choose screenshot';
@@ -712,6 +712,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get rejectNoMention =>
       'Couldn\'t find the business tag or name in the post.';
+
+  @override
+  String get rejectNoDisclosure =>
+      'The place is tagged, but the post doesn\'t say it was a gift. Add #işbirliği (or #reklam) — Turkey\'s ad rules require it for free products — and appeal with the new screenshot.';
 
   @override
   String get rejectNotAPost =>
@@ -784,6 +788,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashEstValueNote => 'rough benchmark: ₺0.15 per view';
+
+  @override
+  String get dashCompliance =>
+      'Every approved post tags you and carries an ad disclosure (#işbirliği), as Turkey\'s influencer-ad guidelines require for gifted products.';
+
+  @override
+  String proofCopyTags(String tags) {
+    return 'Copy “$tags”';
+  }
+
+  @override
+  String get proofCopied => 'Copied — paste it into your post';
 
   @override
   String get dashLive => 'Live activity';
@@ -1070,13 +1086,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proofSampleHint =>
-      'Send a ready-made story screenshot. Claude checks it for real — try both.';
+      'Send a ready-made story screenshot. Claude checks it for real — try a failing one first, then appeal with the good one.';
 
   @override
   String proofSampleGood(String shop) {
-    return 'Send a story that tags $shop';
+    return 'Tags $shop + #işbirliği';
   }
 
   @override
-  String get proofSampleBad => 'Send one that tags nobody';
+  String get proofSampleUndisclosed => 'Tags the place, no #işbirliği';
+
+  @override
+  String get proofSampleBad => 'Tags nobody';
 }

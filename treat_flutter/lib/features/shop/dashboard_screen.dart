@@ -297,14 +297,44 @@ class _RoiCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(T.radiusLg),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          cell(l.dashEstReach, '${data.estimatedReach}', l.dashEstReachNote),
-          const SizedBox(width: 12),
-          cell(
-            l.dashEstValue,
-            '₺${data.estimatedValueTl}',
-            l.dashEstValueNote,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              cell(
+                l.dashEstReach,
+                '${data.estimatedReach}',
+                l.dashEstReachNote,
+              ),
+              const SizedBox(width: 12),
+              cell(
+                l.dashEstValue,
+                '₺${data.estimatedValueTl}',
+                l.dashEstValueNote,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.verified_user_outlined,
+                size: 16,
+                color: T.inkInverse,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  l.dashCompliance,
+                  style: context.text.bodySmall?.copyWith(
+                    color: T.inkInverse.withValues(alpha: 0.9),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

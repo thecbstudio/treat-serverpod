@@ -6,11 +6,12 @@ import 'package:http/http.dart' as http;
 import '../generated/protocol.dart';
 
 /// Why a proof was rejected. Stable keys, mapped to UI copy on the client.
-enum RejectReason { noMention, notAPost, unreadable }
+enum RejectReason { noMention, noDisclosure, notAPost, unreadable }
 
 extension RejectReasonKey on RejectReason {
   String get key => switch (this) {
     RejectReason.noMention => 'no_mention',
+    RejectReason.noDisclosure => 'no_disclosure',
     RejectReason.notAPost => 'not_a_post',
     RejectReason.unreadable => 'unreadable',
   };
@@ -105,9 +106,11 @@ class AnthropicProofVerifier implements ProofVerifier {
     'max_tokens': 400,
     'system':
         'You verify screenshots that students upload to prove they promoted '
-        'a local business on social media. Be strict but fair: approve only '
-        'when the screenshot clearly shows the requested kind of post and '
-        'names or tags the business. If unsure, reject.',
+        'a local business on social media in exchange for a free product. '
+        'Be strict but fair: approve only when the screenshot clearly shows '
+        'the requested kind of post, names or tags the business and, for '
+        'social posts, discloses that the product was a gift or an ad. If '
+        'unsure, reject.',
     'tools': [
       {
         'name': _tool,
@@ -118,7 +121,13 @@ class AnthropicProofVerifier implements ProofVerifier {
             'approved': {'type': 'boolean'},
             'reason': {
               'type': ['string', 'null'],
-              'enum': ['no_mention', 'not_a_post', 'unreadable', null],
+              'enum': [
+                'no_mention',
+                'no_disclosure',
+                'not_a_post',
+                'unreadable',
+                null,
+              ],
               'description': 'Required when approved is false, else null.',
             },
           },
@@ -169,7 +178,17 @@ String buildPrompt(ProofContext c) {
       'Is this a screenshot of a TikTok video or post that mentions this '
           'business?',
   };
-  return '$business\n\n$ask\n\n'
+  // Gifted-product posts must say so (Turkey's Advertising Board guideline
+  // for social-media influencers; FTC/ASA rules say the same elsewhere).
+  // Reviews are left out: a review must not be a paid ad at all.
+  final disclosure = c.proofType == ProofType.googleReview
+      ? ''
+      : '\n\nThe post must also disclose that the product was a gift or an '
+            'ad: a visible #işbirliği, #isbirligi, #reklam, #ad, #gifted, '
+            '#hediye or #sponsored, or Instagram\'s "Paid partnership" / '
+            '"Ücretli ortaklık" label. Reject with reason "no_disclosure" if '
+            'the business is tagged but no such disclosure is visible.';
+  return '$business\n\n$ask$disclosure\n\n'
       'Reject with reason "no_mention" if the business name/tag is missing, '
       '"not_a_post" if it is not that kind of post at all, "unreadable" if you '
       'cannot read the image. Call report_verdict.';
@@ -192,6 +211,7 @@ ProofVerdict parseResponse(String body) {
       if (input['approved'] == true) return const ProofVerdict.approved();
       return ProofVerdict.rejected(switch (input['reason']) {
         'no_mention' => RejectReason.noMention,
+        'no_disclosure' => RejectReason.noDisclosure,
         'not_a_post' => RejectReason.notAPost,
         _ => RejectReason.unreadable,
       });

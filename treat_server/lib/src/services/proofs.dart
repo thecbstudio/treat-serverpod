@@ -165,9 +165,9 @@ Future<ClaimView> submitProofFor(
 /// judges can see Claude approve and reject without posting anything.
 Future<ClaimView> submitSampleProofFor(
   Session session,
-  int claimId, {
-  required bool good,
-}) async {
+  int claimId,
+  SampleProof kind,
+) async {
   requireDemoMode(session);
   final student = await requireStudent(session);
   if (!isDemoStudent(student)) {
@@ -184,7 +184,7 @@ Future<ClaimView> submitSampleProofFor(
   final shop = await Shop.db.findById(session, claim.shopId);
   final bytes = !offer!.proofTypes.contains(ProofType.igStory)
       ? null
-      : await sampleProofBytes(shop!, good: good);
+      : await sampleProofBytes(shop!, kind);
   if (bytes == null) {
     throw treatError('no_sample', 'No sample screenshot for this offer.');
   }

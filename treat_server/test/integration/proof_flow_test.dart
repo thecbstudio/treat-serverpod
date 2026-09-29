@@ -67,6 +67,27 @@ void main() {
       expect(prompt, contains('Kırlangıç Kahve'));
       expect(prompt, contains('@kirlangickahve'));
       expect(prompt, contains('Google review'));
+      // A review must not be an ad at all, so no disclosure is asked for.
+      expect(prompt, isNot(contains('no_disclosure')));
+    });
+
+    test('then social posts must disclose the gift', () {
+      final prompt = buildPrompt(
+        ProofContext(
+          image: jpeg,
+          mediaType: 'image/jpeg',
+          proofType: ProofType.igStory,
+          shopName: 'Pixel',
+          instagramHandle: 'pixel',
+          offerTitle: 'Console hour',
+        ),
+      );
+      expect(prompt, contains('#işbirliği'));
+      expect(prompt, contains('no_disclosure'));
+      const noDisclosure =
+          '{"content":[{"type":"tool_use","name":"report_verdict",'
+          '"input":{"approved":false,"reason":"no_disclosure"}}]}';
+      expect(parseResponse(noDisclosure).reason, RejectReason.noDisclosure);
     });
   });
 

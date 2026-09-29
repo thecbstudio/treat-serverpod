@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:treat_client/treat_client.dart';
 
@@ -20,10 +19,12 @@ class ProofForm extends StatefulWidget {
     required this.proofTypes,
     required this.submitLabel,
     required this.shopName,
+    this.instagramHandle,
   });
 
   final int claimId;
   final String shopName;
+  final String? instagramHandle;
   final List<ProofType> proofTypes;
   final String submitLabel;
 
@@ -81,15 +82,21 @@ class _ProofFormState extends State<ProofForm> {
     }
   }
 
-  Future<void> _submitSample(bool good) async {
+  Future<void> _submitSample(SampleProof kind) async {
     setState(() => _busy = true);
     try {
-      await client.claim.submitSampleProof(widget.claimId, good);
+      await client.claim.submitSampleProof(widget.claimId, kind);
     } catch (e) {
       if (mounted) context.toast(errorMessage(e, context.l));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// What to put in the post: the place's tag and the ad disclosure.
+  String get _tags {
+    final handle = widget.instagramHandle;
+    return handle == null ? '#işbirliği' : '@$handle #işbirliği';
   }
 
   /// Demo accounts can send a ready-made story instead of a real post; the
@@ -126,6 +133,20 @@ class _ProofFormState extends State<ProofForm> {
           const SizedBox(height: 10),
         ],
         Notice(_type.todo(l), tone: PillTone.accent, icon: Icons.campaign),
+        if (_type != ProofType.googleReview) ...[
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ActionChip(
+              avatar: const Icon(Icons.copy_rounded, size: 16),
+              label: Text(l.proofCopyTags(_tags)),
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: _tags));
+                if (context.mounted) context.toast(l.proofCopied);
+              },
+            ),
+          ),
+        ],
         const SizedBox(height: 12),
         if (_bytes != null) ...[
           ClipRRect(
@@ -183,21 +204,34 @@ class _ProofFormState extends State<ProofForm> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                OutlinedButton.icon(
-                  onPressed: _busy ? null : () => _submitSample(true),
-                  icon: const Icon(Icons.alternate_email_rounded),
-                  label: Text(
+                for (final (kind, icon, label) in [
+                  (
+                    SampleProof.tagsPlace,
+                    Icons.verified_outlined,
                     l.proofSampleGood(widget.shopName),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton.icon(
-                  onPressed: _busy ? null : () => _submitSample(false),
-                  icon: const Icon(Icons.do_not_disturb_alt_rounded),
-                  label: Text(l.proofSampleBad),
-                ),
+                  (
+                    SampleProof.noDisclosure,
+                    Icons.report_gmailerrorred_rounded,
+                    l.proofSampleUndisclosed,
+                  ),
+                  (
+                    SampleProof.tagsNobody,
+                    Icons.do_not_disturb_alt_rounded,
+                    l.proofSampleBad,
+                  ),
+                ]) ...[
+                  OutlinedButton.icon(
+                    onPressed: _busy ? null : () => _submitSample(kind),
+                    icon: Icon(icon),
+                    label: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
               ],
             ),
           ),

@@ -1,0 +1,7 @@
+### Ready-made story screenshots demo students can send instead of a real
+### post: one that passes, and one for each common way to fail.
+enum: SampleProof
+values:
+  - tagsPlace
+  - noDisclosure
+  - tagsNobody

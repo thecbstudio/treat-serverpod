@@ -35,6 +35,7 @@ import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
 import 'package:treat_server/src/generated/proof_upload.dart' as _i4s0n1ka;
 import 'package:treat_server/src/generated/public_student.dart' as _ijyz5z8h;
 import 'package:treat_server/src/generated/redeem_result.dart' as _itbz5dhb;
+import 'package:treat_server/src/generated/sample_proof.dart' as _i41sjtmr;
 import 'package:treat_server/src/generated/shop.dart' as _it3lip7k;
 import 'package:treat_server/src/generated/shop_dashboard.dart' as _io00ljue;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
@@ -679,7 +680,7 @@ class _ClaimEndpoint {
   _ida.Future<_iuhj4d1o.ClaimView> submitSampleProof(
     _ist.TestSessionBuilder sessionBuilder,
     int claimId,
-    bool good,
+    _i41sjtmr.SampleProof kind,
   ) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -694,7 +695,7 @@ class _ClaimEndpoint {
           methodName: 'submitSampleProof',
           parameters: _ist.testObjectToJson({
             'claimId': claimId,
-            'good': good,
+            'kind': kind,
           }),
           serializationManager: _serializationManager,
         );

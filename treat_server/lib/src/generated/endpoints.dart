@@ -20,6 +20,7 @@ import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
 import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
+import 'package:treat_server/src/generated/sample_proof.dart' as _i41sjtmr;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
@@ -390,9 +391,9 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<int>(),
               nullable: false,
             ),
-            'good': _is.ParameterDescription(
-              name: 'good',
-              type: _is.getType<bool>(),
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<_i41sjtmr.SampleProof>(),
               nullable: false,
             ),
           },
@@ -404,7 +405,7 @@ class Endpoints extends _is.EndpointDispatch {
                   .submitSampleProof(
                     session,
                     params['claimId'],
-                    params['good'],
+                    params['kind'],
                   ),
         ),
         'thank': _is.MethodConnector(

@@ -83,7 +83,9 @@ flowchart LR
 - A claim costs at most **one strike**; a won appeal gives it back; a lost appeal adds none.
 
 ### AI verification (`treat_server/lib/src/ai/proof_verifier.dart`)
-Claude (Anthropic Messages API, called with `package:http`) gets the screenshot plus the business name, its Instagram handle, the offer and the requested post type. The answer is **forced through a tool call** (`report_verdict`), so there is no free-text parsing. Reasons: `no_mention`, `not_a_post`, `unreadable`.
+Claude (Anthropic Messages API, called with `package:http`) gets the screenshot plus the business name, its Instagram handle, the offer and the requested post type. The answer is **forced through a tool call** (`report_verdict`), so there is no free-text parsing. Reasons: `no_mention`, `no_disclosure`, `not_a_post`, `unreadable`.
+
+**Compliant by design.** Posting about a product you got for free is advertising. Turkey's Advertising Board guideline for social-media influencers (like the FTC and ASA rules elsewhere) requires saying so, so an Instagram/TikTok proof is only approved when it tags the place **and** carries a disclosure such as `#işbirliği`, `#reklam` or Instagram's *Paid partnership* label; otherwise the student gets `no_disclosure` with a one-tap "copy `@place #işbirliği`" fix and can appeal. The business panel states that every approved post is disclosed.
 
 ## Run it locally
 
@@ -115,7 +117,7 @@ Created automatically on server start when `demoAccountPassword` is set (local p
 1. Window A: welcome screen → **Student** (one tap; every tap creates a fresh, verified guest student, so judges never block each other).
 2. Window B: welcome screen → **Business** (the shared demo place, Pixel Oyun Kafe, which always has a live drop).
 3. A: open the live drop → **Claim treat** → note the 6-character code. B: **Scan** → type the code. A flips to *Redeemed* by itself.
-4. A: no real post needed — under *Demo: no post handy?* send the sample story that **tags nobody** → Claude rejects it (strike 1/3). Appeal with the sample that **tags the place** → Claude approves and the strike is returned. B's **Panel** updates live.
+4. A: no real post needed — under *Demo: no post handy?* send the sample that **tags the place but has no #işbirliği** → Claude rejects it with *no disclosure* (strike 1/3). Appeal with the sample that **tags the place + #işbirliği** → Claude approves and the strike is returned. B's **Panel** updates live. (A third sample tags nobody at all.)
 
 The samples are ready-made story screenshots stored on the server; they go through exactly the same upload → storage → Claude path as a real one. They only exist for demo accounts, and demo sign-in only exists while the server runs in demo mode (`demoAccountPassword` set).
 

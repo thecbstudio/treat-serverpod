@@ -1279,13 +1279,13 @@ abstract class AppLocalizations {
   /// No description provided for @proofTodoIgStory.
   ///
   /// In en, this message translates to:
-  /// **'Share an Instagram story tagging the place, then upload a screenshot.'**
+  /// **'Share an Instagram story that tags the place and says it was a gift (#işbirliği), then upload a screenshot.'**
   String get proofTodoIgStory;
 
   /// No description provided for @proofTodoIgPost.
   ///
   /// In en, this message translates to:
-  /// **'Share an Instagram post tagging the place, then upload a screenshot.'**
+  /// **'Share an Instagram post that tags the place and says it was a gift (#işbirliği), then upload a screenshot.'**
   String get proofTodoIgPost;
 
   /// No description provided for @proofTodoGoogleReview.
@@ -1297,7 +1297,7 @@ abstract class AppLocalizations {
   /// No description provided for @proofTodoTiktok.
   ///
   /// In en, this message translates to:
-  /// **'Post a TikTok mentioning the place, then upload a screenshot.'**
+  /// **'Post a TikTok that mentions the place and says it was a gift (#işbirliği), then upload a screenshot.'**
   String get proofTodoTiktok;
 
   /// No description provided for @proofChoose.
@@ -1371,6 +1371,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t find the business tag or name in the post.'**
   String get rejectNoMention;
+
+  /// No description provided for @rejectNoDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'The place is tagged, but the post doesn\'t say it was a gift. Add #işbirliği (or #reklam) — Turkey\'s ad rules require it for free products — and appeal with the new screenshot.'**
+  String get rejectNoDisclosure;
 
   /// No description provided for @rejectNotAPost.
   ///
@@ -1491,6 +1497,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'rough benchmark: ₺0.15 per view'**
   String get dashEstValueNote;
+
+  /// No description provided for @dashCompliance.
+  ///
+  /// In en, this message translates to:
+  /// **'Every approved post tags you and carries an ad disclosure (#işbirliği), as Turkey\'s influencer-ad guidelines require for gifted products.'**
+  String get dashCompliance;
+
+  /// No description provided for @proofCopyTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy “{tags}”'**
+  String proofCopyTags(String tags);
+
+  /// No description provided for @proofCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied — paste it into your post'**
+  String get proofCopied;
 
   /// No description provided for @dashLive.
   ///
@@ -1975,19 +1999,25 @@ abstract class AppLocalizations {
   /// No description provided for @proofSampleHint.
   ///
   /// In en, this message translates to:
-  /// **'Send a ready-made story screenshot. Claude checks it for real — try both.'**
+  /// **'Send a ready-made story screenshot. Claude checks it for real — try a failing one first, then appeal with the good one.'**
   String get proofSampleHint;
 
   /// No description provided for @proofSampleGood.
   ///
   /// In en, this message translates to:
-  /// **'Send a story that tags {shop}'**
+  /// **'Tags {shop} + #işbirliği'**
   String proofSampleGood(String shop);
+
+  /// No description provided for @proofSampleUndisclosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags the place, no #işbirliği'**
+  String get proofSampleUndisclosed;
 
   /// No description provided for @proofSampleBad.
   ///
   /// In en, this message translates to:
-  /// **'Send one that tags nobody'**
+  /// **'Tags nobody'**
   String get proofSampleBad;
 }
 

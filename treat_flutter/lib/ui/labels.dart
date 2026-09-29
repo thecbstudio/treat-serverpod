@@ -82,6 +82,7 @@ extension ProofTodo on ProofType {
 
 String rejectReasonText(String? key, AppLocalizations l) => switch (key) {
   'no_mention' => l.rejectNoMention,
+  'no_disclosure' => l.rejectNoDisclosure,
   'not_a_post' => l.rejectNotAPost,
   _ => l.rejectUnreadable,
 };

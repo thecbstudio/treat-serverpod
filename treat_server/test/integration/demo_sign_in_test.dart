@@ -124,7 +124,7 @@ void main() {
         final view = await endpoints.claim.submitSampleProof(
           guest,
           claimId,
-          true,
+          SampleProof.tagsPlace,
         );
         expect(view.claim.status, ClaimStatus.proofPending);
         expect(view.claim.proofType, ProofType.igStory);
@@ -148,11 +148,35 @@ void main() {
 
       test('when the bad sample is sent then Claude sees a story that tags '
           'nobody', () async {
-        await endpoints.claim.submitSampleProof(guest, claimId, false);
+        await endpoints.claim.submitSampleProof(
+          guest,
+          claimId,
+          SampleProof.tagsNobody,
+        );
         fake.answers.add(const ProofVerdict.rejected(RejectReason.noMention));
         await runProofVerification(sessionBuilder.build(), claimId);
         final after = await endpoints.claim.get(guest, claimId);
         expect(after.claim.status, ClaimStatus.rejected);
+      });
+
+      test('when the sample without #işbirliği is sent then Claude sees '
+          'the place tagged but no disclosure', () async {
+        await endpoints.claim.submitSampleProof(
+          guest,
+          claimId,
+          SampleProof.noDisclosure,
+        );
+        fake.answers.add(
+          const ProofVerdict.rejected(RejectReason.noDisclosure),
+        );
+        await runProofVerification(sessionBuilder.build(), claimId);
+        final undisclosed = await File(
+          'seed_assets/samples/undisclosed/pixel.jpg',
+        ).readAsBytes();
+        expect(fake.seen.single.image, undisclosed);
+        final after = await endpoints.claim.get(guest, claimId);
+        expect(after.claim.status, ClaimStatus.rejected);
+        expect(after.claim.verdictReason, 'no_disclosure');
       });
 
       test('when a real student asks for a sample then demo_off', () async {
@@ -162,7 +186,11 @@ void main() {
         final claim = (await endpoints.claim.create(real, offer.id!)).claim;
         await endpoints.shop.redeem(owner, claim.code);
         await expectLater(
-          endpoints.claim.submitSampleProof(real, claim.id!, true),
+          endpoints.claim.submitSampleProof(
+            real,
+            claim.id!,
+            SampleProof.tagsPlace,
+          ),
           throwsTreat('demo_off'),
         );
       });
