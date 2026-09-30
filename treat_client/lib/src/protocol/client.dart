@@ -20,6 +20,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:treat_client/src/protocol/claim_proof.dart' as _islgq58o;
 import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
 import 'package:treat_client/src/protocol/drop_input.dart' as _id0be9cq;
+import 'package:treat_client/src/protocol/identity_check.dart' as _ivqabh3c;
 import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/me.dart' as _iap2bcnj;
 import 'package:treat_client/src/protocol/offer.dart' as _ibnzpjkx;
@@ -705,6 +706,39 @@ class EndpointSocial extends _isc.EndpointRef {
   );
 }
 
+/// Student-card check for students without a .edu e-mail, and the
+/// verified badge for businesses: upload a photo, the AI decides, the photo
+/// is deleted.
+/// {@category Endpoint}
+class EndpointVerification extends _isc.EndpointRef {
+  EndpointVerification(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'verification';
+
+  /// The newest check (poll while it is `pending`).
+  _ida.Future<_ivqabh3c.IdentityCheck?> latest() =>
+      caller.callServerEndpoint<_ivqabh3c.IdentityCheck?>(
+        'verification',
+        'latest',
+        {},
+      );
+
+  _ida.Future<_iu72foho.ProofUpload> upload() =>
+      caller.callServerEndpoint<_iu72foho.ProofUpload>(
+        'verification',
+        'upload',
+        {},
+      );
+
+  _ida.Future<_ivqabh3c.IdentityCheck> submit(String path) =>
+      caller.callServerEndpoint<_ivqabh3c.IdentityCheck>(
+        'verification',
+        'submit',
+        {'path': path},
+      );
+}
+
 class Modules {
   Modules(Client client) {
     serverpod_auth_idp = _iaic.Caller(client);
@@ -753,6 +787,7 @@ class Client extends _isc.ServerpodClientShared {
     shop = EndpointShop(this);
     shopOffers = EndpointShopOffers(this);
     social = EndpointSocial(this);
+    verification = EndpointVerification(this);
     modules = Modules(this);
   }
 
@@ -776,6 +811,8 @@ class Client extends _isc.ServerpodClientShared {
 
   late final EndpointSocial social;
 
+  late final EndpointVerification verification;
+
   late final Modules modules;
 
   @override
@@ -790,6 +827,7 @@ class Client extends _isc.ServerpodClientShared {
     'shop': shop,
     'shopOffers': shopOffers,
     'social': social,
+    'verification': verification,
   };
 
   @override

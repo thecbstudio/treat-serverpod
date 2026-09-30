@@ -295,7 +295,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonEduNote.
   ///
   /// In en, this message translates to:
-  /// **'This isn\'t a university email, so your account stays unverified: you can browse offers but not claim them.'**
+  /// **'This isn\'t a university email: you can browse offers now, and claim them once you\'ve verified with a photo of your student card.'**
   String get nonEduNote;
 
   /// No description provided for @createProfile.
@@ -643,7 +643,7 @@ abstract class AppLocalizations {
   /// No description provided for @lockNotVerified.
   ///
   /// In en, this message translates to:
-  /// **'Only verified students can claim. Sign up with a university email.'**
+  /// **'Only verified students can claim. Verify with a photo of your student card — it takes a minute.'**
   String get lockNotVerified;
 
   /// No description provided for @lockShopView.
@@ -2445,6 +2445,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your university (up to 80 characters).'**
   String get err_invalid_university;
+
+  /// No description provided for @verifyStudentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify you\'re a student'**
+  String get verifyStudentTitle;
+
+  /// No description provided for @verifyShopTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get the verified badge'**
+  String get verifyShopTitle;
+
+  /// No description provided for @verifyStudentIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of the front of your student ID card (or your university\'s digital student card). Claude checks it in about a minute.'**
+  String get verifyStudentIntro;
+
+  /// No description provided for @verifyShopIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of an official document of your business: tax certificate (vergi levhası), workplace licence, or trade registry record. Claude checks it in about a minute, and your place gets the verified badge students see.'**
+  String get verifyShopIntro;
+
+  /// No description provided for @verifyMustMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'It must match your profile'**
+  String get verifyMustMatch;
+
+  /// No description provided for @verifyStudentMatchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name and university as on the card — fix them in Settings first if needed.'**
+  String get verifyStudentMatchHint;
+
+  /// No description provided for @verifyShopMatchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The legal trade name may differ from your sign; then the address must match.'**
+  String get verifyShopMatchHint;
+
+  /// No description provided for @verifyTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get verifyTakePhoto;
+
+  /// No description provided for @verifyChoosePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose photo'**
+  String get verifyChoosePhoto;
+
+  /// No description provided for @verifySend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send for checking'**
+  String get verifySend;
+
+  /// No description provided for @verifyChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking your photo… you can leave this page, we\'ll keep going.'**
+  String get verifyChecking;
+
+  /// No description provided for @verifyPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo is stored privately, seen only by the AI, and deleted as soon as it has decided. We keep only the result.'**
+  String get verifyPrivacy;
+
+  /// No description provided for @verifyStudentDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re a verified student — go claim your first treat!'**
+  String get verifyStudentDone;
+
+  /// No description provided for @verifyShopDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your place is verified: students see the badge on your page and offers.'**
+  String get verifyShopDone;
+
+  /// No description provided for @verifyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t check the photo just now. Please send it again.'**
+  String get verifyFailed;
+
+  /// No description provided for @verifyNotAStudentCard.
+  ///
+  /// In en, this message translates to:
+  /// **'That doesn\'t look like a student ID card. Photograph the front of your university card.'**
+  String get verifyNotAStudentCard;
+
+  /// No description provided for @verifyNotABusinessDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'That doesn\'t look like an official business document. Use your tax certificate, licence or registry record.'**
+  String get verifyNotABusinessDocument;
+
+  /// No description provided for @verifyNameMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The name on the document doesn\'t match your profile. Check your name in Settings, or use your own document.'**
+  String get verifyNameMismatch;
+
+  /// No description provided for @verifySchoolMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The university on the card doesn\'t match your profile. Fix it in Settings and send again.'**
+  String get verifySchoolMismatch;
+
+  /// No description provided for @verifyExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This card has expired. Use your current card or the digital card from your university.'**
+  String get verifyExpired;
+
+  /// No description provided for @verifyUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t read the photo. Take it in good light, flat and sharp, with the whole document visible.'**
+  String get verifyUnreadable;
+
+  /// No description provided for @verifyCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify with your student card'**
+  String get verifyCta;
+
+  /// No description provided for @verifyShopCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Get verified'**
+  String get verifyShopCta;
+
+  /// No description provided for @verifyShopBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified places get a badge on their page and offers. Send a photo of your tax certificate or licence.'**
+  String get verifyShopBanner;
+
+  /// No description provided for @verifiedBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified business'**
+  String get verifiedBusiness;
+
+  /// No description provided for @err_already_verified.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re already verified.'**
+  String get err_already_verified;
+
+  /// No description provided for @err_check_pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your last photo is still being checked.'**
+  String get err_check_pending;
+
+  /// No description provided for @err_too_many_checks.
+  ///
+  /// In en, this message translates to:
+  /// **'That was 3 tries today — try again tomorrow.'**
+  String get err_too_many_checks;
+
+  /// No description provided for @err_no_role.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish setting up your account first.'**
+  String get err_no_role;
 }
 
 class _AppLocalizationsDelegate

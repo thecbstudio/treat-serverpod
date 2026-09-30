@@ -34,6 +34,7 @@ import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
 import '../endpoints/shop_endpoint.dart' as _i4fqeydl;
 import '../endpoints/shop_offers_endpoint.dart' as _ifm6c9vh;
 import '../endpoints/social_endpoint.dart' as _iy6grqf3;
+import '../endpoints/verification_endpoint.dart' as _ie4zs15l;
 export 'future_calls.dart' show ServerpodFutureCallsGetter;
 
 class Endpoints extends _is.EndpointDispatch {
@@ -98,6 +99,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'social',
+          null,
+        ),
+      'verification': _ie4zs15l.VerificationEndpoint()
+        ..initialize(
+          server,
+          'verification',
           null,
         ),
     };
@@ -1045,6 +1052,54 @@ class Endpoints extends _is.EndpointDispatch {
                     params['targetId'],
                     params['reason'],
                   ),
+        ),
+      },
+    );
+    connectors['verification'] = _is.EndpointConnector(
+      name: 'verification',
+      endpoint: endpoints['verification']!,
+      methodConnectors: {
+        'latest': _is.MethodConnector(
+          name: 'latest',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['verification'] as _ie4zs15l.VerificationEndpoint)
+                      .latest(session),
+        ),
+        'upload': _is.MethodConnector(
+          name: 'upload',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['verification'] as _ie4zs15l.VerificationEndpoint)
+                      .upload(session),
+        ),
+        'submit': _is.MethodConnector(
+          name: 'submit',
+          params: {
+            'path': _is.ParameterDescription(
+              name: 'path',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['verification'] as _ie4zs15l.VerificationEndpoint)
+                      .submit(
+                        session,
+                        params['path'],
+                      ),
         ),
       },
     );

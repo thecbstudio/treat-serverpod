@@ -155,6 +155,14 @@ class _Detail extends StatelessWidget {
                     Notice(lock, icon: Icons.lock_outline_rounded),
                     const SizedBox(height: 12),
                   ],
+                  if (eligibility?.reason == EligibilityReason.notVerified) ...[
+                    OutlinedButton.icon(
+                      onPressed: () => context.push('/verify'),
+                      icon: const Icon(Icons.badge_outlined),
+                      label: Text(l.verifyCta),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   if (eligibility != null) ...[
                     _ClaimButton(offerId: offer.id!, eligibility: eligibility),
                     const SizedBox(height: 8),

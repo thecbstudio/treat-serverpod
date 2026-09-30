@@ -19,6 +19,13 @@ Future<void> deleteAccount(Session session) async {
   if (student != null) requireNotDemoStudent(session, student);
   if (shop != null) requireNotDemoLocked(session, shop: shop);
 
+  final checkImages = [
+    for (final c in await IdentityCheck.db.find(
+      session,
+      where: (t) => t.authUserId.equals(authUserId),
+    ))
+      ?c.imagePath,
+  ];
   final claims = [
     if (student != null)
       ...await Claim.db.find(
@@ -45,8 +52,7 @@ Future<void> deleteAccount(Session session) async {
   });
 
   // Files last: a failed transaction must not leave claims without images.
-  for (final c in claims) {
-    final path = c.proofPath;
+  for (final path in [...claims.map((c) => c.proofPath), ...checkImages]) {
     if (path == null) continue;
     try {
       await session.storage.deleteFile(storageId: proofStorage, path: path);

@@ -23,8 +23,11 @@ import 'package:treat_server/src/generated/drop_input.dart' as _io47mjlk;
 import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/future_calls_generated_models/expire_claim_call_expire_model.dart'
     as _i0ubflsj;
+import 'package:treat_server/src/generated/future_calls_generated_models/verify_identity_call_verify_model.dart'
+    as _ixxnnmqe;
 import 'package:treat_server/src/generated/future_calls_generated_models/verify_proof_call_verify_model.dart'
     as _ijb16y0z;
+import 'package:treat_server/src/generated/identity_check.dart' as _ibggwczk;
 import 'package:treat_server/src/generated/leaderboard_entry.dart' as _ikcio32l;
 import 'package:treat_server/src/generated/me.dart' as _ietetfc8;
 import 'package:treat_server/src/generated/offer.dart' as _i1s2ys04;
@@ -192,6 +195,8 @@ class TestEndpoints {
   late final _ShopOffersEndpoint shopOffers;
 
   late final _SocialEndpoint social;
+
+  late final _VerificationEndpoint verification;
 }
 
 class _InternalTestEndpoints extends TestEndpoints
@@ -241,11 +246,17 @@ class _InternalTestEndpoints extends TestEndpoints
       endpoints,
       serializationManager,
     );
+    verification = _VerificationEndpoint(
+      endpoints,
+      serializationManager,
+    );
   }
 }
 
 class _FutureCalls {
   late final expireClaimCall = _ExpireClaimCallFutureCall();
+
+  late final verifyIdentityCall = _VerifyIdentityCallFutureCall();
 
   late final verifyProofCall = _VerifyProofCallFutureCall();
 }
@@ -1842,6 +1853,108 @@ class _SocialEndpoint {
   }
 }
 
+class _VerificationEndpoint {
+  _VerificationEndpoint(
+    this._endpointDispatch,
+    this._serializationManager,
+  );
+
+  final _is.EndpointDispatch _endpointDispatch;
+
+  final _is.SerializationManager _serializationManager;
+
+  _ida.Future<_ibggwczk.IdentityCheck?> latest(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'verification',
+            method: 'latest',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'verification',
+          methodName: 'latest',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ibggwczk.IdentityCheck?>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_i4s0n1ka.ProofUpload> upload(
+    _ist.TestSessionBuilder sessionBuilder,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'verification',
+            method: 'upload',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'verification',
+          methodName: 'upload',
+          parameters: _ist.testObjectToJson({}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_i4s0n1ka.ProofUpload>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+
+  _ida.Future<_ibggwczk.IdentityCheck> submit(
+    _ist.TestSessionBuilder sessionBuilder,
+    String path,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'verification',
+            method: 'submit',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'verification',
+          methodName: 'submit',
+          parameters: _ist.testObjectToJson({'path': path}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_ibggwczk.IdentityCheck>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
+}
+
 class _ExpireClaimCallFutureCall {
   Future<void> expire(
     _ist.TestSessionBuilder sessionBuilder,
@@ -1852,6 +1965,25 @@ class _ExpireClaimCallFutureCall {
         (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild();
     try {
       await _ipmzuoh2.ExpireClaimCallExpireFutureCall().invoke(
+        _localUniqueSession,
+        object,
+      );
+    } finally {
+      await _localUniqueSession.close();
+    }
+  }
+}
+
+class _VerifyIdentityCallFutureCall {
+  Future<void> verify(
+    _ist.TestSessionBuilder sessionBuilder,
+    int checkId,
+  ) async {
+    var object = _ixxnnmqe.VerifyIdentityCallVerifyModel(checkId: checkId);
+    var _localUniqueSession =
+        (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild();
+    try {
+      await _ipmzuoh2.VerifyIdentityCallVerifyFutureCall().invoke(
         _localUniqueSession,
         object,
       );

@@ -65,13 +65,13 @@ flowchart LR
 
 | Feature | Where |
 |---|---|
-| **Endpoints + generated client** | `profile`, `offer`, `shopOffers`, `claim`, `shop`, `social`, `leaderboard`, `demo` — all rules and authorization run on the server. |
+| **Endpoints + generated client** | `profile`, `offer`, `shopOffers`, `claim`, `shop`, `social`, `leaderboard`, `verification`, `demo` — all rules and authorization run on the server. |
 | **Web server (Relic)** | Server-rendered `/p/:id` public place pages (link previews, schema.org data for search), `/card/:id` printable counter cards with QR codes drawn as SVG on the server, and the `/privacy` (KVKK/GDPR) and `/terms` pages; a gzip middleware for the Flutter bundle (3.96 MB → 1.13 MB). |
-| **Models + ORM + migrations** | `student_profile`, `shop`, `offer`, `claim`, `report` tables (`lib/src/models/*.spy.yaml`), relations to the auth user, indexes, includes. |
+| **Models + ORM + migrations** | `student_profile`, `shop`, `offer`, `claim`, `report`, `identity_check` tables (`lib/src/models/*.spy.yaml`), relations to the auth user, indexes, includes. |
 | **Transactions + row locks** | Claiming locks the student and the offer (`LockMode.forUpdate`) so double taps and concurrent students can't beat caps or the frequency rule. Redeem is idempotent inside a locked transaction. |
 | **Streams (WebSockets)** | `claim.watch(id)` pushes the student's claim state; `shop.watchFeed()` pushes the business panel. |
 | **Server events** | `session.messages` channels `claim:<id>` / `shop:<id>` fan changes out to open streams; `watch` also re-checks the DB every 5 s so a missed message (e.g. multiple instances without Redis) only delays an update. |
-| **Future calls / scheduled work** | An hourly job re-checks TikToks a week after approval through TikTok's public oEmbed API and takes the treat back if the video was deleted. `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` runs the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
+| **Future calls / scheduled work** | An hourly job re-checks TikToks a week after approval through TikTok's public oEmbed API and takes the treat back if the video was deleted. `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` (screenshots) and `VerifyIdentityCall` (student cards, business documents) run the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
 | **File uploads / cloud storage** | Proof screenshots go to **private** storage through upload descriptions; the server picks the path, checks type/size by magic bytes, and gives the business short-lived download links. |
 | **Authentication** | Serverpod email identity provider (sign-up with terms/privacy checkbox, verification code, login) + our own student / business profiles. **Account deletion** removes the auth user in one transaction (profile, claims, reports, logins and refresh tokens cascade), deletes the screenshots from storage and revokes open sessions via `session.messages.authenticationRevoked`. `.edu` e-mails are verified automatically. Demo mode adds a one-tap sign-in that creates a guest and issues its token server-side (`AuthServices.instance.tokenManager.issueToken`). |
 | **Testing** | `serverpod_test` (`withServerpod`): 135+ tests — rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes and appeals, drops, demo sign-in and hardening, ratings, removed-post reports, post re-checks, settings, account deletion, content reports. |
@@ -99,6 +99,11 @@ Google forbids reviews in exchange for anything, so treat never asks for one: a 
 - Permanent posts (feed post, Reel, TikTok) come with their **link**; the place can open them from its panel.
 - The place can **report a post as removed** (48 h for stories, 7 days for permanent posts): treat taken back, strike, no appeal.
 - TikToks are **re-checked automatically** after 7 days.
+
+### Student cards and business documents
+- `.edu` e-mails are verified on sign-up. Everyone else sends a photo of their **student ID card**; Claude checks it's a student card, that name and university match the profile and that it hasn't expired. Only then can they claim.
+- Businesses send a **tax certificate (vergi levhası), licence or registry record** for the **verified badge**; the legal trade name often differs from the sign, so the name *or* the address must match. Renaming the place removes the badge.
+- The photo sits in private storage only until the verdict and is then deleted; only the result is kept. 3 tries a day, one at a time.
 
 ### Safety for user content
 - Anyone can **report** a review, a wall post or a place. A review or post reported by 2 different users leaves public pages (a review's stars still count); places are only recorded, so two accounts can't take a business off the app. Demo guests' reports never hide anything.

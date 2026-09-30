@@ -1,0 +1,19 @@
+### One AI check of a student card or business document. The photo is
+### deleted as soon as there is a verdict; only the result stays.
+class: IdentityCheck
+table: identity_check
+fields:
+  authUser: module:serverpod_auth_core:AuthUser?, relation(onDelete=Cascade)
+  kind: VerificationKind
+  ### Private storage; null once the photo was deleted.
+  imagePath: String?, scope=serverOnly
+  status: CheckStatus
+  ### not_a_student_card | not_a_business_document | name_mismatch |
+  ### school_mismatch | expired | unreadable | verify_failed
+  reason: String?
+  attempts: int, default=0
+  createdAt: DateTime, default=now
+  decidedAt: DateTime?
+indexes:
+  identity_check_user_idx:
+    fields: authUserId, createdAt

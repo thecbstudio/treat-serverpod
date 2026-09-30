@@ -22,6 +22,7 @@ import 'package:treat_server/src/generated/leaderboard_entry.dart' as _ikcio32l;
 import 'package:treat_server/src/generated/offer_card.dart' as _ipkteuk5;
 import 'package:treat_server/src/generated/wall_post.dart' as _ikxwgva9;
 import 'badge_id.dart' as _i14xwlyb;
+import 'check_status.dart' as _i152b260;
 import 'claim.dart' as _iywv5oz4;
 import 'claim_proof.dart' as _iiz71frh;
 import 'claim_status.dart' as _i4cqplnc;
@@ -32,8 +33,11 @@ import 'eligibility.dart' as _iapxm79h;
 import 'eligibility_reason.dart' as _ixt5yy28;
 import 'future_calls_generated_models/expire_claim_call_expire_model.dart'
     as _iizahf83;
+import 'future_calls_generated_models/verify_identity_call_verify_model.dart'
+    as _ikgpjhb7;
 import 'future_calls_generated_models/verify_proof_call_verify_model.dart'
     as _idz7zgl8;
+import 'identity_check.dart' as _ib8wvp93;
 import 'leaderboard_entry.dart' as _ikawkn1p;
 import 'me.dart' as _i22ljs0z;
 import 'offer.dart' as _iqlmmtnc;
@@ -62,8 +66,10 @@ import 'student_verification.dart' as _ipqqbskf;
 import 'top_student.dart' as _iub4wqas;
 import 'treat_exception.dart' as _iawcmjml;
 import 'user_role.dart' as _ir0y0iu6;
+import 'verification_kind.dart' as _ikt935kv;
 import 'wall_post.dart' as _i6mr85kx;
 export 'badge_id.dart';
+export 'check_status.dart';
 export 'claim.dart';
 export 'claim_proof.dart';
 export 'claim_status.dart';
@@ -72,6 +78,7 @@ export 'drop_input.dart';
 export 'drop_signal.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
+export 'identity_check.dart';
 export 'leaderboard_entry.dart';
 export 'me.dart';
 export 'offer.dart';
@@ -100,6 +107,7 @@ export 'student_verification.dart';
 export 'top_student.dart';
 export 'treat_exception.dart';
 export 'user_role.dart';
+export 'verification_kind.dart';
 export 'wall_post.dart';
 
 class Protocol extends _is.DatabaseSerializationManager {
@@ -393,6 +401,103 @@ class Protocol extends _is.DatabaseSerializationManager {
             _isp.IndexElementDefinition(
               type: _isp.IndexElementDefinitionType.column,
               definition: 'offerId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'identity_check',
+      dartName: 'IdentityCheck',
+      schema: 'public',
+      module: 'treat',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'authUserId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'kind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:VerificationKind',
+        ),
+        _isp.ColumnDefinition(
+          name: 'imagePath',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'status',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:CheckStatus',
+        ),
+        _isp.ColumnDefinition(
+          name: 'reason',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'attempts',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '0',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'decidedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'identity_check_fk_0',
+          columns: ['authUserId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'identity_check_user_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'authUserId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'createdAt',
             ),
           ],
           type: 'btree',
@@ -956,6 +1061,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _i14xwlyb.BadgeId) {
       return _i14xwlyb.BadgeId.fromJson(data) as T;
     }
+    if (t == _i152b260.CheckStatus) {
+      return _i152b260.CheckStatus.fromJson(data) as T;
+    }
     if (t == _iywv5oz4.Claim) {
       return _iywv5oz4.Claim.fromJson(data) as T;
     }
@@ -983,8 +1091,14 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _iizahf83.ExpireClaimCallExpireModel) {
       return _iizahf83.ExpireClaimCallExpireModel.fromJson(data) as T;
     }
+    if (t == _ikgpjhb7.VerifyIdentityCallVerifyModel) {
+      return _ikgpjhb7.VerifyIdentityCallVerifyModel.fromJson(data) as T;
+    }
     if (t == _idz7zgl8.VerifyProofCallVerifyModel) {
       return _idz7zgl8.VerifyProofCallVerifyModel.fromJson(data) as T;
+    }
+    if (t == _ib8wvp93.IdentityCheck) {
+      return _ib8wvp93.IdentityCheck.fromJson(data) as T;
     }
     if (t == _ikawkn1p.LeaderboardEntry) {
       return _ikawkn1p.LeaderboardEntry.fromJson(data) as T;
@@ -1070,11 +1184,17 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _ir0y0iu6.UserRole) {
       return _ir0y0iu6.UserRole.fromJson(data) as T;
     }
+    if (t == _ikt935kv.VerificationKind) {
+      return _ikt935kv.VerificationKind.fromJson(data) as T;
+    }
     if (t == _i6mr85kx.WallPost) {
       return _i6mr85kx.WallPost.fromJson(data) as T;
     }
     if (t == _is.getType<_i14xwlyb.BadgeId?>()) {
       return (data != null ? _i14xwlyb.BadgeId.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i152b260.CheckStatus?>()) {
+      return (data != null ? _i152b260.CheckStatus.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iywv5oz4.Claim?>()) {
       return (data != null ? _iywv5oz4.Claim.fromJson(data) : null) as T;
@@ -1107,10 +1227,20 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_ikgpjhb7.VerifyIdentityCallVerifyModel?>()) {
+      return (data != null
+              ? _ikgpjhb7.VerifyIdentityCallVerifyModel.fromJson(data)
+              : null)
+          as T;
+    }
     if (t == _is.getType<_idz7zgl8.VerifyProofCallVerifyModel?>()) {
       return (data != null
               ? _idz7zgl8.VerifyProofCallVerifyModel.fromJson(data)
               : null)
+          as T;
+    }
+    if (t == _is.getType<_ib8wvp93.IdentityCheck?>()) {
+      return (data != null ? _ib8wvp93.IdentityCheck.fromJson(data) : null)
           as T;
     }
     if (t == _is.getType<_ikawkn1p.LeaderboardEntry?>()) {
@@ -1207,6 +1337,10 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_ir0y0iu6.UserRole?>()) {
       return (data != null ? _ir0y0iu6.UserRole.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_ikt935kv.VerificationKind?>()) {
+      return (data != null ? _ikt935kv.VerificationKind.fromJson(data) : null)
+          as T;
+    }
     if (t == _is.getType<_i6mr85kx.WallPost?>()) {
       return (data != null ? _i6mr85kx.WallPost.fromJson(data) : null) as T;
     }
@@ -1300,6 +1434,7 @@ class Protocol extends _is.DatabaseSerializationManager {
   static String? getClassNameForType(Type type) {
     return switch (type) {
       _i14xwlyb.BadgeId => 'BadgeId',
+      _i152b260.CheckStatus => 'CheckStatus',
       _iywv5oz4.Claim => 'Claim',
       _iiz71frh.ProofLink => 'ProofLink',
       _i4cqplnc.ClaimStatus => 'ClaimStatus',
@@ -1309,7 +1444,10 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iapxm79h.Eligibility => 'Eligibility',
       _ixt5yy28.EligibilityReason => 'EligibilityReason',
       _iizahf83.ExpireClaimCallExpireModel => 'ExpireClaimCallExpireModel',
+      _ikgpjhb7.VerifyIdentityCallVerifyModel =>
+        'VerifyIdentityCallVerifyModel',
       _idz7zgl8.VerifyProofCallVerifyModel => 'VerifyProofCallVerifyModel',
+      _ib8wvp93.IdentityCheck => 'IdentityCheck',
       _ikawkn1p.LeaderboardEntry => 'LeaderboardEntry',
       _i22ljs0z.Me => 'Me',
       _iqlmmtnc.Offer => 'Offer',
@@ -1338,6 +1476,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _iub4wqas.TopStudent => 'TopStudent',
       _iawcmjml.TreatException => 'TreatException',
       _ir0y0iu6.UserRole => 'UserRole',
+      _ikt935kv.VerificationKind => 'VerificationKind',
       _i6mr85kx.WallPost => 'WallPost',
       _ => null,
     };
@@ -1355,6 +1494,8 @@ class Protocol extends _is.DatabaseSerializationManager {
     switch (data) {
       case _i14xwlyb.BadgeId():
         return 'BadgeId';
+      case _i152b260.CheckStatus():
+        return 'CheckStatus';
       case _iywv5oz4.Claim():
         return 'Claim';
       case _iiz71frh.ProofLink():
@@ -1373,8 +1514,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'EligibilityReason';
       case _iizahf83.ExpireClaimCallExpireModel():
         return 'ExpireClaimCallExpireModel';
+      case _ikgpjhb7.VerifyIdentityCallVerifyModel():
+        return 'VerifyIdentityCallVerifyModel';
       case _idz7zgl8.VerifyProofCallVerifyModel():
         return 'VerifyProofCallVerifyModel';
+      case _ib8wvp93.IdentityCheck():
+        return 'IdentityCheck';
       case _ikawkn1p.LeaderboardEntry():
         return 'LeaderboardEntry';
       case _i22ljs0z.Me():
@@ -1431,6 +1576,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'TreatException';
       case _ir0y0iu6.UserRole():
         return 'UserRole';
+      case _ikt935kv.VerificationKind():
+        return 'VerificationKind';
       case _i6mr85kx.WallPost():
         return 'WallPost';
     }
@@ -1465,6 +1612,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'BadgeId') {
       return deserialize<_i14xwlyb.BadgeId>(data['data']);
     }
+    if (dataClassName == 'CheckStatus') {
+      return deserialize<_i152b260.CheckStatus>(data['data']);
+    }
     if (dataClassName == 'Claim') {
       return deserialize<_iywv5oz4.Claim>(data['data']);
     }
@@ -1492,8 +1642,14 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'ExpireClaimCallExpireModel') {
       return deserialize<_iizahf83.ExpireClaimCallExpireModel>(data['data']);
     }
+    if (dataClassName == 'VerifyIdentityCallVerifyModel') {
+      return deserialize<_ikgpjhb7.VerifyIdentityCallVerifyModel>(data['data']);
+    }
     if (dataClassName == 'VerifyProofCallVerifyModel') {
       return deserialize<_idz7zgl8.VerifyProofCallVerifyModel>(data['data']);
+    }
+    if (dataClassName == 'IdentityCheck') {
+      return deserialize<_ib8wvp93.IdentityCheck>(data['data']);
     }
     if (dataClassName == 'LeaderboardEntry') {
       return deserialize<_ikawkn1p.LeaderboardEntry>(data['data']);
@@ -1579,6 +1735,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'UserRole') {
       return deserialize<_ir0y0iu6.UserRole>(data['data']);
     }
+    if (dataClassName == 'VerificationKind') {
+      return deserialize<_ikt935kv.VerificationKind>(data['data']);
+    }
     if (dataClassName == 'WallPost') {
       return deserialize<_i6mr85kx.WallPost>(data['data']);
     }
@@ -1628,6 +1787,8 @@ class Protocol extends _is.DatabaseSerializationManager {
     switch (t) {
       case _iywv5oz4.Claim:
         return _iywv5oz4.Claim.t;
+      case _ib8wvp93.IdentityCheck:
+        return _ib8wvp93.IdentityCheck.t;
       case _iqlmmtnc.Offer:
         return _iqlmmtnc.Offer.t;
       case _i2t8i3ij.Report:

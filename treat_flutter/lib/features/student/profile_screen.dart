@@ -41,6 +41,20 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (student.verification != StudentVerification.verified) ...[
+                    const SizedBox(height: 14),
+                    Notice(
+                      context.l.lockNotVerified,
+                      tone: PillTone.amber,
+                      icon: Icons.badge_outlined,
+                    ),
+                    const SizedBox(height: 8),
+                    FilledButton.icon(
+                      onPressed: () => context.push('/verify'),
+                      icon: const Icon(Icons.badge_outlined),
+                      label: Text(context.l.verifyCta),
+                    ),
+                  ],
                   const SizedBox(height: 16),
                   Row(
                     children: [

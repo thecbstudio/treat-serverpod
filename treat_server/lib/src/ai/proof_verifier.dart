@@ -68,7 +68,6 @@ class AnthropicProofVerifier implements ProofVerifier {
   }) : _http = client ?? http.Client();
 
   static const defaultModel = 'claude-sonnet-5';
-  static const _endpoint = 'https://api.anthropic.com/v1/messages';
   static const _tool = 'report_verdict';
 
   final String apiKey;
@@ -76,30 +75,8 @@ class AnthropicProofVerifier implements ProofVerifier {
   final http.Client _http;
 
   @override
-  Future<ProofVerdict> verify(ProofContext c) async {
-    final http.Response response;
-    try {
-      response = await _http
-          .post(
-            Uri.parse(_endpoint),
-            headers: {
-              'x-api-key': apiKey,
-              'anthropic-version': '2023-06-01',
-              'content-type': 'application/json',
-            },
-            body: jsonEncode(_request(c)),
-          )
-          .timeout(const Duration(seconds: 60));
-    } catch (e) {
-      throw VerifierUnavailable('request failed: $e');
-    }
-    if (response.statusCode != 200) {
-      throw VerifierUnavailable(
-        'HTTP ${response.statusCode}: ${_short(response.body)}',
-      );
-    }
-    return parseResponse(response.body);
-  }
+  Future<ProofVerdict> verify(ProofContext c) async =>
+      parseResponse(await postToClaude(_http, apiKey, _request(c)));
 
   Map<String, Object?> _request(ProofContext c) => {
     'model': model,
@@ -153,8 +130,59 @@ class AnthropicProofVerifier implements ProofVerifier {
       },
     ],
   };
+}
 
-  static String _short(String s) => s.length > 300 ? s.substring(0, 300) : s;
+/// POSTs a Messages API request and returns the response body. Network
+/// errors and non-200 answers become [VerifierUnavailable] (retried).
+Future<String> postToClaude(
+  http.Client client,
+  String apiKey,
+  Map<String, Object?> request,
+) async {
+  final http.Response response;
+  try {
+    response = await client
+        .post(
+          Uri.parse('https://api.anthropic.com/v1/messages'),
+          headers: {
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+          },
+          body: jsonEncode(request),
+        )
+        .timeout(const Duration(seconds: 60));
+  } catch (e) {
+    throw VerifierUnavailable('request failed: $e');
+  }
+  if (response.statusCode != 200) {
+    final body = response.body;
+    throw VerifierUnavailable(
+      'HTTP ${response.statusCode}: '
+      '${body.length > 300 ? body.substring(0, 300) : body}',
+    );
+  }
+  return response.body;
+}
+
+/// The input of the first tool call in a Messages API response body.
+Map<Object?, Object?> toolInputOf(String body) {
+  final Object? decoded;
+  try {
+    decoded = jsonDecode(body);
+  } catch (_) {
+    throw VerifierUnavailable('response is not JSON');
+  }
+  final content = decoded is Map ? decoded['content'] : null;
+  if (content is! List) throw VerifierUnavailable('no content');
+  for (final block in content) {
+    if (block is Map && block['type'] == 'tool_use') {
+      final input = block['input'];
+      if (input is Map) return input;
+      break;
+    }
+  }
+  throw VerifierUnavailable('no tool_use block');
 }
 
 String buildPrompt(ProofContext c) {
@@ -196,28 +224,14 @@ String buildPrompt(ProofContext c) {
 
 /// Parses a Messages API response body into a verdict.
 ProofVerdict parseResponse(String body) {
-  final Object? decoded;
-  try {
-    decoded = jsonDecode(body);
-  } catch (_) {
-    throw VerifierUnavailable('response is not JSON');
-  }
-  final content = (decoded as Map<String, Object?>)['content'];
-  if (content is! List) throw VerifierUnavailable('no content');
-  for (final block in content) {
-    if (block is Map && block['type'] == 'tool_use') {
-      final input = block['input'];
-      if (input is! Map) break;
-      if (input['approved'] == true) return const ProofVerdict.approved();
-      return ProofVerdict.rejected(switch (input['reason']) {
-        'no_mention' => RejectReason.noMention,
-        'no_disclosure' => RejectReason.noDisclosure,
-        'not_a_post' => RejectReason.notAPost,
-        _ => RejectReason.unreadable,
-      });
-    }
-  }
-  throw VerifierUnavailable('no tool_use block');
+  final input = toolInputOf(body);
+  if (input['approved'] == true) return const ProofVerdict.approved();
+  return ProofVerdict.rejected(switch (input['reason']) {
+    'no_mention' => RejectReason.noMention,
+    'no_disclosure' => RejectReason.noDisclosure,
+    'not_a_post' => RejectReason.notAPost,
+    _ => RejectReason.unreadable,
+  });
 }
 
 /// JPEG/PNG/WebP by magic bytes; null for anything else.

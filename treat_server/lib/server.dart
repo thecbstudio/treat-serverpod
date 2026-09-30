@@ -10,6 +10,7 @@ import 'src/generated/serverpod.dart';
 import 'src/seed/demo_history.dart';
 import 'src/seed/demo_seed.dart';
 import 'src/services/jobs.dart';
+import 'src/services/identity_checks.dart';
 import 'src/services/proofs.dart';
 import 'src/web/gzip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
@@ -131,6 +132,7 @@ void run(List<String> args) async {
         demoPassword: pod.getPassword('demoAccountPassword'),
       );
       await resumePendingVerifications(session);
+      await resumePendingIdentityChecks(session);
       // Every hour: are TikToks approved a week ago still online?
       Timer.periodic(const Duration(hours: 1), (_) async {
         final s = await pod.createSession(enableLogging: false);

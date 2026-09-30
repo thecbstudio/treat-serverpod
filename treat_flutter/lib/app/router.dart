@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:treat_client/treat_client.dart';
 
 import '../client.dart';
+import '../features/account/verify_screen.dart';
 import '../features/auth/auth_hero.dart' show Wordmark;
 import '../features/auth/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
@@ -129,6 +130,7 @@ final router = GoRouter(
       ],
     ),
     GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
+    GoRoute(path: '/verify', builder: (_, _) => const VerifyScreen()),
     GoRoute(
       path: '/claim/:id',
       builder: (_, state) =>

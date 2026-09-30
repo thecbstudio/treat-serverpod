@@ -21,6 +21,7 @@ import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
 import 'package:treat_client/src/protocol/wall_post.dart' as _ie03ixnw;
 import 'badge_id.dart' as _i14xwlyb;
+import 'check_status.dart' as _i152b260;
 import 'claim.dart' as _iywv5oz4;
 import 'claim_proof.dart' as _iiz71frh;
 import 'claim_status.dart' as _i4cqplnc;
@@ -29,6 +30,7 @@ import 'drop_input.dart' as _ippz03u2;
 import 'drop_signal.dart' as _i1c14r0n;
 import 'eligibility.dart' as _iapxm79h;
 import 'eligibility_reason.dart' as _ixt5yy28;
+import 'identity_check.dart' as _ib8wvp93;
 import 'leaderboard_entry.dart' as _ikawkn1p;
 import 'me.dart' as _i22ljs0z;
 import 'offer.dart' as _iqlmmtnc;
@@ -57,8 +59,10 @@ import 'student_verification.dart' as _ipqqbskf;
 import 'top_student.dart' as _iub4wqas;
 import 'treat_exception.dart' as _iawcmjml;
 import 'user_role.dart' as _ir0y0iu6;
+import 'verification_kind.dart' as _ikt935kv;
 import 'wall_post.dart' as _i6mr85kx;
 export 'badge_id.dart';
+export 'check_status.dart';
 export 'claim.dart';
 export 'claim_proof.dart';
 export 'claim_status.dart';
@@ -67,6 +71,7 @@ export 'drop_input.dart';
 export 'drop_signal.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
+export 'identity_check.dart';
 export 'leaderboard_entry.dart';
 export 'me.dart';
 export 'offer.dart';
@@ -95,6 +100,7 @@ export 'student_verification.dart';
 export 'top_student.dart';
 export 'treat_exception.dart';
 export 'user_role.dart';
+export 'verification_kind.dart';
 export 'wall_post.dart';
 export 'client.dart';
 
@@ -135,6 +141,9 @@ class Protocol extends _isc.SerializationManager {
     if (t == _i14xwlyb.BadgeId) {
       return _i14xwlyb.BadgeId.fromJson(data) as T;
     }
+    if (t == _i152b260.CheckStatus) {
+      return _i152b260.CheckStatus.fromJson(data) as T;
+    }
     if (t == _iywv5oz4.Claim) {
       return _iywv5oz4.Claim.fromJson(data) as T;
     }
@@ -158,6 +167,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _ixt5yy28.EligibilityReason) {
       return _ixt5yy28.EligibilityReason.fromJson(data) as T;
+    }
+    if (t == _ib8wvp93.IdentityCheck) {
+      return _ib8wvp93.IdentityCheck.fromJson(data) as T;
     }
     if (t == _ikawkn1p.LeaderboardEntry) {
       return _ikawkn1p.LeaderboardEntry.fromJson(data) as T;
@@ -243,11 +255,17 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ir0y0iu6.UserRole) {
       return _ir0y0iu6.UserRole.fromJson(data) as T;
     }
+    if (t == _ikt935kv.VerificationKind) {
+      return _ikt935kv.VerificationKind.fromJson(data) as T;
+    }
     if (t == _i6mr85kx.WallPost) {
       return _i6mr85kx.WallPost.fromJson(data) as T;
     }
     if (t == _isc.getType<_i14xwlyb.BadgeId?>()) {
       return (data != null ? _i14xwlyb.BadgeId.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i152b260.CheckStatus?>()) {
+      return (data != null ? _i152b260.CheckStatus.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_iywv5oz4.Claim?>()) {
       return (data != null ? _iywv5oz4.Claim.fromJson(data) : null) as T;
@@ -272,6 +290,10 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_ixt5yy28.EligibilityReason?>()) {
       return (data != null ? _ixt5yy28.EligibilityReason.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_ib8wvp93.IdentityCheck?>()) {
+      return (data != null ? _ib8wvp93.IdentityCheck.fromJson(data) : null)
           as T;
     }
     if (t == _isc.getType<_ikawkn1p.LeaderboardEntry?>()) {
@@ -368,6 +390,10 @@ class Protocol extends _isc.SerializationManager {
     if (t == _isc.getType<_ir0y0iu6.UserRole?>()) {
       return (data != null ? _ir0y0iu6.UserRole.fromJson(data) : null) as T;
     }
+    if (t == _isc.getType<_ikt935kv.VerificationKind?>()) {
+      return (data != null ? _ikt935kv.VerificationKind.fromJson(data) : null)
+          as T;
+    }
     if (t == _isc.getType<_i6mr85kx.WallPost?>()) {
       return (data != null ? _i6mr85kx.WallPost.fromJson(data) : null) as T;
     }
@@ -458,6 +484,7 @@ class Protocol extends _isc.SerializationManager {
   static String? getClassNameForType(Type type) {
     return switch (type) {
       _i14xwlyb.BadgeId => 'BadgeId',
+      _i152b260.CheckStatus => 'CheckStatus',
       _iywv5oz4.Claim => 'Claim',
       _iiz71frh.ProofLink => 'ProofLink',
       _i4cqplnc.ClaimStatus => 'ClaimStatus',
@@ -466,6 +493,7 @@ class Protocol extends _isc.SerializationManager {
       _i1c14r0n.DropSignal => 'DropSignal',
       _iapxm79h.Eligibility => 'Eligibility',
       _ixt5yy28.EligibilityReason => 'EligibilityReason',
+      _ib8wvp93.IdentityCheck => 'IdentityCheck',
       _ikawkn1p.LeaderboardEntry => 'LeaderboardEntry',
       _i22ljs0z.Me => 'Me',
       _iqlmmtnc.Offer => 'Offer',
@@ -494,6 +522,7 @@ class Protocol extends _isc.SerializationManager {
       _iub4wqas.TopStudent => 'TopStudent',
       _iawcmjml.TreatException => 'TreatException',
       _ir0y0iu6.UserRole => 'UserRole',
+      _ikt935kv.VerificationKind => 'VerificationKind',
       _i6mr85kx.WallPost => 'WallPost',
       _ => null,
     };
@@ -511,6 +540,8 @@ class Protocol extends _isc.SerializationManager {
     switch (data) {
       case _i14xwlyb.BadgeId():
         return 'BadgeId';
+      case _i152b260.CheckStatus():
+        return 'CheckStatus';
       case _iywv5oz4.Claim():
         return 'Claim';
       case _iiz71frh.ProofLink():
@@ -527,6 +558,8 @@ class Protocol extends _isc.SerializationManager {
         return 'Eligibility';
       case _ixt5yy28.EligibilityReason():
         return 'EligibilityReason';
+      case _ib8wvp93.IdentityCheck():
+        return 'IdentityCheck';
       case _ikawkn1p.LeaderboardEntry():
         return 'LeaderboardEntry';
       case _i22ljs0z.Me():
@@ -583,6 +616,8 @@ class Protocol extends _isc.SerializationManager {
         return 'TreatException';
       case _ir0y0iu6.UserRole():
         return 'UserRole';
+      case _ikt935kv.VerificationKind():
+        return 'VerificationKind';
       case _i6mr85kx.WallPost():
         return 'WallPost';
     }
@@ -613,6 +648,9 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'BadgeId') {
       return deserialize<_i14xwlyb.BadgeId>(data['data']);
     }
+    if (dataClassName == 'CheckStatus') {
+      return deserialize<_i152b260.CheckStatus>(data['data']);
+    }
     if (dataClassName == 'Claim') {
       return deserialize<_iywv5oz4.Claim>(data['data']);
     }
@@ -636,6 +674,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'EligibilityReason') {
       return deserialize<_ixt5yy28.EligibilityReason>(data['data']);
+    }
+    if (dataClassName == 'IdentityCheck') {
+      return deserialize<_ib8wvp93.IdentityCheck>(data['data']);
     }
     if (dataClassName == 'LeaderboardEntry') {
       return deserialize<_ikawkn1p.LeaderboardEntry>(data['data']);
@@ -720,6 +761,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'UserRole') {
       return deserialize<_ir0y0iu6.UserRole>(data['data']);
+    }
+    if (dataClassName == 'VerificationKind') {
+      return deserialize<_ikt935kv.VerificationKind>(data['data']);
     }
     if (dataClassName == 'WallPost') {
       return deserialize<_i6mr85kx.WallPost>(data['data']);

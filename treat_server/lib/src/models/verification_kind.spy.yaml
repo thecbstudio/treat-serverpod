@@ -1,0 +1,6 @@
+### What an identity check looks at: a non-.edu student's student card, or a
+### business's official document (tax certificate, licence, registry record).
+enum: VerificationKind
+values:
+  - studentCard
+  - businessDocument

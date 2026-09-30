@@ -1,0 +1,8 @@
+### `failed` = technical failure after retries: no verdict, the user can
+### simply send the photo again.
+enum: CheckStatus
+values:
+  - pending
+  - approved
+  - rejected
+  - failed

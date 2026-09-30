@@ -116,7 +116,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonEduNote =>
-      'This isn\'t a university email, so your account stays unverified: you can browse offers but not claim them.';
+      'This isn\'t a university email: you can browse offers now, and claim them once you\'ve verified with a photo of your student card.';
 
   @override
   String get createProfile => 'Create profile';
@@ -308,7 +308,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lockNotVerified =>
-      'Only verified students can claim. Sign up with a university email.';
+      'Only verified students can claim. Verify with a photo of your student card — it takes a minute.';
 
   @override
   String get lockShopView =>
@@ -1348,4 +1348,108 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get err_invalid_university =>
       'Enter your university (up to 80 characters).';
+
+  @override
+  String get verifyStudentTitle => 'Verify you\'re a student';
+
+  @override
+  String get verifyShopTitle => 'Get the verified badge';
+
+  @override
+  String get verifyStudentIntro =>
+      'Take a photo of the front of your student ID card (or your university\'s digital student card). Claude checks it in about a minute.';
+
+  @override
+  String get verifyShopIntro =>
+      'Take a photo of an official document of your business: tax certificate (vergi levhası), workplace licence, or trade registry record. Claude checks it in about a minute, and your place gets the verified badge students see.';
+
+  @override
+  String get verifyMustMatch => 'It must match your profile';
+
+  @override
+  String get verifyStudentMatchHint =>
+      'Name and university as on the card — fix them in Settings first if needed.';
+
+  @override
+  String get verifyShopMatchHint =>
+      'The legal trade name may differ from your sign; then the address must match.';
+
+  @override
+  String get verifyTakePhoto => 'Take photo';
+
+  @override
+  String get verifyChoosePhoto => 'Choose photo';
+
+  @override
+  String get verifySend => 'Send for checking';
+
+  @override
+  String get verifyChecking =>
+      'Checking your photo… you can leave this page, we\'ll keep going.';
+
+  @override
+  String get verifyPrivacy =>
+      'The photo is stored privately, seen only by the AI, and deleted as soon as it has decided. We keep only the result.';
+
+  @override
+  String get verifyStudentDone =>
+      'You\'re a verified student — go claim your first treat!';
+
+  @override
+  String get verifyShopDone =>
+      'Your place is verified: students see the badge on your page and offers.';
+
+  @override
+  String get verifyFailed =>
+      'We couldn\'t check the photo just now. Please send it again.';
+
+  @override
+  String get verifyNotAStudentCard =>
+      'That doesn\'t look like a student ID card. Photograph the front of your university card.';
+
+  @override
+  String get verifyNotABusinessDocument =>
+      'That doesn\'t look like an official business document. Use your tax certificate, licence or registry record.';
+
+  @override
+  String get verifyNameMismatch =>
+      'The name on the document doesn\'t match your profile. Check your name in Settings, or use your own document.';
+
+  @override
+  String get verifySchoolMismatch =>
+      'The university on the card doesn\'t match your profile. Fix it in Settings and send again.';
+
+  @override
+  String get verifyExpired =>
+      'This card has expired. Use your current card or the digital card from your university.';
+
+  @override
+  String get verifyUnreadable =>
+      'We couldn\'t read the photo. Take it in good light, flat and sharp, with the whole document visible.';
+
+  @override
+  String get verifyCta => 'Verify with your student card';
+
+  @override
+  String get verifyShopCta => 'Get verified';
+
+  @override
+  String get verifyShopBanner =>
+      'Verified places get a badge on their page and offers. Send a photo of your tax certificate or licence.';
+
+  @override
+  String get verifiedBusiness => 'Verified business';
+
+  @override
+  String get err_already_verified => 'You\'re already verified.';
+
+  @override
+  String get err_check_pending => 'Your last photo is still being checked.';
+
+  @override
+  String get err_too_many_checks =>
+      'That was 3 tries today — try again tomorrow.';
+
+  @override
+  String get err_no_role => 'Finish setting up your account first.';
 }

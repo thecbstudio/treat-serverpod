@@ -144,6 +144,8 @@ class ProfileEndpoint extends Endpoint {
       session,
       shop.copyWith(
         name: clean.name,
+        // The badge was given for the old name: check the document again.
+        verified: shop.verified && clean.name == shop.name,
         district: clean.district,
         address: clean.address,
         bio: clean.bio,

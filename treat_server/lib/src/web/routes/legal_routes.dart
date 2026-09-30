@@ -63,6 +63,10 @@ Protection Law No. 6698 (KVKK) and follows the EU GDPR.</p>
   place, thank-you notes, and which posts you chose to show publicly.</li>
   <li><b>Businesses:</b> the place's name, category, district, address,
   description, Instagram handle, Google review link, and its offers.</li>
+  <li><b>Verification photos:</b> if you verify with your student card (no
+  university e-mail) or a business document (verified badge), the photo. It is
+  deleted as soon as the check has decided; we keep only the result (approved
+  or rejected, and why).</li>
   <li><b>Reports</b> you send about content, and technical logs (IP address,
   device and request data) needed to run and secure the service.</li>
 </ul>
@@ -78,14 +82,18 @@ Protection Law No. 6698 (KVKK) and follows the EU GDPR.</p>
   <li><b>Legal obligations</b> (KVKK art. 5/2-ç): records we must keep by law.</li>
 </ul>
 
-<h2>How your post is verified</h2>
+<h2>How posts, student cards and documents are checked</h2>
 <p>When you upload a screenshot, it is sent to <b>Anthropic</b> (Claude), an AI
 provider acting as our processor, together with the place's name and handle.
 Claude checks that the post tags the place and is disclosed as an ad
-(#işbirliği). Anthropic does not use this data to train its models. For TikTok
+(#işbirliği). Student cards and business documents are sent the same way, with
+the name and university (or the place's name and address) from your profile;
+Claude answers only "approved" or a reason, and we do not extract ID numbers.
+Anthropic does not use this data to train its models. For TikTok
 links we ask TikTok's public oEmbed service whether the video is still online.
-No decision about you is made by the AI alone that you cannot contest: every
-rejection can be appealed once.</p>
+No decision about you is made by the AI alone that you cannot contest: a
+rejected post can be appealed once, a rejected card or document can be sent
+again, and you can always write to us.</p>
 
 <h2>Who sees what</h2>
 <ul>

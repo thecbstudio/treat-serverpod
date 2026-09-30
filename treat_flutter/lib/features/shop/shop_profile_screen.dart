@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/session.dart';
 import '../../app/theme.dart';
@@ -41,6 +42,31 @@ class ShopProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
+              if (shop.verified)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Pill(
+                    l.verifiedBusiness,
+                    tone: PillTone.green,
+                    icon: Icons.verified_rounded,
+                  ),
+                )
+              else
+                TreatCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(l.verifyShopBanner, style: context.text.bodyMedium),
+                      const SizedBox(height: 10),
+                      FilledButton.icon(
+                        onPressed: () => context.push('/verify'),
+                        icon: const Icon(Icons.verified_outlined),
+                        label: Text(l.verifyShopCta),
+                      ),
+                    ],
+                  ),
+                ),
               const SizedBox(height: 16),
               ReputationTools(shop: shop),
               const SizedBox(height: 16),

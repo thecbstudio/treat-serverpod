@@ -15,9 +15,12 @@ import 'dart:async' as _ida;
 import 'package:clock/clock.dart' as _io0w16m8;
 import 'package:serverpod/serverpod.dart' as _is;
 import '../future_calls/expire_claim_call.dart' as _ilqcuh3m;
+import '../future_calls/verify_identity_call.dart' as _i43xeq4j;
 import '../future_calls/verify_proof_call.dart' as _ipj1b90x;
 import 'future_calls_generated_models/expire_claim_call_expire_model.dart'
     as _iizahf83;
+import 'future_calls_generated_models/verify_identity_call_verify_model.dart'
+    as _ikgpjhb7;
 import 'future_calls_generated_models/verify_proof_call_verify_model.dart'
     as _idz7zgl8;
 
@@ -64,6 +67,8 @@ class FutureCalls extends _is.FutureCallDispatch<_FutureCallRef> {
   ) {
     var registeredFutureCalls = <String, _is.InvokableFutureCall>{
       'ExpireClaimCallExpireFutureCall': ExpireClaimCallExpireFutureCall(),
+      'VerifyIdentityCallVerifyFutureCall':
+          VerifyIdentityCallVerifyFutureCall(),
       'VerifyProofCallVerifyFutureCall': VerifyProofCallVerifyFutureCall(),
     };
     _futureCallManager = futureCallManager;
@@ -189,6 +194,10 @@ class _FutureCallRef {
     _invokeFutureCall,
   );
 
+  late final verifyIdentityCall = _VerifyIdentityCallFutureCallDispatcher(
+    _invokeFutureCall,
+  );
+
   late final verifyProofCall = _VerifyProofCallFutureCallDispatcher(
     _invokeFutureCall,
   );
@@ -203,6 +212,20 @@ class _ExpireClaimCallFutureCallDispatcher {
     var object = _iizahf83.ExpireClaimCallExpireModel(claimId: claimId);
     return _invokeFutureCall(
       'ExpireClaimCallExpireFutureCall',
+      object,
+    );
+  }
+}
+
+class _VerifyIdentityCallFutureCallDispatcher {
+  _VerifyIdentityCallFutureCallDispatcher(this._invokeFutureCall);
+
+  final _InvokeFutureCall _invokeFutureCall;
+
+  Future<void> verify(int checkId) {
+    var object = _ikgpjhb7.VerifyIdentityCallVerifyModel(checkId: checkId);
+    return _invokeFutureCall(
+      'VerifyIdentityCallVerifyFutureCall',
       object,
     );
   }
@@ -234,6 +257,24 @@ class ExpireClaimCallExpireFutureCall
       await _ilqcuh3m.ExpireClaimCall().expire(
         session,
         object.claimId,
+      );
+    }
+  }
+}
+
+class VerifyIdentityCallVerifyFutureCall
+    extends _is.FutureCall<_ikgpjhb7.VerifyIdentityCallVerifyModel>
+    implements
+        _is.InvokableFutureCall<_ikgpjhb7.VerifyIdentityCallVerifyModel> {
+  @override
+  _ida.Future<void> invoke(
+    _is.Session session,
+    _ikgpjhb7.VerifyIdentityCallVerifyModel? object,
+  ) async {
+    if (object != null) {
+      await _i43xeq4j.VerifyIdentityCall().verify(
+        session,
+        object.checkId,
       );
     }
   }
