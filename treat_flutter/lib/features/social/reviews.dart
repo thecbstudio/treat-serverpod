@@ -5,6 +5,7 @@ import 'package:treat_client/treat_client.dart';
 import '../../app/theme.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../account/account_actions.dart';
 import '../student/rate_card.dart' show Stars;
 
 /// The treat score: big average, star count and a 5★…1★ bar chart.
@@ -80,9 +81,11 @@ class ScoreSummary extends StatelessWidget {
 }
 
 /// One rated visit. [Review.privateNote] only arrives for the place itself.
+/// [reportable] adds a "Report" menu (public pages, not your own review).
 class ReviewTile extends StatelessWidget {
-  const ReviewTile({super.key, required this.review});
+  const ReviewTile({super.key, required this.review, this.reportable = false});
   final Review review;
+  final bool reportable;
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +117,17 @@ class ReviewTile extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Stars(value: review.rating, size: 14),
+                    if (reportable &&
+                        canReport(studentId: review.studentId)) ...[
+                      const Spacer(),
+                      _ReportMenu(
+                        onReport: () => showReportSheet(
+                          context,
+                          ReportKind.review,
+                          review.claimId,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 Text(
@@ -170,10 +184,12 @@ class ReviewsSection extends StatelessWidget {
     required this.title,
     required this.rating,
     required this.reviews,
+    this.reportable = false,
   });
   final String title;
   final ShopRating rating;
   final List<Review> reviews;
+  final bool reportable;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -190,7 +206,36 @@ class ReviewsSection extends StatelessWidget {
           ),
         )
       else
-        for (final r in reviews) ReviewTile(review: r),
+        for (final r in reviews) ReviewTile(review: r, reportable: reportable),
     ],
+  );
+}
+
+/// A small "⋮ → Report" menu.
+class _ReportMenu extends StatelessWidget {
+  const _ReportMenu({required this.onReport});
+  final VoidCallback onReport;
+
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+    dimension: 28,
+    child: PopupMenuButton<void>(
+      padding: EdgeInsets.zero,
+      iconSize: 18,
+      icon: const Icon(Icons.more_vert_rounded, color: T.inkTertiary),
+      tooltip: context.l.report,
+      itemBuilder: (_) => [
+        PopupMenuItem(
+          onTap: onReport,
+          child: Row(
+            children: [
+              const Icon(Icons.flag_outlined, size: 18),
+              const SizedBox(width: 10),
+              Text(context.l.report),
+            ],
+          ),
+        ),
+      ],
+    ),
   );
 }

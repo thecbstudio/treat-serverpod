@@ -6,6 +6,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../account/account_actions.dart';
 
 /// A shared post: the screenshot, who posted it and their thank-you note.
 class WallPostTile extends StatelessWidget {
@@ -93,11 +94,33 @@ Future<void> showWallPost(BuildContext context, WallPost post) =>
               ),
               if (post.thanksNote != null)
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                   child: Notice(
                     '“${post.thanksNote}”',
                     tone: PillTone.accent,
                     icon: Icons.favorite_border_rounded,
+                  ),
+                ),
+              if (canReport(studentId: post.studentId, shopId: post.shopId))
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                    child: TextButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showReportSheet(
+                          context,
+                          ReportKind.wallPost,
+                          post.claimId,
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: T.inkSecondary,
+                      ),
+                      icon: const Icon(Icons.flag_outlined, size: 18),
+                      label: Text(context.l.report),
+                    ),
                   ),
                 ),
             ],

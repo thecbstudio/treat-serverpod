@@ -46,6 +46,9 @@ fields:
   ### Optional note only the place sees.
   privateNote: String?
   ratedAt: DateTime?
+  ### Hidden from public pages after reports from different users.
+  reviewHidden: bool, default=false
+  wallHidden: bool, default=false
 indexes:
   claim_student_idx:
     fields: studentId

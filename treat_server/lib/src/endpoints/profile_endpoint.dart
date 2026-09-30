@@ -3,6 +3,7 @@ import 'package:serverpod/serverpod.dart';
 import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
+import '../services/account_deletion.dart' as deletion;
 import '../services/accounts.dart';
 import '../services/demo.dart';
 import '../services/google_review.dart';
@@ -58,12 +59,7 @@ class ProfileEndpoint extends Endpoint {
     String university,
   ) async {
     final authUserId = requireAuthUserId(session);
-    name = name.trim();
-    university = university.trim();
-    if (name.isEmpty || name.length > 60) throw treatError('invalid_name');
-    if (university.isEmpty || university.length > 80) {
-      throw treatError('invalid_university');
-    }
+    (name, university) = _validStudent(name, university);
     final email = await emailOf(session, authUserId);
     if (email == null) throw treatError('no_email');
 
@@ -87,6 +83,34 @@ class ProfileEndpoint extends Endpoint {
     });
     return getMe(session);
   }
+
+  /// Settings: the student's name and university. Demo guests keep their
+  /// university (it keeps them off public lists).
+  Future<Me> updateStudent(
+    Session session,
+    String name,
+    String university,
+  ) async {
+    final student = await requireStudent(session);
+    requireNotDemoStudent(session, student);
+    (name, university) = _validStudent(name, university);
+    if (isGuest(student) && university != guestUniversity) {
+      throw treatError(
+        'guest_university',
+        'Demo guests stay at $guestUniversity. Sign up to use your own.',
+      );
+    }
+    await StudentProfile.db.updateRow(
+      session,
+      student.copyWith(name: name, university: university),
+      columns: (t) => [t.name, t.university],
+    );
+    return getMe(session);
+  }
+
+  /// Deletes the account and everything personal in it, for good.
+  Future<void> deleteAccount(Session session) =>
+      deletion.deleteAccount(session);
 
   Future<Me> createShop(Session session, ShopInput input) async {
     final authUserId = requireAuthUserId(session);
@@ -148,6 +172,16 @@ class ProfileEndpoint extends Endpoint {
         await findShopOf(session, authUserId, transaction: tx) != null) {
       throw treatError('role_already_set', 'This account already has a role.');
     }
+  }
+
+  (String, String) _validStudent(String name, String university) {
+    name = name.trim();
+    university = university.trim();
+    if (name.isEmpty || name.length > 60) throw treatError('invalid_name');
+    if (university.isEmpty || university.length > 80) {
+      throw treatError('invalid_university');
+    }
+    return (name, university);
   }
 
   ShopInput _validShopInput(ShopInput input) {

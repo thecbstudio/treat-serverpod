@@ -47,6 +47,9 @@ import 'proof_type.dart' as _i671eu65;
 import 'proof_upload.dart' as _idi75cqx;
 import 'public_student.dart' as _i377gh4k;
 import 'redeem_result.dart' as _iggnnz44;
+import 'report.dart' as _i2t8i3ij;
+import 'report_kind.dart' as _imx1jrz0;
+import 'report_reason.dart' as _ijgj7dn0;
 import 'review.dart' as _itqm5y01;
 import 'sample_proof.dart' as _iyeld2s2;
 import 'shop.dart' as _isgf2ncs;
@@ -82,6 +85,9 @@ export 'proof_type.dart';
 export 'proof_upload.dart';
 export 'public_student.dart';
 export 'redeem_result.dart';
+export 'report.dart';
+export 'report_kind.dart';
+export 'report_reason.dart';
 export 'review.dart';
 export 'sample_proof.dart';
 export 'shop.dart';
@@ -284,6 +290,20 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnType: _isp.ColumnType.timestampWithoutTimeZone,
           isNullable: true,
           dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'reviewHidden',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
+        ),
+        _isp.ColumnDefinition(
+          name: 'wallHidden',
+          columnType: _isp.ColumnType.boolean,
+          isNullable: false,
+          dartType: 'bool',
+          columnDefault: 'false',
         ),
       ],
       foreignKeys: [
@@ -542,6 +562,105 @@ class Protocol extends _is.DatabaseSerializationManager {
             _isp.IndexElementDefinition(
               type: _isp.IndexElementDefinitionType.column,
               definition: 'seedKey',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'report',
+      dartName: 'Report',
+      schema: 'public',
+      module: 'treat',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'reporterId',
+          columnType: _isp.ColumnType.uuid,
+          isNullable: false,
+          dartType: 'UuidValue',
+        ),
+        _isp.ColumnDefinition(
+          name: 'kind',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:ReportKind',
+        ),
+        _isp.ColumnDefinition(
+          name: 'targetId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'reason',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:ReportReason',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'report_fk_0',
+          columns: ['reporterId'],
+          referenceTable: 'serverpod_auth_core_user',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'report_target_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'kind',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'targetId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'report_once_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'reporterId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'kind',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'targetId',
             ),
           ],
           type: 'btree',
@@ -906,6 +1025,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _iggnnz44.RedeemResult) {
       return _iggnnz44.RedeemResult.fromJson(data) as T;
     }
+    if (t == _i2t8i3ij.Report) {
+      return _i2t8i3ij.Report.fromJson(data) as T;
+    }
+    if (t == _imx1jrz0.ReportKind) {
+      return _imx1jrz0.ReportKind.fromJson(data) as T;
+    }
+    if (t == _ijgj7dn0.ReportReason) {
+      return _ijgj7dn0.ReportReason.fromJson(data) as T;
+    }
     if (t == _itqm5y01.Review) {
       return _itqm5y01.Review.fromJson(data) as T;
     }
@@ -1027,6 +1155,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_iggnnz44.RedeemResult?>()) {
       return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i2t8i3ij.Report?>()) {
+      return (data != null ? _i2t8i3ij.Report.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_imx1jrz0.ReportKind?>()) {
+      return (data != null ? _imx1jrz0.ReportKind.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ijgj7dn0.ReportReason?>()) {
+      return (data != null ? _ijgj7dn0.ReportReason.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_itqm5y01.Review?>()) {
       return (data != null ? _itqm5y01.Review.fromJson(data) : null) as T;
@@ -1186,6 +1323,9 @@ class Protocol extends _is.DatabaseSerializationManager {
       _idi75cqx.ProofUpload => 'ProofUpload',
       _i377gh4k.PublicStudent => 'PublicStudent',
       _iggnnz44.RedeemResult => 'RedeemResult',
+      _i2t8i3ij.Report => 'Report',
+      _imx1jrz0.ReportKind => 'ReportKind',
+      _ijgj7dn0.ReportReason => 'ReportReason',
       _itqm5y01.Review => 'Review',
       _iyeld2s2.SampleProof => 'SampleProof',
       _isgf2ncs.Shop => 'Shop',
@@ -1261,6 +1401,12 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PublicStudent';
       case _iggnnz44.RedeemResult():
         return 'RedeemResult';
+      case _i2t8i3ij.Report():
+        return 'Report';
+      case _imx1jrz0.ReportKind():
+        return 'ReportKind';
+      case _ijgj7dn0.ReportReason():
+        return 'ReportReason';
       case _itqm5y01.Review():
         return 'Review';
       case _iyeld2s2.SampleProof():
@@ -1388,6 +1534,15 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'RedeemResult') {
       return deserialize<_iggnnz44.RedeemResult>(data['data']);
     }
+    if (dataClassName == 'Report') {
+      return deserialize<_i2t8i3ij.Report>(data['data']);
+    }
+    if (dataClassName == 'ReportKind') {
+      return deserialize<_imx1jrz0.ReportKind>(data['data']);
+    }
+    if (dataClassName == 'ReportReason') {
+      return deserialize<_ijgj7dn0.ReportReason>(data['data']);
+    }
     if (dataClassName == 'Review') {
       return deserialize<_itqm5y01.Review>(data['data']);
     }
@@ -1475,6 +1630,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return _iywv5oz4.Claim.t;
       case _iqlmmtnc.Offer:
         return _iqlmmtnc.Offer.t;
+      case _i2t8i3ij.Report:
+        return _i2t8i3ij.Report.t;
       case _isgf2ncs.Shop:
         return _isgf2ncs.Shop.t;
       case _iovtxv26.StudentProfile:

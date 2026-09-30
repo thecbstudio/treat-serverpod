@@ -30,6 +30,8 @@ import 'package:treat_client/src/protocol/proof_type.dart' as _i99q6qgz;
 import 'package:treat_client/src/protocol/proof_upload.dart' as _iu72foho;
 import 'package:treat_client/src/protocol/public_student.dart' as _ihfjemru;
 import 'package:treat_client/src/protocol/redeem_result.dart' as _i8ej1owz;
+import 'package:treat_client/src/protocol/report_kind.dart' as _i04iw30o;
+import 'package:treat_client/src/protocol/report_reason.dart' as _iak07t0u;
 import 'package:treat_client/src/protocol/sample_proof.dart' as _ij1gidu7;
 import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
 import 'package:treat_client/src/protocol/shop_dashboard.dart' as _iqqmplla;
@@ -499,6 +501,27 @@ class EndpointProfile extends _isc.EndpointRef {
     },
   );
 
+  /// Settings: the student's name and university. Demo guests keep their
+  /// university (it keeps them off public lists).
+  _ida.Future<_iap2bcnj.Me> updateStudent(
+    String name,
+    String university,
+  ) => caller.callServerEndpoint<_iap2bcnj.Me>(
+    'profile',
+    'updateStudent',
+    {
+      'name': name,
+      'university': university,
+    },
+  );
+
+  /// Deletes the account and everything personal in it, for good.
+  _ida.Future<void> deleteAccount() => caller.callServerEndpoint<void>(
+    'profile',
+    'deleteAccount',
+    {},
+  );
+
   _ida.Future<_iap2bcnj.Me> createShop(_inznu32h.ShopInput input) =>
       caller.callServerEndpoint<_iap2bcnj.Me>(
         'profile',
@@ -665,6 +688,21 @@ class EndpointSocial extends _isc.EndpointRef {
         'recentPosts',
         {},
       );
+
+  /// Reports a review or wall post (target = claim id) or a place (shop id).
+  _ida.Future<void> report(
+    _i04iw30o.ReportKind kind,
+    int targetId,
+    _iak07t0u.ReportReason reason,
+  ) => caller.callServerEndpoint<void>(
+    'social',
+    'report',
+    {
+      'kind': kind,
+      'targetId': targetId,
+      'reason': reason,
+    },
+  );
 }
 
 class Modules {

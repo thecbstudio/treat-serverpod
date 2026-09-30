@@ -53,12 +53,16 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     this.review,
     this.privateNote,
     this.ratedAt,
+    bool? reviewHidden,
+    bool? wallHidden,
   }) : fromDrop = fromDrop ?? false,
        createdAt = createdAt ?? DateTime.now(),
        appealed = appealed ?? false,
        verifyAttempts = verifyAttempts ?? 0,
        strikeGiven = strikeGiven ?? false,
-       shareOnWall = shareOnWall ?? false;
+       shareOnWall = shareOnWall ?? false,
+       reviewHidden = reviewHidden ?? false,
+       wallHidden = wallHidden ?? false;
 
   factory Claim({
     int? id,
@@ -91,6 +95,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     String? review,
     String? privateNote,
     DateTime? ratedAt,
+    bool? reviewHidden,
+    bool? wallHidden,
   }) = _ClaimImpl;
 
   factory Claim.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -167,6 +173,12 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       ratedAt: jsonSerialization['ratedAt'] == null
           ? null
           : _is.DateTimeJsonExtension.fromJson(jsonSerialization['ratedAt']),
+      reviewHidden: jsonSerialization['reviewHidden'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['reviewHidden']),
+      wallHidden: jsonSerialization['wallHidden'] == null
+          ? null
+          : _is.BoolJsonExtension.fromJson(jsonSerialization['wallHidden']),
     );
   }
 
@@ -251,6 +263,11 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
 
   DateTime? ratedAt;
 
+  /// Hidden from public pages after reports from different users.
+  bool reviewHidden;
+
+  bool wallHidden;
+
   @override
   _is.Table<int?> get table => t;
 
@@ -288,6 +305,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     String? review,
     String? privateNote,
     DateTime? ratedAt,
+    bool? reviewHidden,
+    bool? wallHidden,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -325,6 +344,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       if (review != null) 'review': review,
       if (privateNote != null) 'privateNote': privateNote,
       if (ratedAt != null) 'ratedAt': ratedAt?.toJson(),
+      'reviewHidden': reviewHidden,
+      'wallHidden': wallHidden,
     };
   }
 
@@ -363,6 +384,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       if (review != null) 'review': review,
       if (privateNote != null) 'privateNote': privateNote,
       if (ratedAt != null) 'ratedAt': ratedAt?.toJson(),
+      'reviewHidden': reviewHidden,
+      'wallHidden': wallHidden,
     };
   }
 
@@ -434,6 +457,8 @@ class _ClaimImpl extends Claim {
     String? review,
     String? privateNote,
     DateTime? ratedAt,
+    bool? reviewHidden,
+    bool? wallHidden,
   }) : super._(
          id: id,
          offerId: offerId,
@@ -465,6 +490,8 @@ class _ClaimImpl extends Claim {
          review: review,
          privateNote: privateNote,
          ratedAt: ratedAt,
+         reviewHidden: reviewHidden,
+         wallHidden: wallHidden,
        );
 
   /// Returns a shallow copy of this [Claim]
@@ -502,6 +529,8 @@ class _ClaimImpl extends Claim {
     Object? review = _Undefined,
     Object? privateNote = _Undefined,
     Object? ratedAt = _Undefined,
+    bool? reviewHidden,
+    bool? wallHidden,
   }) {
     return Claim(
       id: id is int? ? id : this.id,
@@ -542,6 +571,8 @@ class _ClaimImpl extends Claim {
       review: review is String? ? review : this.review,
       privateNote: privateNote is String? ? privateNote : this.privateNote,
       ratedAt: ratedAt is DateTime? ? ratedAt : this.ratedAt,
+      reviewHidden: reviewHidden ?? this.reviewHidden,
+      wallHidden: wallHidden ?? this.wallHidden,
     );
   }
 }
@@ -697,6 +728,16 @@ class ClaimUpdateTable extends _is.UpdateTable<ClaimTable> {
         table.ratedAt,
         value,
       );
+
+  _is.ColumnValue<bool, bool> reviewHidden(bool value) => _is.ColumnValue(
+    table.reviewHidden,
+    value,
+  );
+
+  _is.ColumnValue<bool, bool> wallHidden(bool value) => _is.ColumnValue(
+    table.wallHidden,
+    value,
+  );
 }
 
 class ClaimTable extends _is.Table<int?> {
@@ -819,6 +860,16 @@ class ClaimTable extends _is.Table<int?> {
       'ratedAt',
       this,
     );
+    reviewHidden = _is.ColumnBool(
+      'reviewHidden',
+      this,
+      hasDefault: true,
+    );
+    wallHidden = _is.ColumnBool(
+      'wallHidden',
+      this,
+      hasDefault: true,
+    );
   }
 
   late final ClaimUpdateTable updateTable;
@@ -897,6 +948,11 @@ class ClaimTable extends _is.Table<int?> {
 
   late final _is.ColumnDateTime ratedAt;
 
+  /// Hidden from public pages after reports from different users.
+  late final _is.ColumnBool reviewHidden;
+
+  late final _is.ColumnBool wallHidden;
+
   _iqlmmtnc.OfferTable get offer {
     if (_offer != null) return _offer!;
     _offer = _is.createRelationTable(
@@ -953,6 +1009,8 @@ class ClaimTable extends _is.Table<int?> {
     review,
     privateNote,
     ratedAt,
+    reviewHidden,
+    wallHidden,
   ];
 
   @override

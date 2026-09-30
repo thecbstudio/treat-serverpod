@@ -1993,7 +1993,7 @@ abstract class AppLocalizations {
   /// No description provided for @err_demo_locked.
   ///
   /// In en, this message translates to:
-  /// **'This demo place is shared by everyone trying the app, so its profile and seeded offers are read-only. Create your own offer to try editing — or start a drop.'**
+  /// **'This demo account is shared by everyone trying the app, so parts of it are read-only. Create your own offer or start a drop — or try it as a one-tap guest.'**
   String get err_demo_locked;
 
   /// No description provided for @err_demo_busy.
@@ -2265,6 +2265,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use the share link of your Instagram post/Reel or TikTok (it starts with https://).'**
   String get err_invalid_post_link;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile'**
+  String get settingsProfile;
+
+  /// No description provided for @settingsGuestUniversity.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo guests stay at Demo University — sign up to use your own.'**
+  String get settingsGuestUniversity;
+
+  /// No description provided for @settingsLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & terms'**
+  String get settingsLegal;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy notice'**
+  String get settingsPrivacy;
+
+  /// No description provided for @settingsTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get settingsTerms;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAccount;
+
+  /// No description provided for @settingsSignedInAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {email}'**
+  String settingsSignedInAs(String email);
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountStudent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile, treats, ratings, reviews, notes and post screenshots are deleted right away. This can\'t be undone.'**
+  String get deleteAccountStudent;
+
+  /// No description provided for @deleteAccountShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Your place, its offers, the claims made there and their screenshots are deleted right away. This can\'t be undone.'**
+  String get deleteAccountShop;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand this can\'t be undone'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @deleteAccountGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever'**
+  String get deleteAccountGo;
+
+  /// No description provided for @deleteAccountDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was deleted'**
+  String get deleteAccountDone;
+
+  /// No description provided for @report.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get report;
+
+  /// No description provided for @reportTitleReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this review'**
+  String get reportTitleReview;
+
+  /// No description provided for @reportTitlePost.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this post'**
+  String get reportTitlePost;
+
+  /// No description provided for @reportTitleShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this place'**
+  String get reportTitleShop;
+
+  /// No description provided for @reportSpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam or advertising'**
+  String get reportSpam;
+
+  /// No description provided for @reportOffensive.
+  ///
+  /// In en, this message translates to:
+  /// **'Offensive or hateful'**
+  String get reportOffensive;
+
+  /// No description provided for @reportFake.
+  ///
+  /// In en, this message translates to:
+  /// **'Fake or misleading'**
+  String get reportFake;
+
+  /// No description provided for @reportPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows someone without consent'**
+  String get reportPrivacy;
+
+  /// No description provided for @reportOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get reportOther;
+
+  /// No description provided for @reportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report'**
+  String get reportSend;
+
+  /// No description provided for @reportThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks — content reported by several people is hidden, and we look at every report.'**
+  String get reportThanks;
+
+  /// No description provided for @err_own_content.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t report your own page.'**
+  String get err_own_content;
+
+  /// No description provided for @err_guest_university.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo guests stay at Demo University. Sign up to use your own.'**
+  String get err_guest_university;
+
+  /// No description provided for @err_invalid_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name (up to 60 characters).'**
+  String get err_invalid_name;
+
+  /// No description provided for @err_invalid_university.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your university (up to 80 characters).'**
+  String get err_invalid_university;
 }
 
 class _AppLocalizationsDelegate

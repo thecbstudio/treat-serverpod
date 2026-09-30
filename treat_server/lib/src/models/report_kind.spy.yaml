@@ -1,0 +1,7 @@
+### What a report points at: a public review (claim id), a wall post (claim
+### id) or a place (shop id).
+enum: ReportKind
+values:
+  - review
+  - wallPost
+  - shop

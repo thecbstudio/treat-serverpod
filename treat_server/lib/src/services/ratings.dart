@@ -54,7 +54,11 @@ Future<List<Review>> reviewsFor(
 }) async {
   final claims = await Claim.db.find(
     session,
-    where: (t) => t.shopId.equals(shopId) & t.rating.notEquals(null),
+    // Reported reviews leave public pages; their stars still count.
+    where: (t) =>
+        t.shopId.equals(shopId) &
+        t.rating.notEquals(null) &
+        (forOwner ? Constant.bool(true) : t.reviewHidden.equals(false)),
     orderBy: (t) => t.ratedAt.desc(),
     limit: limit,
     include: Claim.include(
@@ -67,7 +71,10 @@ Future<List<Review>> reviewsFor(
       Review(
         claimId: c.id!,
         studentId: c.studentId,
-        studentName: c.student!.name,
+        // Guests pick any name and nobody moderates it.
+        studentName: forOwner || !isGuest(c.student!)
+            ? c.student!.name
+            : 'Demo guest',
         university: c.student!.university,
         rating: c.rating!,
         review: forOwner || !isGuest(c.student!) ? c.review : null,

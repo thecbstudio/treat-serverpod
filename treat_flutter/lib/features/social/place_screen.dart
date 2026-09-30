@@ -6,6 +6,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../account/account_actions.dart';
 import '../drops/drops_strip.dart';
 import '../student/discover_screen.dart' show OfferTile;
 import 'reviews.dart';
@@ -89,6 +90,21 @@ class _Page extends StatelessWidget {
               ),
             ),
           ),
+          actions: [
+            if (canReport(shopId: shop.id))
+              Padding(
+                padding: const EdgeInsets.all(6),
+                child: CircleAvatar(
+                  backgroundColor: T.card,
+                  child: IconButton(
+                    onPressed: () =>
+                        showReportSheet(context, ReportKind.shop, shop.id!),
+                    icon: const Icon(Icons.flag_outlined, color: T.ink),
+                    tooltip: l.reportTitleShop,
+                  ),
+                ),
+              ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             background: Image.asset(
               shopPhoto(shop),
@@ -212,6 +228,7 @@ class _Page extends StatelessWidget {
                     title: l.reviewsTitle,
                     rating: page.rating,
                     reviews: page.reviews,
+                    reportable: true,
                   ),
                   SectionTitle(l.wallTitle),
                   WallGrid(posts: page.wall),

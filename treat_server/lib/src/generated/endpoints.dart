@@ -20,6 +20,8 @@ import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
 import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
+import 'package:treat_server/src/generated/report_kind.dart' as _ijp19xdp;
+import 'package:treat_server/src/generated/report_reason.dart' as _il5b19py;
 import 'package:treat_server/src/generated/sample_proof.dart' as _i41sjtmr;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
@@ -672,6 +674,41 @@ class Endpoints extends _is.EndpointDispatch {
                     params['university'],
                   ),
         ),
+        'updateStudent': _is.MethodConnector(
+          name: 'updateStudent',
+          params: {
+            'name': _is.ParameterDescription(
+              name: 'name',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+            'university': _is.ParameterDescription(
+              name: 'university',
+              type: _is.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .updateStudent(
+                    session,
+                    params['name'],
+                    params['university'],
+                  ),
+        ),
+        'deleteAccount': _is.MethodConnector(
+          name: 'deleteAccount',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .deleteAccount(session),
+        ),
         'createShop': _is.MethodConnector(
           name: 'createShop',
           params: {
@@ -977,6 +1014,37 @@ class Endpoints extends _is.EndpointDispatch {
                 Map<String, dynamic> params,
               ) async => (endpoints['social'] as _iy6grqf3.SocialEndpoint)
                   .recentPosts(session),
+        ),
+        'report': _is.MethodConnector(
+          name: 'report',
+          params: {
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<_ijp19xdp.ReportKind>(),
+              nullable: false,
+            ),
+            'targetId': _is.ParameterDescription(
+              name: 'targetId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'reason': _is.ParameterDescription(
+              name: 'reason',
+              type: _is.getType<_il5b19py.ReportReason>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['social'] as _iy6grqf3.SocialEndpoint).report(
+                    session,
+                    params['kind'],
+                    params['targetId'],
+                    params['reason'],
+                  ),
         ),
       },
     );

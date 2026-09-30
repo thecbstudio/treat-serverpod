@@ -29,6 +29,7 @@ Future<List<WallPost>> wallPosts(
       var w =
           t.status.equals(ClaimStatus.approved) &
           t.shareOnWall.equals(true) &
+          t.wallHidden.equals(false) &
           t.student.university.notEquals(guestUniversity);
       if (shopId != null) w = w & t.shopId.equals(shopId);
       if (studentId != null) w = w & t.studentId.equals(studentId);

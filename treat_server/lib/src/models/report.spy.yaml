@@ -1,0 +1,17 @@
+### A user flagging public content. Reviews and wall posts are hidden once
+### enough different users reported them; places are only recorded for
+### review (two accounts must not be able to take a business off the app).
+class: Report
+table: report
+fields:
+  reporter: module:serverpod_auth_core:AuthUser?, relation(onDelete=Cascade)
+  kind: ReportKind
+  targetId: int
+  reason: ReportReason
+  createdAt: DateTime, default=now
+indexes:
+  report_target_idx:
+    fields: kind, targetId
+  report_once_idx:
+    fields: reporterId, kind, targetId
+    unique: true

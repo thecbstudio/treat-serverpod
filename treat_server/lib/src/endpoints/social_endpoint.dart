@@ -3,6 +3,7 @@ import 'package:serverpod/serverpod.dart';
 import '../domain/clock.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
+import '../services/moderation.dart' as moderation;
 import '../services/offer_cards.dart';
 import '../services/ratings.dart';
 import '../services/social.dart';
@@ -48,4 +49,12 @@ class SocialEndpoint extends Endpoint {
   /// Latest shared posts across all places (Discover strip).
   Future<List<WallPost>> recentPosts(Session session) =>
       wallPosts(session, limit: 12);
+
+  /// Reports a review or wall post (target = claim id) or a place (shop id).
+  Future<void> report(
+    Session session,
+    ReportKind kind,
+    int targetId,
+    ReportReason reason,
+  ) => moderation.report(session, kind, targetId, reason);
 }

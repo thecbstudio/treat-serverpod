@@ -52,6 +52,22 @@ bool isSampleProof(Claim c) =>
 /// Demo students: the seeded jury student and every one-tap guest.
 bool isDemoStudent(StudentProfile s) => s.email.endsWith('@demo.treat');
 
+/// The shared jury student and the seeded history students: read-only in
+/// demo mode, like the seeded places.
+bool isSeededDemoStudent(StudentProfile s) =>
+    s.email.endsWith('demo.treat') && !isGuest(s);
+
+/// Blocks profile edits and deletion of [isSeededDemoStudent] in demo mode.
+void requireNotDemoStudent(Session session, StudentProfile s) {
+  if (demoModeOn(session) && isSeededDemoStudent(s)) {
+    throw treatError(
+      'demo_locked',
+      'This demo student is shared by everyone trying the app, so its '
+          'profile is read-only. Try it with a one-tap guest instead.',
+    );
+  }
+}
+
 /// A story screenshot for [kind]: tags [shop] with an ad disclosure, tags it
 /// without one, or tags nobody. The first two exist for seeded places only.
 /// Real Claude verifies it like any upload.

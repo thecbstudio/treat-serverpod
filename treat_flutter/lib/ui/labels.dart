@@ -204,6 +204,10 @@ String errorMessage(Object error, AppLocalizations l) {
       'flag_window_over' => l.err_flag_window_over,
       'demo_busy' => l.err_demo_busy,
       'no_sample' => l.err_no_sample,
+      'own_content' => l.err_own_content,
+      'guest_university' => l.err_guest_university,
+      'invalid_name' => l.err_invalid_name,
+      'invalid_university' => l.err_invalid_university,
       // The server sends the eligibility reason as the message.
       'ineligible' =>
         lockMessage(

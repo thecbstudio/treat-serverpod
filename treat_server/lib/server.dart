@@ -13,6 +13,7 @@ import 'src/services/jobs.dart';
 import 'src/services/proofs.dart';
 import 'src/web/gzip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
+import 'src/web/routes/legal_routes.dart';
 import 'src/web/routes/place_card_route.dart';
 import 'src/web/routes/public_place_route.dart';
 
@@ -64,6 +65,8 @@ void run(List<String> args) async {
   // its printable counter card with the Google review QR.
   pod.webServer.addRoute(PublicPlaceRoute(), '/p/:id');
   pod.webServer.addRoute(PlaceCardRoute(), '/card/:id');
+  pod.webServer.addRoute(PrivacyRoute(), '/privacy');
+  pod.webServer.addRoute(TermsRoute(), '/terms');
 
   if (appDir.existsSync()) {
     // ~4 MB of JavaScript: gzip it (Relic has no built-in compression).

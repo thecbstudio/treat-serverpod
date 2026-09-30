@@ -32,6 +32,8 @@ offer:
 profile:
   - getMe:
   - createStudent:
+  - updateStudent:
+  - deleteAccount:
   - createShop:
   - updateShop:
   - setGoogleReviewUrl:
@@ -51,3 +53,4 @@ social:
   - shopPage:
   - student:
   - recentPosts:
+  - report:

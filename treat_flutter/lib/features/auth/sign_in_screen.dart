@@ -7,6 +7,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../account/account_actions.dart';
 import 'auth_hero.dart';
 
 /// Serverpod's email sign-in flow (register → code → password, or login),
@@ -42,6 +43,9 @@ class SignInScreen extends StatelessWidget {
             ? EmailFlowScreen.startRegistration
             : EmailFlowScreen.login,
         onError: (error) => context.toast(errorMessage(error, l)),
+        // Sign-up asks to accept both (Serverpod's built-in checkbox).
+        onTermsAndConditionsPressed: () => openWebPage('/terms'),
+        onPrivacyPolicyPressed: () => openWebPage('/privacy'),
       ),
     );
   }

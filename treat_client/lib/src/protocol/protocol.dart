@@ -42,6 +42,9 @@ import 'proof_type.dart' as _i671eu65;
 import 'proof_upload.dart' as _idi75cqx;
 import 'public_student.dart' as _i377gh4k;
 import 'redeem_result.dart' as _iggnnz44;
+import 'report.dart' as _i2t8i3ij;
+import 'report_kind.dart' as _imx1jrz0;
+import 'report_reason.dart' as _ijgj7dn0;
 import 'review.dart' as _itqm5y01;
 import 'sample_proof.dart' as _iyeld2s2;
 import 'shop.dart' as _isgf2ncs;
@@ -77,6 +80,9 @@ export 'proof_type.dart';
 export 'proof_upload.dart';
 export 'public_student.dart';
 export 'redeem_result.dart';
+export 'report.dart';
+export 'report_kind.dart';
+export 'report_reason.dart';
 export 'review.dart';
 export 'sample_proof.dart';
 export 'shop.dart';
@@ -192,6 +198,15 @@ class Protocol extends _isc.SerializationManager {
     if (t == _iggnnz44.RedeemResult) {
       return _iggnnz44.RedeemResult.fromJson(data) as T;
     }
+    if (t == _i2t8i3ij.Report) {
+      return _i2t8i3ij.Report.fromJson(data) as T;
+    }
+    if (t == _imx1jrz0.ReportKind) {
+      return _imx1jrz0.ReportKind.fromJson(data) as T;
+    }
+    if (t == _ijgj7dn0.ReportReason) {
+      return _ijgj7dn0.ReportReason.fromJson(data) as T;
+    }
     if (t == _itqm5y01.Review) {
       return _itqm5y01.Review.fromJson(data) as T;
     }
@@ -301,6 +316,15 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_iggnnz44.RedeemResult?>()) {
       return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i2t8i3ij.Report?>()) {
+      return (data != null ? _i2t8i3ij.Report.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_imx1jrz0.ReportKind?>()) {
+      return (data != null ? _imx1jrz0.ReportKind.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ijgj7dn0.ReportReason?>()) {
+      return (data != null ? _ijgj7dn0.ReportReason.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_itqm5y01.Review?>()) {
       return (data != null ? _itqm5y01.Review.fromJson(data) : null) as T;
@@ -455,6 +479,9 @@ class Protocol extends _isc.SerializationManager {
       _idi75cqx.ProofUpload => 'ProofUpload',
       _i377gh4k.PublicStudent => 'PublicStudent',
       _iggnnz44.RedeemResult => 'RedeemResult',
+      _i2t8i3ij.Report => 'Report',
+      _imx1jrz0.ReportKind => 'ReportKind',
+      _ijgj7dn0.ReportReason => 'ReportReason',
       _itqm5y01.Review => 'Review',
       _iyeld2s2.SampleProof => 'SampleProof',
       _isgf2ncs.Shop => 'Shop',
@@ -526,6 +553,12 @@ class Protocol extends _isc.SerializationManager {
         return 'PublicStudent';
       case _iggnnz44.RedeemResult():
         return 'RedeemResult';
+      case _i2t8i3ij.Report():
+        return 'Report';
+      case _imx1jrz0.ReportKind():
+        return 'ReportKind';
+      case _ijgj7dn0.ReportReason():
+        return 'ReportReason';
       case _itqm5y01.Review():
         return 'Review';
       case _iyeld2s2.SampleProof():
@@ -642,6 +675,15 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'RedeemResult') {
       return deserialize<_iggnnz44.RedeemResult>(data['data']);
+    }
+    if (dataClassName == 'Report') {
+      return deserialize<_i2t8i3ij.Report>(data['data']);
+    }
+    if (dataClassName == 'ReportKind') {
+      return deserialize<_imx1jrz0.ReportKind>(data['data']);
+    }
+    if (dataClassName == 'ReportReason') {
+      return deserialize<_ijgj7dn0.ReportReason>(data['data']);
     }
     if (dataClassName == 'Review') {
       return deserialize<_itqm5y01.Review>(data['data']);

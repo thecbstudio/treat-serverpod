@@ -21,6 +21,7 @@ import '../features/student/leaderboard_screen.dart';
 import '../features/student/my_claims_screen.dart';
 import '../features/student/offer_detail_screen.dart';
 import '../features/student/profile_screen.dart';
+import '../features/student/settings_screen.dart';
 import '../ui/widgets.dart';
 import 'session.dart';
 import 'theme.dart';
@@ -127,6 +128,7 @@ final router = GoRouter(
         GoRoute(path: '/me', builder: (_, _) => const ProfileScreen()),
       ],
     ),
+    GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
     GoRoute(
       path: '/claim/:id',
       builder: (_, state) =>
@@ -199,6 +201,7 @@ bool _isShopPath(String p) => p.startsWith('/shop');
 bool _isStudentOnly(String p) =>
     p == '/discover' ||
     p == '/me' ||
+    p == '/settings' ||
     p == '/claims' ||
     p == '/leaderboard' ||
     p.startsWith('/claim/');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:treat_client/treat_client.dart';
 
 import '../../app/session.dart';
@@ -27,7 +28,19 @@ class ProfileScreen extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  _Header(me: me, student: student),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _Header(me: me, student: student),
+                      ),
+                      IconButton(
+                        onPressed: () => context.push('/settings'),
+                        icon: const Icon(Icons.settings_outlined),
+                        tooltip: context.l.settingsTitle,
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
@@ -71,6 +84,12 @@ class ProfileScreen extends StatelessWidget {
                         : Icons.warning_amber_rounded,
                   ),
                   const SizedBox(height: 24),
+                  OutlinedButton.icon(
+                    onPressed: () => context.push('/settings'),
+                    icon: const Icon(Icons.settings_outlined),
+                    label: Text(context.l.settingsTitle),
+                  ),
+                  const SizedBox(height: 8),
                   OutlinedButton.icon(
                     onPressed: appSession.signOut,
                     icon: const Icon(Icons.logout_rounded),

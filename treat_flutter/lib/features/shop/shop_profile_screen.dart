@@ -5,6 +5,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../account/account_actions.dart';
 import 'reputation_tools.dart';
 import 'shop_profile_form.dart';
 
@@ -54,12 +55,16 @@ class ShopProfileScreen extends StatelessWidget {
                   },
                 ),
               ),
+              SectionTitle(l.settingsLegal),
+              const LegalLinks(),
               const SizedBox(height: 24),
               OutlinedButton.icon(
                 onPressed: appSession.signOut,
                 icon: const Icon(Icons.logout_rounded),
                 label: Text(l.logout),
               ),
+              const SizedBox(height: 8),
+              const Align(child: DeleteAccountButton(isShop: true)),
             ],
           ),
         ),

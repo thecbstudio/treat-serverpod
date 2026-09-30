@@ -1084,7 +1084,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_demo_locked =>
-      'This demo place is shared by everyone trying the app, so its profile and seeded offers are read-only. Create your own offer to try editing — or start a drop.';
+      'This demo account is shared by everyone trying the app, so parts of it are read-only. Create your own offer or start a drop — or try it as a one-tap guest.';
 
   @override
   String get err_demo_busy =>
@@ -1250,4 +1250,102 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get err_invalid_post_link =>
       'Use the share link of your Instagram post/Reel or TikTok (it starts with https://).';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsProfile => 'Your profile';
+
+  @override
+  String get settingsGuestUniversity =>
+      'Demo guests stay at Demo University — sign up to use your own.';
+
+  @override
+  String get settingsLegal => 'Privacy & terms';
+
+  @override
+  String get settingsPrivacy => 'Privacy notice';
+
+  @override
+  String get settingsTerms => 'Terms of use';
+
+  @override
+  String get settingsAccount => 'Account';
+
+  @override
+  String settingsSignedInAs(String email) {
+    return 'Signed in as $email';
+  }
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountStudent =>
+      'Your profile, treats, ratings, reviews, notes and post screenshots are deleted right away. This can\'t be undone.';
+
+  @override
+  String get deleteAccountShop =>
+      'Your place, its offers, the claims made there and their screenshots are deleted right away. This can\'t be undone.';
+
+  @override
+  String get deleteAccountConfirm => 'I understand this can\'t be undone';
+
+  @override
+  String get deleteAccountGo => 'Delete forever';
+
+  @override
+  String get deleteAccountDone => 'Your account was deleted';
+
+  @override
+  String get report => 'Report';
+
+  @override
+  String get reportTitleReview => 'Report this review';
+
+  @override
+  String get reportTitlePost => 'Report this post';
+
+  @override
+  String get reportTitleShop => 'Report this place';
+
+  @override
+  String get reportSpam => 'Spam or advertising';
+
+  @override
+  String get reportOffensive => 'Offensive or hateful';
+
+  @override
+  String get reportFake => 'Fake or misleading';
+
+  @override
+  String get reportPrivacy => 'Shows someone without consent';
+
+  @override
+  String get reportOther => 'Something else';
+
+  @override
+  String get reportSend => 'Send report';
+
+  @override
+  String get reportThanks =>
+      'Thanks — content reported by several people is hidden, and we look at every report.';
+
+  @override
+  String get err_own_content => 'You can\'t report your own page.';
+
+  @override
+  String get err_guest_university =>
+      'Demo guests stay at Demo University. Sign up to use your own.';
+
+  @override
+  String get err_invalid_name => 'Enter a name (up to 60 characters).';
+
+  @override
+  String get err_invalid_university =>
+      'Enter your university (up to 80 characters).';
 }
