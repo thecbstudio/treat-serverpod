@@ -47,6 +47,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? strikeGiven,
     bool? shareOnWall,
     this.thanksNote,
+    this.rating,
+    this.review,
+    this.privateNote,
+    this.ratedAt,
   }) : fromDrop = fromDrop ?? false,
        createdAt = createdAt ?? DateTime.now(),
        appealed = appealed ?? false,
@@ -79,6 +83,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? strikeGiven,
     bool? shareOnWall,
     String? thanksNote,
+    int? rating,
+    String? review,
+    String? privateNote,
+    DateTime? ratedAt,
   }) = _ClaimImpl;
 
   factory Claim.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -143,6 +151,12 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
           ? null
           : _is.BoolJsonExtension.fromJson(jsonSerialization['shareOnWall']),
       thanksNote: jsonSerialization['thanksNote'] as String?,
+      rating: jsonSerialization['rating'] as int?,
+      review: jsonSerialization['review'] as String?,
+      privateNote: jsonSerialization['privateNote'] as String?,
+      ratedAt: jsonSerialization['ratedAt'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(jsonSerialization['ratedAt']),
     );
   }
 
@@ -208,6 +222,18 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
   /// Optional thank-you note to the place, written after approval.
   String? thanksNote;
 
+  /// The visit's rating (1–5), from a student who was scanned in. Never
+  /// affects the treat. Public, labelled "verified visit · free treat".
+  int? rating;
+
+  /// Optional public short review with the rating.
+  String? review;
+
+  /// Optional note only the place sees.
+  String? privateNote;
+
+  DateTime? ratedAt;
+
   @override
   _is.Table<int?> get table => t;
 
@@ -239,6 +265,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     bool? strikeGiven,
     bool? shareOnWall,
     String? thanksNote,
+    int? rating,
+    String? review,
+    String? privateNote,
+    DateTime? ratedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -269,6 +299,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
       if (thanksNote != null) 'thanksNote': thanksNote,
+      if (rating != null) 'rating': rating,
+      if (review != null) 'review': review,
+      if (privateNote != null) 'privateNote': privateNote,
+      if (ratedAt != null) 'ratedAt': ratedAt?.toJson(),
     };
   }
 
@@ -300,6 +334,10 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
       if (thanksNote != null) 'thanksNote': thanksNote,
+      if (rating != null) 'rating': rating,
+      if (review != null) 'review': review,
+      if (privateNote != null) 'privateNote': privateNote,
+      if (ratedAt != null) 'ratedAt': ratedAt?.toJson(),
     };
   }
 
@@ -365,6 +403,10 @@ class _ClaimImpl extends Claim {
     bool? strikeGiven,
     bool? shareOnWall,
     String? thanksNote,
+    int? rating,
+    String? review,
+    String? privateNote,
+    DateTime? ratedAt,
   }) : super._(
          id: id,
          offerId: offerId,
@@ -390,6 +432,10 @@ class _ClaimImpl extends Claim {
          strikeGiven: strikeGiven,
          shareOnWall: shareOnWall,
          thanksNote: thanksNote,
+         rating: rating,
+         review: review,
+         privateNote: privateNote,
+         ratedAt: ratedAt,
        );
 
   /// Returns a shallow copy of this [Claim]
@@ -421,6 +467,10 @@ class _ClaimImpl extends Claim {
     bool? strikeGiven,
     bool? shareOnWall,
     Object? thanksNote = _Undefined,
+    Object? rating = _Undefined,
+    Object? review = _Undefined,
+    Object? privateNote = _Undefined,
+    Object? ratedAt = _Undefined,
   }) {
     return Claim(
       id: id is int? ? id : this.id,
@@ -453,6 +503,10 @@ class _ClaimImpl extends Claim {
       strikeGiven: strikeGiven ?? this.strikeGiven,
       shareOnWall: shareOnWall ?? this.shareOnWall,
       thanksNote: thanksNote is String? ? thanksNote : this.thanksNote,
+      rating: rating is int? ? rating : this.rating,
+      review: review is String? ? review : this.review,
+      privateNote: privateNote is String? ? privateNote : this.privateNote,
+      ratedAt: ratedAt is DateTime? ? ratedAt : this.ratedAt,
     );
   }
 }
@@ -576,6 +630,27 @@ class ClaimUpdateTable extends _is.UpdateTable<ClaimTable> {
     table.thanksNote,
     value,
   );
+
+  _is.ColumnValue<int, int> rating(int? value) => _is.ColumnValue(
+    table.rating,
+    value,
+  );
+
+  _is.ColumnValue<String, String> review(String? value) => _is.ColumnValue(
+    table.review,
+    value,
+  );
+
+  _is.ColumnValue<String, String> privateNote(String? value) => _is.ColumnValue(
+    table.privateNote,
+    value,
+  );
+
+  _is.ColumnValue<DateTime, DateTime> ratedAt(DateTime? value) =>
+      _is.ColumnValue(
+        table.ratedAt,
+        value,
+      );
 }
 
 class ClaimTable extends _is.Table<int?> {
@@ -674,6 +749,22 @@ class ClaimTable extends _is.Table<int?> {
       'thanksNote',
       this,
     );
+    rating = _is.ColumnInt(
+      'rating',
+      this,
+    );
+    review = _is.ColumnString(
+      'review',
+      this,
+    );
+    privateNote = _is.ColumnString(
+      'privateNote',
+      this,
+    );
+    ratedAt = _is.ColumnDateTime(
+      'ratedAt',
+      this,
+    );
   }
 
   late final ClaimUpdateTable updateTable;
@@ -733,6 +824,18 @@ class ClaimTable extends _is.Table<int?> {
   /// Optional thank-you note to the place, written after approval.
   late final _is.ColumnString thanksNote;
 
+  /// The visit's rating (1–5), from a student who was scanned in. Never
+  /// affects the treat. Public, labelled "verified visit · free treat".
+  late final _is.ColumnInt rating;
+
+  /// Optional public short review with the rating.
+  late final _is.ColumnString review;
+
+  /// Optional note only the place sees.
+  late final _is.ColumnString privateNote;
+
+  late final _is.ColumnDateTime ratedAt;
+
   _iqlmmtnc.OfferTable get offer {
     if (_offer != null) return _offer!;
     _offer = _is.createRelationTable(
@@ -783,6 +886,10 @@ class ClaimTable extends _is.Table<int?> {
     strikeGiven,
     shareOnWall,
     thanksNote,
+    rating,
+    review,
+    privateNote,
+    ratedAt,
   ];
 
   @override

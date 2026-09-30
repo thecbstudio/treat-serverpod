@@ -13,7 +13,9 @@
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:treat_server/src/generated/protocol.dart' as _iegszk5h;
 import 'claim_view.dart' as _i48lh927;
+import 'review.dart' as _itqm5y01;
 import 'shop.dart' as _isgf2ncs;
+import 'shop_rating.dart' as _i7zra0pp;
 import 'top_student.dart' as _iub4wqas;
 
 /// Business panel: totals, ROI estimate, recent activity, top students.
@@ -27,6 +29,8 @@ abstract class ShopDashboard
     required this.estimatedValueTl,
     required this.recent,
     required this.topStudents,
+    required this.rating,
+    required this.reviews,
   });
 
   factory ShopDashboard({
@@ -37,6 +41,8 @@ abstract class ShopDashboard
     required int estimatedValueTl,
     required List<_i48lh927.ClaimView> recent,
     required List<_iub4wqas.TopStudent> topStudents,
+    required _i7zra0pp.ShopRating rating,
+    required List<_itqm5y01.Review> reviews,
   }) = _ShopDashboardImpl;
 
   factory ShopDashboard.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -53,6 +59,12 @@ abstract class ShopDashboard
       ),
       topStudents: _iegszk5h.Protocol().deserialize<List<_iub4wqas.TopStudent>>(
         jsonSerialization['topStudents'],
+      ),
+      rating: _iegszk5h.Protocol().deserialize<_i7zra0pp.ShopRating>(
+        jsonSerialization['rating'],
+      ),
+      reviews: _iegszk5h.Protocol().deserialize<List<_itqm5y01.Review>>(
+        jsonSerialization['reviews'],
       ),
     );
   }
@@ -71,6 +83,11 @@ abstract class ShopDashboard
 
   List<_iub4wqas.TopStudent> topStudents;
 
+  _i7zra0pp.ShopRating rating;
+
+  /// Newest first, with private notes.
+  List<_itqm5y01.Review> reviews;
+
   /// Returns a shallow copy of this [ShopDashboard]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -82,6 +99,8 @@ abstract class ShopDashboard
     int? estimatedValueTl,
     List<_i48lh927.ClaimView>? recent,
     List<_iub4wqas.TopStudent>? topStudents,
+    _i7zra0pp.ShopRating? rating,
+    List<_itqm5y01.Review>? reviews,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -94,6 +113,8 @@ abstract class ShopDashboard
       'estimatedValueTl': estimatedValueTl,
       'recent': recent.toJson(valueToJson: (v) => v.toJson()),
       'topStudents': topStudents.toJson(valueToJson: (v) => v.toJson()),
+      'rating': rating.toJson(),
+      'reviews': reviews.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -110,6 +131,8 @@ abstract class ShopDashboard
       'topStudents': topStudents.toJson(
         valueToJson: (v) => v.toJsonForProtocol(),
       ),
+      'rating': rating.toJsonForProtocol(),
+      'reviews': reviews.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
@@ -128,6 +151,8 @@ class _ShopDashboardImpl extends ShopDashboard {
     required int estimatedValueTl,
     required List<_i48lh927.ClaimView> recent,
     required List<_iub4wqas.TopStudent> topStudents,
+    required _i7zra0pp.ShopRating rating,
+    required List<_itqm5y01.Review> reviews,
   }) : super._(
          shop: shop,
          activeOffers: activeOffers,
@@ -136,6 +161,8 @@ class _ShopDashboardImpl extends ShopDashboard {
          estimatedValueTl: estimatedValueTl,
          recent: recent,
          topStudents: topStudents,
+         rating: rating,
+         reviews: reviews,
        );
 
   /// Returns a shallow copy of this [ShopDashboard]
@@ -150,6 +177,8 @@ class _ShopDashboardImpl extends ShopDashboard {
     int? estimatedValueTl,
     List<_i48lh927.ClaimView>? recent,
     List<_iub4wqas.TopStudent>? topStudents,
+    _i7zra0pp.ShopRating? rating,
+    List<_itqm5y01.Review>? reviews,
   }) {
     return ShopDashboard(
       shop: shop ?? this.shop.copyWith(),
@@ -160,6 +189,8 @@ class _ShopDashboardImpl extends ShopDashboard {
       recent: recent ?? this.recent.map((e0) => e0.copyWith()).toList(),
       topStudents:
           topStudents ?? this.topStudents.map((e0) => e0.copyWith()).toList(),
+      rating: rating ?? this.rating.copyWith(),
+      reviews: reviews ?? this.reviews.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

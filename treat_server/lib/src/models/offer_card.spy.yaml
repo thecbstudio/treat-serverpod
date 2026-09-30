@@ -6,3 +6,5 @@ fields:
   claimedToday: int
   claimedTotal: int
   eligibility: Eligibility?
+  ### The place's treat score (same for every offer of the place).
+  rating: ShopRating?

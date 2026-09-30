@@ -25,6 +25,7 @@ abstract final class T {
   static const greenSoft = Color(0xFFE7F2E9);
   static const amber = Color(0xFFA06A10);
   static const amberSoft = Color(0xFFFAEDCA);
+  static const star = Color(0xFFF2A516);
   static const gold = Color(0xFFE6A01F);
   static const goldSoft = Color(0xFFFBEECB);
   static const red = Color(0xFFCF4335);

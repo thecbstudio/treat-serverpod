@@ -8,6 +8,7 @@ import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
 import '../drops/drops_strip.dart';
 import '../social/wall.dart';
+import 'rate_card.dart' show ScoreBadge;
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -233,12 +234,15 @@ class OfferTile extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (card.shop.verified)
+                    ScoreBadge(rating: card.rating),
+                    if (card.shop.verified) ...[
+                      const SizedBox(width: 6),
                       const Icon(
                         Icons.verified_rounded,
                         size: 16,
                         color: T.green,
                       ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 2),

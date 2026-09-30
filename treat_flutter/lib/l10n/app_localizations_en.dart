@@ -1124,4 +1124,68 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get proofSampleBad => 'Tags nobody';
+
+  @override
+  String rateTitle(String shop) {
+    return 'How was $shop?';
+  }
+
+  @override
+  String get rateDone => 'Thanks for rating your visit';
+
+  @override
+  String get rateEdit => 'Edit';
+
+  @override
+  String get rateReviewHint =>
+      'A few words for other students (optional, public)';
+
+  @override
+  String ratePrivateHint(String shop) {
+    return 'A note only $shop sees (optional)';
+  }
+
+  @override
+  String get rateDisclaimer =>
+      'Be honest — your rating doesn\'t affect your treat. It shows on the place page as a verified visit with a free treat.';
+
+  @override
+  String get rateSave => 'Save rating';
+
+  @override
+  String get rateThanks => 'Rating saved';
+
+  @override
+  String get reviewVerified => 'Verified visit · free treat';
+
+  @override
+  String get reviewsTitle => 'What students say';
+
+  @override
+  String get reviewsEmpty =>
+      'No ratings yet — students rate a place after it scans their code.';
+
+  @override
+  String reviewCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n verified ratings',
+      one: '1 verified rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dashRatingTitle => 'Your treat score';
+
+  @override
+  String get dashPrivateNote => 'Only you see this';
+
+  @override
+  String get err_invalid_rating => 'Pick 1 to 5 stars.';
+
+  @override
+  String get err_not_visited =>
+      'You can rate the place after it scans your code.';
 }

@@ -1,0 +1,8 @@
+### A place's treat score: ratings from students who were scanned in there.
+class: ShopRating
+fields:
+  ### 0 when there are no ratings yet.
+  average: double
+  count: int
+  ### How many 1★ … 5★ ratings (index 0 = 1★).
+  distribution: List<int>

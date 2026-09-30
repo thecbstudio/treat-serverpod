@@ -8,6 +8,7 @@ import '../services/accounts.dart';
 import '../services/claims.dart';
 import '../services/demo.dart';
 import '../services/proofs.dart';
+import '../services/ratings.dart';
 
 /// A student's claims: create, list, open, and watch one live.
 class ClaimEndpoint extends Endpoint {
@@ -51,6 +52,23 @@ class ClaimEndpoint extends Endpoint {
     int claimId,
     SampleProof kind,
   ) => submitSampleProofFor(session, claimId, kind);
+
+  /// Rate the visit (1–5) once the place scanned the code, with an optional
+  /// public review and a note only the place sees. Can be changed later and
+  /// never affects the treat.
+  Future<ClaimView> rate(
+    Session session,
+    int claimId,
+    int stars, {
+    String? review,
+    String? privateNote,
+  }) => rateVisit(
+    session,
+    claimId,
+    stars,
+    review: review,
+    privateNote: privateNote,
+  );
 
   /// After approval: a short thank-you note to the place (shown on its page
   /// and in its panel) and whether the post may appear on its public wall.

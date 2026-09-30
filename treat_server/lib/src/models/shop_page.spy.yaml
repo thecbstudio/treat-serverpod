@@ -5,3 +5,5 @@ fields:
   offers: List<OfferCard>
   studentsTreated: int
   wall: List<WallPost>
+  rating: ShopRating
+  reviews: List<Review>

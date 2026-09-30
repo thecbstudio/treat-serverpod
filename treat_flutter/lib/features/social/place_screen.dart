@@ -8,6 +8,7 @@ import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
 import '../drops/drops_strip.dart';
 import '../student/discover_screen.dart' show OfferTile;
+import 'reviews.dart';
 import 'wall.dart';
 
 /// A place's public page: who they are, how many students they treated, what
@@ -147,6 +148,12 @@ class _Page extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
+                      if (page.rating.count > 0)
+                        Pill(
+                          '★ ${page.rating.average.toStringAsFixed(1)} · '
+                          '${l.reviewCount(page.rating.count)}',
+                          tone: PillTone.amber,
+                        ),
                       Pill(
                         l.placeTreated(page.studentsTreated),
                         tone: PillTone.accent,
@@ -200,6 +207,11 @@ class _Page extends StatelessWidget {
                       card: offers[i],
                       onTap: () => context.push('/offer/${offers[i].offer.id}'),
                     ),
+                  ),
+                  ReviewsSection(
+                    title: l.reviewsTitle,
+                    rating: page.rating,
+                    reviews: page.reviews,
                   ),
                   SectionTitle(l.wallTitle),
                   WallGrid(posts: page.wall),

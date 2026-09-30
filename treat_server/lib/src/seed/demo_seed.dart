@@ -111,6 +111,7 @@ Future<void> seedDemoData(Session session, {String? demoPassword}) async {
         );
     await seedJuryStudentHistory(session, jury);
     await seedDemoHistory(session);
+    await seedDemoRatings(session);
     await ensureDemoDrop(session);
   }
 }

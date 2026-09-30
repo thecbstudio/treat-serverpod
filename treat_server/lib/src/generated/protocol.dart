@@ -47,11 +47,13 @@ import 'proof_type.dart' as _i671eu65;
 import 'proof_upload.dart' as _idi75cqx;
 import 'public_student.dart' as _i377gh4k;
 import 'redeem_result.dart' as _iggnnz44;
+import 'review.dart' as _itqm5y01;
 import 'sample_proof.dart' as _iyeld2s2;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_dashboard.dart' as _iqgdamt7;
 import 'shop_input.dart' as _i5vfstp6;
 import 'shop_page.dart' as _iv7ebkk1;
+import 'shop_rating.dart' as _i7zra0pp;
 import 'student_profile.dart' as _iovtxv26;
 import 'student_verification.dart' as _ipqqbskf;
 import 'top_student.dart' as _iub4wqas;
@@ -80,11 +82,13 @@ export 'proof_type.dart';
 export 'proof_upload.dart';
 export 'public_student.dart';
 export 'redeem_result.dart';
+export 'review.dart';
 export 'sample_proof.dart';
 export 'shop.dart';
 export 'shop_dashboard.dart';
 export 'shop_input.dart';
 export 'shop_page.dart';
+export 'shop_rating.dart';
 export 'student_profile.dart';
 export 'student_verification.dart';
 export 'top_student.dart';
@@ -244,6 +248,30 @@ class Protocol extends _is.DatabaseSerializationManager {
           columnType: _isp.ColumnType.text,
           isNullable: true,
           dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'rating',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'review',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'privateNote',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'ratedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
         ),
       ],
       foreignKeys: [
@@ -860,6 +888,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _iggnnz44.RedeemResult) {
       return _iggnnz44.RedeemResult.fromJson(data) as T;
     }
+    if (t == _itqm5y01.Review) {
+      return _itqm5y01.Review.fromJson(data) as T;
+    }
     if (t == _iyeld2s2.SampleProof) {
       return _iyeld2s2.SampleProof.fromJson(data) as T;
     }
@@ -874,6 +905,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _iv7ebkk1.ShopPage) {
       return _iv7ebkk1.ShopPage.fromJson(data) as T;
+    }
+    if (t == _i7zra0pp.ShopRating) {
+      return _i7zra0pp.ShopRating.fromJson(data) as T;
     }
     if (t == _iovtxv26.StudentProfile) {
       return _iovtxv26.StudentProfile.fromJson(data) as T;
@@ -976,6 +1010,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _is.getType<_iggnnz44.RedeemResult?>()) {
       return (data != null ? _iggnnz44.RedeemResult.fromJson(data) : null) as T;
     }
+    if (t == _is.getType<_itqm5y01.Review?>()) {
+      return (data != null ? _itqm5y01.Review.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_iyeld2s2.SampleProof?>()) {
       return (data != null ? _iyeld2s2.SampleProof.fromJson(data) : null) as T;
     }
@@ -991,6 +1028,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_iv7ebkk1.ShopPage?>()) {
       return (data != null ? _iv7ebkk1.ShopPage.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i7zra0pp.ShopRating?>()) {
+      return (data != null ? _i7zra0pp.ShopRating.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iovtxv26.StudentProfile?>()) {
       return (data != null ? _iovtxv26.StudentProfile.fromJson(data) : null)
@@ -1045,11 +1085,20 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_itqm5y01.Review>) {
+      return (data as List)
+              .map((e) => deserialize<_itqm5y01.Review>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_irfq3mof.OfferCard>) {
       return (data as List)
               .map((e) => deserialize<_irfq3mof.OfferCard>(e))
               .toList()
           as T;
+    }
+    if (t == List<int>) {
+      return (data as List).map((e) => deserialize<int>(e)).toList() as T;
     }
     if (t == List<_iqmyfspq.OfferCategory>) {
       return (data as List)
@@ -1119,11 +1168,13 @@ class Protocol extends _is.DatabaseSerializationManager {
       _idi75cqx.ProofUpload => 'ProofUpload',
       _i377gh4k.PublicStudent => 'PublicStudent',
       _iggnnz44.RedeemResult => 'RedeemResult',
+      _itqm5y01.Review => 'Review',
       _iyeld2s2.SampleProof => 'SampleProof',
       _isgf2ncs.Shop => 'Shop',
       _iqgdamt7.ShopDashboard => 'ShopDashboard',
       _i5vfstp6.ShopInput => 'ShopInput',
       _iv7ebkk1.ShopPage => 'ShopPage',
+      _i7zra0pp.ShopRating => 'ShopRating',
       _iovtxv26.StudentProfile => 'StudentProfile',
       _ipqqbskf.StudentVerification => 'StudentVerification',
       _iub4wqas.TopStudent => 'TopStudent',
@@ -1192,6 +1243,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'PublicStudent';
       case _iggnnz44.RedeemResult():
         return 'RedeemResult';
+      case _itqm5y01.Review():
+        return 'Review';
       case _iyeld2s2.SampleProof():
         return 'SampleProof';
       case _isgf2ncs.Shop():
@@ -1202,6 +1255,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ShopInput';
       case _iv7ebkk1.ShopPage():
         return 'ShopPage';
+      case _i7zra0pp.ShopRating():
+        return 'ShopRating';
       case _iovtxv26.StudentProfile():
         return 'StudentProfile';
       case _ipqqbskf.StudentVerification():
@@ -1315,6 +1370,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'RedeemResult') {
       return deserialize<_iggnnz44.RedeemResult>(data['data']);
     }
+    if (dataClassName == 'Review') {
+      return deserialize<_itqm5y01.Review>(data['data']);
+    }
     if (dataClassName == 'SampleProof') {
       return deserialize<_iyeld2s2.SampleProof>(data['data']);
     }
@@ -1329,6 +1387,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'ShopPage') {
       return deserialize<_iv7ebkk1.ShopPage>(data['data']);
+    }
+    if (dataClassName == 'ShopRating') {
+      return deserialize<_i7zra0pp.ShopRating>(data['data']);
     }
     if (dataClassName == 'StudentProfile') {
       return deserialize<_iovtxv26.StudentProfile>(data['data']);

@@ -186,6 +186,8 @@ String errorMessage(Object error, AppLocalizations l) {
       'note_too_long' => l.err_note_too_long,
       'demo_off' => l.err_demo_off,
       'demo_locked' => l.err_demo_locked,
+      'invalid_rating' => l.err_invalid_rating,
+      'not_visited' => l.err_not_visited,
       'flag_window_over' => l.err_flag_window_over,
       'demo_busy' => l.err_demo_busy,
       'no_sample' => l.err_no_sample,

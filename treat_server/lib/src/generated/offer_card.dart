@@ -15,6 +15,7 @@ import 'package:treat_server/src/generated/protocol.dart' as _iegszk5h;
 import 'eligibility.dart' as _iapxm79h;
 import 'offer.dart' as _iqlmmtnc;
 import 'shop.dart' as _isgf2ncs;
+import 'shop_rating.dart' as _i7zra0pp;
 
 /// An offer with its shop, today's usage and (for students) eligibility.
 abstract class OfferCard
@@ -25,6 +26,7 @@ abstract class OfferCard
     required this.claimedToday,
     required this.claimedTotal,
     this.eligibility,
+    this.rating,
   });
 
   factory OfferCard({
@@ -33,6 +35,7 @@ abstract class OfferCard
     required int claimedToday,
     required int claimedTotal,
     _iapxm79h.Eligibility? eligibility,
+    _i7zra0pp.ShopRating? rating,
   }) = _OfferCardImpl;
 
   factory OfferCard.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -50,6 +53,11 @@ abstract class OfferCard
           : _iegszk5h.Protocol().deserialize<_iapxm79h.Eligibility>(
               jsonSerialization['eligibility'],
             ),
+      rating: jsonSerialization['rating'] == null
+          ? null
+          : _iegszk5h.Protocol().deserialize<_i7zra0pp.ShopRating>(
+              jsonSerialization['rating'],
+            ),
     );
   }
 
@@ -63,6 +71,9 @@ abstract class OfferCard
 
   _iapxm79h.Eligibility? eligibility;
 
+  /// The place's treat score (same for every offer of the place).
+  _i7zra0pp.ShopRating? rating;
+
   /// Returns a shallow copy of this [OfferCard]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -72,6 +83,7 @@ abstract class OfferCard
     int? claimedToday,
     int? claimedTotal,
     _iapxm79h.Eligibility? eligibility,
+    _i7zra0pp.ShopRating? rating,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -82,6 +94,7 @@ abstract class OfferCard
       'claimedToday': claimedToday,
       'claimedTotal': claimedTotal,
       if (eligibility != null) 'eligibility': eligibility?.toJson(),
+      if (rating != null) 'rating': rating?.toJson(),
     };
   }
 
@@ -94,6 +107,7 @@ abstract class OfferCard
       'claimedToday': claimedToday,
       'claimedTotal': claimedTotal,
       if (eligibility != null) 'eligibility': eligibility?.toJsonForProtocol(),
+      if (rating != null) 'rating': rating?.toJsonForProtocol(),
     };
   }
 
@@ -112,12 +126,14 @@ class _OfferCardImpl extends OfferCard {
     required int claimedToday,
     required int claimedTotal,
     _iapxm79h.Eligibility? eligibility,
+    _i7zra0pp.ShopRating? rating,
   }) : super._(
          offer: offer,
          shop: shop,
          claimedToday: claimedToday,
          claimedTotal: claimedTotal,
          eligibility: eligibility,
+         rating: rating,
        );
 
   /// Returns a shallow copy of this [OfferCard]
@@ -130,6 +146,7 @@ class _OfferCardImpl extends OfferCard {
     int? claimedToday,
     int? claimedTotal,
     Object? eligibility = _Undefined,
+    Object? rating = _Undefined,
   }) {
     return OfferCard(
       offer: offer ?? this.offer.copyWith(),
@@ -139,6 +156,9 @@ class _OfferCardImpl extends OfferCard {
       eligibility: eligibility is _iapxm79h.Eligibility?
           ? eligibility
           : this.eligibility?.copyWith(),
+      rating: rating is _i7zra0pp.ShopRating?
+          ? rating
+          : this.rating?.copyWith(),
     );
   }
 }

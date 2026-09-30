@@ -13,7 +13,9 @@
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:treat_server/src/generated/protocol.dart' as _iegszk5h;
 import 'offer_card.dart' as _irfq3mof;
+import 'review.dart' as _itqm5y01;
 import 'shop.dart' as _isgf2ncs;
+import 'shop_rating.dart' as _i7zra0pp;
 import 'wall_post.dart' as _i6mr85kx;
 
 /// A place's public page.
@@ -24,6 +26,8 @@ abstract class ShopPage
     required this.offers,
     required this.studentsTreated,
     required this.wall,
+    required this.rating,
+    required this.reviews,
   });
 
   factory ShopPage({
@@ -31,6 +35,8 @@ abstract class ShopPage
     required List<_irfq3mof.OfferCard> offers,
     required int studentsTreated,
     required List<_i6mr85kx.WallPost> wall,
+    required _i7zra0pp.ShopRating rating,
+    required List<_itqm5y01.Review> reviews,
   }) = _ShopPageImpl;
 
   factory ShopPage.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -45,6 +51,12 @@ abstract class ShopPage
       wall: _iegszk5h.Protocol().deserialize<List<_i6mr85kx.WallPost>>(
         jsonSerialization['wall'],
       ),
+      rating: _iegszk5h.Protocol().deserialize<_i7zra0pp.ShopRating>(
+        jsonSerialization['rating'],
+      ),
+      reviews: _iegszk5h.Protocol().deserialize<List<_itqm5y01.Review>>(
+        jsonSerialization['reviews'],
+      ),
     );
   }
 
@@ -56,6 +68,10 @@ abstract class ShopPage
 
   List<_i6mr85kx.WallPost> wall;
 
+  _i7zra0pp.ShopRating rating;
+
+  List<_itqm5y01.Review> reviews;
+
   /// Returns a shallow copy of this [ShopPage]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -64,6 +80,8 @@ abstract class ShopPage
     List<_irfq3mof.OfferCard>? offers,
     int? studentsTreated,
     List<_i6mr85kx.WallPost>? wall,
+    _i7zra0pp.ShopRating? rating,
+    List<_itqm5y01.Review>? reviews,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -73,6 +91,8 @@ abstract class ShopPage
       'offers': offers.toJson(valueToJson: (v) => v.toJson()),
       'studentsTreated': studentsTreated,
       'wall': wall.toJson(valueToJson: (v) => v.toJson()),
+      'rating': rating.toJson(),
+      'reviews': reviews.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -84,6 +104,8 @@ abstract class ShopPage
       'offers': offers.toJson(valueToJson: (v) => v.toJsonForProtocol()),
       'studentsTreated': studentsTreated,
       'wall': wall.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      'rating': rating.toJsonForProtocol(),
+      'reviews': reviews.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
@@ -99,11 +121,15 @@ class _ShopPageImpl extends ShopPage {
     required List<_irfq3mof.OfferCard> offers,
     required int studentsTreated,
     required List<_i6mr85kx.WallPost> wall,
+    required _i7zra0pp.ShopRating rating,
+    required List<_itqm5y01.Review> reviews,
   }) : super._(
          shop: shop,
          offers: offers,
          studentsTreated: studentsTreated,
          wall: wall,
+         rating: rating,
+         reviews: reviews,
        );
 
   /// Returns a shallow copy of this [ShopPage]
@@ -115,12 +141,16 @@ class _ShopPageImpl extends ShopPage {
     List<_irfq3mof.OfferCard>? offers,
     int? studentsTreated,
     List<_i6mr85kx.WallPost>? wall,
+    _i7zra0pp.ShopRating? rating,
+    List<_itqm5y01.Review>? reviews,
   }) {
     return ShopPage(
       shop: shop ?? this.shop.copyWith(),
       offers: offers ?? this.offers.map((e0) => e0.copyWith()).toList(),
       studentsTreated: studentsTreated ?? this.studentsTreated,
       wall: wall ?? this.wall.map((e0) => e0.copyWith()).toList(),
+      rating: rating ?? this.rating.copyWith(),
+      reviews: reviews ?? this.reviews.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

@@ -319,6 +319,25 @@ class EndpointClaim extends _isc.EndpointRef {
     },
   );
 
+  /// Rate the visit (1–5) once the place scanned the code, with an optional
+  /// public review and a note only the place sees. Can be changed later and
+  /// never affects the treat.
+  _ida.Future<_iq1pcdgl.ClaimView> rate(
+    int claimId,
+    int stars, {
+    String? review,
+    String? privateNote,
+  }) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
+    'claim',
+    'rate',
+    {
+      'claimId': claimId,
+      'stars': stars,
+      'review': review,
+      'privateNote': privateNote,
+    },
+  );
+
   /// After approval: a short thank-you note to the place (shown on its page
   /// and in its panel) and whether the post may appear on its public wall.
   _ida.Future<_iq1pcdgl.ClaimView> thank(

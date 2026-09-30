@@ -4,6 +4,7 @@ import '../domain/clock.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
 import '../services/offer_cards.dart';
+import '../services/ratings.dart';
 import '../services/social.dart';
 
 /// Public pages: a place's page with its wall, a student's profile, and the
@@ -36,6 +37,8 @@ class SocialEndpoint extends Endpoint {
       ),
       studentsTreated: await studentsTreated(session, shopId),
       wall: await wallPosts(session, shopId: shopId),
+      rating: (await ratingsFor(session, {shopId}))[shopId]!,
+      reviews: await reviewsFor(session, shopId, forOwner: false),
     );
   }
 

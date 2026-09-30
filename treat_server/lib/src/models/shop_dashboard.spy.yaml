@@ -8,3 +8,6 @@ fields:
   estimatedValueTl: int
   recent: List<ClaimView>
   topStudents: List<TopStudent>
+  rating: ShopRating
+  ### Newest first, with private notes.
+  reviews: List<Review>

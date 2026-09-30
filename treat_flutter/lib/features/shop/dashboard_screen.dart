@@ -7,6 +7,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../social/reviews.dart';
 import '../student/claim_screen.dart' show claimTone;
 
 /// Business panel: numbers, ROI estimate and a live activity feed that
@@ -246,6 +247,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ],
   ];
 
+  Widget _reviews(ShopDashboard d) => ReviewsSection(
+    title: context.l.dashRatingTitle,
+    rating: d.rating,
+    reviews: d.reviews.take(5).toList(),
+  );
+
   List<Widget> _narrow(ShopDashboard d) {
     final stats = _stats(d);
     return [
@@ -256,6 +263,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _statRow(stats.sublist(2)),
       const SizedBox(height: 10),
       _RoiCard(data: d),
+      _reviews(d),
       ..._feedSection(d),
       ..._topStudents(d),
     ];
@@ -285,6 +293,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               const SizedBox(height: 20),
               _RoiCard(data: d),
+              _reviews(d),
               ..._topStudents(d),
             ],
           ),

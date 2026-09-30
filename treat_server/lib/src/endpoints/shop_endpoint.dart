@@ -8,6 +8,7 @@ import '../services/accounts.dart';
 import '../services/claims.dart';
 import '../services/demo.dart';
 import '../services/proofs.dart';
+import '../services/ratings.dart';
 
 /// Business-side actions at the counter and the live panel.
 class ShopEndpoint extends Endpoint {
@@ -75,6 +76,8 @@ class ShopEndpoint extends Endpoint {
         for (final t in top.take(5))
           TopStudent(name: t.s.name, university: t.s.university, approved: t.n),
       ],
+      rating: (await ratingsFor(session, {shop.id!}))[shop.id!]!,
+      reviews: await reviewsFor(session, shop.id!, forOwner: true),
     );
   }
 

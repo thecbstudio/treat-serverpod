@@ -531,5 +531,24 @@
     }
   },
   "proofSampleUndisclosed": "Tags the place, no #işbirliği",
-  "proofSampleBad": "Tags nobody"
+  "proofSampleBad": "Tags nobody",
+  "rateTitle": "How was {shop}?",
+  "@rateTitle": {"placeholders": {"shop": {"type": "String"}}},
+  "rateDone": "Thanks for rating your visit",
+  "rateEdit": "Edit",
+  "rateReviewHint": "A few words for other students (optional, public)",
+  "ratePrivateHint": "A note only {shop} sees (optional)",
+  "@ratePrivateHint": {"placeholders": {"shop": {"type": "String"}}},
+  "rateDisclaimer": "Be honest — your rating doesn't affect your treat. It shows on the place page as a verified visit with a free treat.",
+  "rateSave": "Save rating",
+  "rateThanks": "Rating saved",
+  "reviewVerified": "Verified visit · free treat",
+  "reviewsTitle": "What students say",
+  "reviewsEmpty": "No ratings yet — students rate a place after it scans their code.",
+  "reviewCount": "{n, plural, =1{1 verified rating} other{{n} verified ratings}}",
+  "@reviewCount": {"placeholders": {"n": {"type": "int"}}},
+  "dashRatingTitle": "Your treat score",
+  "dashPrivateNote": "Only you see this",
+  "err_invalid_rating": "Pick 1 to 5 stars.",
+  "err_not_visited": "You can rate the place after it scans your code."
 }

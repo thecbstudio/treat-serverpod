@@ -46,6 +46,10 @@ abstract class Claim
     bool? strikeGiven,
     bool? shareOnWall,
     this.thanksNote,
+    this.rating,
+    this.review,
+    this.privateNote,
+    this.ratedAt,
   }) : fromDrop = fromDrop ?? false,
        createdAt = createdAt ?? DateTime.now(),
        appealed = appealed ?? false,
@@ -77,6 +81,10 @@ abstract class Claim
     bool? strikeGiven,
     bool? shareOnWall,
     String? thanksNote,
+    int? rating,
+    String? review,
+    String? privateNote,
+    DateTime? ratedAt,
   }) = _ClaimImpl;
 
   factory Claim.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -142,6 +150,12 @@ abstract class Claim
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['shareOnWall']),
       thanksNote: jsonSerialization['thanksNote'] as String?,
+      rating: jsonSerialization['rating'] as int?,
+      review: jsonSerialization['review'] as String?,
+      privateNote: jsonSerialization['privateNote'] as String?,
+      ratedAt: jsonSerialization['ratedAt'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(jsonSerialization['ratedAt']),
     );
   }
 
@@ -202,6 +216,18 @@ abstract class Claim
   /// Optional thank-you note to the place, written after approval.
   String? thanksNote;
 
+  /// The visit's rating (1–5), from a student who was scanned in. Never
+  /// affects the treat. Public, labelled "verified visit · free treat".
+  int? rating;
+
+  /// Optional public short review with the rating.
+  String? review;
+
+  /// Optional note only the place sees.
+  String? privateNote;
+
+  DateTime? ratedAt;
+
   /// Returns a shallow copy of this [Claim]
   /// with some or all fields replaced by the given arguments.
   @_isc.useResult
@@ -229,6 +255,10 @@ abstract class Claim
     bool? strikeGiven,
     bool? shareOnWall,
     String? thanksNote,
+    int? rating,
+    String? review,
+    String? privateNote,
+    DateTime? ratedAt,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -258,6 +288,10 @@ abstract class Claim
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
       if (thanksNote != null) 'thanksNote': thanksNote,
+      if (rating != null) 'rating': rating,
+      if (review != null) 'review': review,
+      if (privateNote != null) 'privateNote': privateNote,
+      if (ratedAt != null) 'ratedAt': ratedAt?.toJson(),
     };
   }
 
@@ -289,6 +323,10 @@ abstract class Claim
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
       if (thanksNote != null) 'thanksNote': thanksNote,
+      if (rating != null) 'rating': rating,
+      if (review != null) 'review': review,
+      if (privateNote != null) 'privateNote': privateNote,
+      if (ratedAt != null) 'ratedAt': ratedAt?.toJson(),
     };
   }
 
@@ -325,6 +363,10 @@ class _ClaimImpl extends Claim {
     bool? strikeGiven,
     bool? shareOnWall,
     String? thanksNote,
+    int? rating,
+    String? review,
+    String? privateNote,
+    DateTime? ratedAt,
   }) : super._(
          id: id,
          offerId: offerId,
@@ -349,6 +391,10 @@ class _ClaimImpl extends Claim {
          strikeGiven: strikeGiven,
          shareOnWall: shareOnWall,
          thanksNote: thanksNote,
+         rating: rating,
+         review: review,
+         privateNote: privateNote,
+         ratedAt: ratedAt,
        );
 
   /// Returns a shallow copy of this [Claim]
@@ -379,6 +425,10 @@ class _ClaimImpl extends Claim {
     bool? strikeGiven,
     bool? shareOnWall,
     Object? thanksNote = _Undefined,
+    Object? rating = _Undefined,
+    Object? review = _Undefined,
+    Object? privateNote = _Undefined,
+    Object? ratedAt = _Undefined,
   }) {
     return Claim(
       id: id is int? ? id : this.id,
@@ -410,6 +460,10 @@ class _ClaimImpl extends Claim {
       strikeGiven: strikeGiven ?? this.strikeGiven,
       shareOnWall: shareOnWall ?? this.shareOnWall,
       thanksNote: thanksNote is String? ? thanksNote : this.thanksNote,
+      rating: rating is int? ? rating : this.rating,
+      review: review is String? ? review : this.review,
+      privateNote: privateNote is String? ? privateNote : this.privateNote,
+      ratedAt: ratedAt is DateTime? ? ratedAt : this.ratedAt,
     );
   }
 }

@@ -2061,6 +2061,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tags nobody'**
   String get proofSampleBad;
+
+  /// No description provided for @rateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How was {shop}?'**
+  String rateTitle(String shop);
+
+  /// No description provided for @rateDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for rating your visit'**
+  String get rateDone;
+
+  /// No description provided for @rateEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get rateEdit;
+
+  /// No description provided for @rateReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A few words for other students (optional, public)'**
+  String get rateReviewHint;
+
+  /// No description provided for @ratePrivateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A note only {shop} sees (optional)'**
+  String ratePrivateHint(String shop);
+
+  /// No description provided for @rateDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Be honest — your rating doesn\'t affect your treat. It shows on the place page as a verified visit with a free treat.'**
+  String get rateDisclaimer;
+
+  /// No description provided for @rateSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save rating'**
+  String get rateSave;
+
+  /// No description provided for @rateThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating saved'**
+  String get rateThanks;
+
+  /// No description provided for @reviewVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified visit · free treat'**
+  String get reviewVerified;
+
+  /// No description provided for @reviewsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What students say'**
+  String get reviewsTitle;
+
+  /// No description provided for @reviewsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No ratings yet — students rate a place after it scans their code.'**
+  String get reviewsEmpty;
+
+  /// No description provided for @reviewCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{n, plural, =1{1 verified rating} other{{n} verified ratings}}'**
+  String reviewCount(int n);
+
+  /// No description provided for @dashRatingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your treat score'**
+  String get dashRatingTitle;
+
+  /// No description provided for @dashPrivateNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you see this'**
+  String get dashPrivateNote;
+
+  /// No description provided for @err_invalid_rating.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick 1 to 5 stars.'**
+  String get err_invalid_rating;
+
+  /// No description provided for @err_not_visited.
+  ///
+  /// In en, this message translates to:
+  /// **'You can rate the place after it scans your code.'**
+  String get err_not_visited;
 }
 
 class _AppLocalizationsDelegate

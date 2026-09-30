@@ -408,6 +408,42 @@ class Endpoints extends _is.EndpointDispatch {
                     params['kind'],
                   ),
         ),
+        'rate': _is.MethodConnector(
+          name: 'rate',
+          params: {
+            'claimId': _is.ParameterDescription(
+              name: 'claimId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'stars': _is.ParameterDescription(
+              name: 'stars',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+            'review': _is.ParameterDescription(
+              name: 'review',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+            'privateNote': _is.ParameterDescription(
+              name: 'privateNote',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['claim'] as _i0cek2rs.ClaimEndpoint).rate(
+                session,
+                params['claimId'],
+                params['stars'],
+                review: params['review'],
+                privateNote: params['privateNote'],
+              ),
+        ),
         'thank': _is.MethodConnector(
           name: 'thank',
           params: {

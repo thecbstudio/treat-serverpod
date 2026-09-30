@@ -2,6 +2,7 @@ import 'package:serverpod/serverpod.dart';
 
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
+import 'ratings.dart';
 
 /// Builds [OfferCard]s: usage from the claims table, eligibility for
 /// [student] when given. [offers] must include their shop.
@@ -41,6 +42,12 @@ Future<List<OfferCard>> buildOfferCards(
     }
   }
 
+  final ratings = await ratingsFor(
+    session,
+    offers.map((o) => o.shopId).toSet(),
+    transaction: transaction,
+  );
+
   return [
     for (final offer in offers)
       _card(
@@ -49,7 +56,7 @@ Future<List<OfferCard>> buildOfferCards(
         student,
         myClaimsByShop[offer.shopId] ?? const [],
         now,
-      ),
+      ).copyWith(rating: ratings[offer.shopId]),
   ];
 }
 

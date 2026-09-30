@@ -12,6 +12,7 @@ import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
 import 'proof_form.dart';
+import 'rate_card.dart';
 
 PillTone claimTone(ClaimStatus s) => switch (s) {
   ClaimStatus.active => PillTone.accent,
@@ -180,6 +181,12 @@ class _ClaimBody extends StatelessWidget {
             },
           ),
         ),
+        // Once scanned in, the visit can be rated (never affects the treat).
+        if (claim.status != ClaimStatus.active &&
+            claim.status != ClaimStatus.expired) ...[
+          const SizedBox(height: 16),
+          RateCard(key: ValueKey(claim.id), view: view),
+        ],
       ],
     );
   }

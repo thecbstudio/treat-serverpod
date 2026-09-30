@@ -33,6 +33,14 @@ fields:
   shareOnWall: bool, default=false
   ### Optional thank-you note to the place, written after approval.
   thanksNote: String?
+  ### The visit's rating (1–5), from a student who was scanned in. Never
+  ### affects the treat. Public, labelled "verified visit · free treat".
+  rating: int?
+  ### Optional public short review with the rating.
+  review: String?
+  ### Optional note only the place sees.
+  privateNote: String?
+  ratedAt: DateTime?
 indexes:
   claim_student_idx:
     fields: studentId

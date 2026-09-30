@@ -7,6 +7,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 import '../domain/clock.dart';
 import '../domain/rules.dart';
 import '../generated/protocol.dart';
+import '../services/demo.dart';
 import '../services/claims.dart';
 import '../services/proofs.dart';
 
@@ -323,3 +324,52 @@ Future<void> cleanUpJudgeOffers(Session session) async {
 }
 
 const judgeOfferLifetime = Duration(hours: 6);
+
+/// Gives the seeded students' past visits a rating (and some a short review),
+/// so every place starts with a believable treat score. Only touches visits
+/// that have no rating yet, so it is safe on every boot.
+Future<void> seedDemoRatings(Session session) async {
+  final visits = await Claim.db.find(
+    session,
+    where: (t) =>
+        t.rating.equals(null) &
+        t.status.inSet({ClaimStatus.redeemed, ClaimStatus.approved}) &
+        t.student.university.notEquals(guestUniversity),
+    include: Claim.include(offer: Offer.include()),
+  );
+  for (final c in visits) {
+    // Mostly happy, not all perfect: a score of 4.x reads as real.
+    const stars = [5, 4, 5, 5, 4, 3, 5, 4, 5, 4, 5, 2];
+    final rating = stars[c.id! % stars.length];
+    final review = c.thanksNote ?? _reviewFor(c.offer!.category, rating, c.id!);
+    await Claim.db.updateRow(
+      session,
+      c.copyWith(
+        rating: rating,
+        review: review,
+        ratedAt: (c.decidedAt ?? c.redeemedAt ?? c.createdAt).add(
+          const Duration(hours: 2),
+        ),
+      ),
+    );
+  }
+}
+
+String? _reviewFor(OfferCategory category, int rating, int seed) {
+  if (seed % 3 == 0) return null; // not everyone writes something
+  if (rating <= 2) return 'Friendly staff, but I waited quite a while.';
+  if (rating == 3) return 'Okay, a bit crowded at lunchtime.';
+  const byCategory = {
+    OfferCategory.coffee: [
+      'Great spot to study.',
+      'Proper coffee, fair prices.',
+    ],
+    OfferCategory.food: ['Generous portion.', 'Quick and tasty.'],
+    OfferCategory.dessert: ['Worth the walk.', 'Pistachio is the one.'],
+    OfferCategory.beauty: ['Careful and quick.', 'Will book again.'],
+    OfferCategory.fitness: ['Instructor was great with beginners.'],
+    OfferCategory.activity: ['So much fun with friends.', 'Chill vibe.'],
+  };
+  final options = byCategory[category] ?? const ['Would come back.'];
+  return options[seed % options.length];
+}
