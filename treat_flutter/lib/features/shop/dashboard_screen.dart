@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:treat_client/treat_client.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/theme.dart';
 import '../../client.dart';
@@ -474,6 +475,18 @@ class _FeedRow extends StatelessWidget {
               tooltip: l.dashViewProof,
               onPressed: onViewProof,
               icon: const Icon(Icons.image_outlined, color: T.inkSecondary),
+            ),
+          if (c.postUrl != null)
+            IconButton(
+              tooltip: l.dashOpenPost,
+              onPressed: () => launchUrl(
+                Uri.parse(c.postUrl!),
+                webOnlyWindowName: '_blank',
+              ),
+              icon: const Icon(
+                Icons.open_in_new_rounded,
+                color: T.inkSecondary,
+              ),
             ),
           Pill(c.status.label(l), tone: claimTone(c.status)),
         ],

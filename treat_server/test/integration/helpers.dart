@@ -49,7 +49,7 @@ OfferInput offerInput({
   activeEndMin: endMin,
   dailyCap: dailyCap,
   totalCap: totalCap,
-  proofTypes: [ProofType.igStory, ProofType.igStory, ProofType.googleReview],
+  proofTypes: [ProofType.igStory, ProofType.igStory, ProofType.igPost],
 );
 
 Matcher throwsTreat(String code) =>

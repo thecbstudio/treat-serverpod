@@ -312,7 +312,7 @@ const _offers = [
     startHour: 14,
     endHour: 18,
     dailyCap: 3,
-    proofTypes: [ProofType.igStory, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.igPost],
     ageDays: 4,
   ),
   _SeedOffer(
@@ -352,7 +352,7 @@ const _offers = [
     dailyCap: 2,
     totalCap: 40,
     featured: true,
-    proofTypes: [ProofType.igStory, ProofType.igPost, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.igPost],
     ageDays: 14,
   ),
   _SeedOffer(
@@ -387,7 +387,7 @@ const _offers = [
     endHour: 12,
     dailyCap: 10,
     featured: true,
-    proofTypes: [ProofType.igStory, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.igPost],
     ageDays: 12,
   ),
   _SeedOffer(
@@ -424,7 +424,7 @@ const _offers = [
     endHour: 24,
     dailyCap: 6,
     featured: true,
-    proofTypes: [ProofType.igStory, ProofType.tiktok, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.tiktok, ProofType.igPost],
     ageDays: 16,
   ),
   _SeedOffer(
@@ -436,7 +436,7 @@ const _offers = [
     startHour: 10,
     endHour: 20,
     dailyCap: 3,
-    proofTypes: [ProofType.igStory, ProofType.igPost, ProofType.googleReview],
+    proofTypes: [ProofType.igStory, ProofType.igPost],
     ageDays: 3,
   ),
 ];

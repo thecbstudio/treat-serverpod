@@ -9,6 +9,7 @@ import '../generated/protocol.dart';
 import 'accounts.dart';
 import 'claims.dart';
 import 'demo.dart';
+import 'post_links.dart';
 import 'jobs.dart';
 
 const proofStorage = 'private';
@@ -89,6 +90,7 @@ Future<ClaimView> submitProofFor(
   ProofType proofType,
   String path, {
   bool shareOnWall = false,
+  String? postUrl,
 }) async {
   if (!path.startsWith('proofs/$claimId/') || path.contains('..')) {
     throw treatError('invalid_proof', 'Upload the screenshot again.');
@@ -132,12 +134,14 @@ Future<ClaimView> submitProofFor(
       claim.offerId,
       transaction: tx,
     );
-    if (!offer!.proofTypes.contains(proofType)) {
+    if (!offer!.proofTypes.contains(proofType) ||
+        !offerableProofTypes.contains(proofType)) {
       throw treatError(
         'proof_type_not_accepted',
         'Pick one of the listed posts.',
       );
     }
+    final link = validPostUrl(proofType, postUrl);
     final isAppeal = claim.status == ClaimStatus.rejected;
     return Claim.db.updateRow(
       session,
@@ -150,6 +154,8 @@ Future<ClaimView> submitProofFor(
         verifyAttempts: 0,
         appealed: claim.appealed || isAppeal,
         shareOnWall: shareOnWall,
+        postUrl: link,
+        stillUpCheckedAt: null,
       ),
       transaction: tx,
     );
@@ -326,14 +332,21 @@ Future<void> runProofVerification(Session session, int claimId) async {
 /// Verdict reason when the place reported an approved post as taken down.
 const flaggedReason = 'flagged_by_place';
 
-/// How long after approval a place can report that the post is gone.
+/// Verdict reason when the TikTok was no longer online at the 7-day check.
+const postRemovedReason = 'post_removed';
+
+/// How long after approval a place can report a story as taken down;
+/// permanent posts (feed post, Reel, TikTok) get [stillUpAfter].
 const flagWindow = Duration(hours: 48);
 
-/// The place reports that an approved post was deleted (the "post a story,
+Duration flagWindowFor(ProofType? type) =>
+    permanentProofTypes.contains(type) ? stillUpAfter : flagWindow;
+
+/// The place reports that an approved post was deleted (the "post it,
 /// screenshot it, delete it" trick no screenshot check can catch). Once per
-/// claim, within [flagWindow]: the treat is taken back, the student gets the
-/// claim's strike, and there is no appeal — a second screenshot can't prove
-/// the post is still up.
+/// claim, within [flagWindowFor]: the treat is taken back, the student gets
+/// the claim's strike, and there is no appeal — a second screenshot can't
+/// prove the post is still up.
 Future<ClaimView> flagApprovedProof(Session session, int claimId) async {
   final shop = await requireShop(session);
   final updated = await session.db.transaction((tx) async {
@@ -350,58 +363,108 @@ Future<ClaimView> flagApprovedProof(Session session, int claimId) async {
       throw treatError('not_approved', 'Only approved posts can be reported.');
     }
     final decided = c.decidedAt ?? c.createdAt;
-    if (clock().difference(decided) > flagWindow) {
+    if (clock().difference(decided) > flagWindowFor(c.proofType)) {
       throw treatError(
         'flag_window_over',
-        'Posts can be reported within 48 hours of approval.',
+        'This post can no longer be reported.',
       );
     }
-    final student = await StudentProfile.db.findById(
-      session,
-      c.studentId,
-      lockMode: LockMode.forUpdate,
-      transaction: tx,
-    );
+    final student = await StudentProfile.db.findById(session, c.studentId);
     // Demo: the shared place can't rewrite seeded students' history.
     if (!isGuest(student!)) requireNotDemoLocked(session, shop: shop);
-    await StudentProfile.db.updateRow(
-      session,
-      student.copyWith(
-        treats: student.treats > 0 ? student.treats - 1 : 0,
-        strikes: c.strikeGiven ? student.strikes : student.strikes + 1,
-      ),
-      transaction: tx,
-    );
-    final lockedShop = await Shop.db.findById(
-      session,
-      shop.id!,
-      lockMode: LockMode.forUpdate,
-      transaction: tx,
-    );
-    await Shop.db.updateRow(
-      session,
-      lockedShop!.copyWith(
-        approvedProofs: lockedShop.approvedProofs > 0
-            ? lockedShop.approvedProofs - 1
-            : 0,
-      ),
-      transaction: tx,
-    );
-    return Claim.db.updateRow(
-      session,
-      c.copyWith(
-        status: ClaimStatus.rejected,
-        decidedAt: clock(),
-        verdictReason: flaggedReason,
-        strikeGiven: true,
-        appealed: true, // no appeal after a report
-        shareOnWall: false,
-      ),
-      transaction: tx,
-    );
+    return _revokeApproval(session, tx, c, flaggedReason);
   });
   await notifyClaimChanged(session, updated);
   return claimViewOf(session, updated);
+}
+
+/// Re-checks TikToks approved [stillUpAfter] ago: still online → marked
+/// checked; gone → treat taken back like a place report; unknown (network,
+/// TikTok hiccup) → tried again next run. Returns how many were taken back.
+Future<int> checkPostsStillUp(Session session) async {
+  final stillUp = postStillUpOverride ?? tiktokStillUp;
+  var removed = 0;
+  for (final due in await tiktoksDueForCheck(session)) {
+    final up = await stillUp(due.postUrl!);
+    if (up == null) continue;
+    final updated = await session.db.transaction((tx) async {
+      final c = await Claim.db.findById(
+        session,
+        due.id!,
+        lockMode: LockMode.forUpdate,
+        transaction: tx,
+      );
+      if (c == null ||
+          c.status != ClaimStatus.approved ||
+          c.stillUpCheckedAt != null) {
+        return null;
+      }
+      if (up) {
+        return Claim.db.updateRow(
+          session,
+          c.copyWith(stillUpCheckedAt: clock()),
+          transaction: tx,
+        );
+      }
+      return _revokeApproval(session, tx, c, postRemovedReason);
+    });
+    if (updated == null) continue;
+    if (!up) {
+      removed++;
+      await notifyClaimChanged(session, updated);
+    }
+  }
+  return removed;
+}
+
+/// Takes an approved treat back: -1 treat, the claim's strike, the place's
+/// approved count down, off the wall, no appeal.
+Future<Claim> _revokeApproval(
+  Session session,
+  Transaction tx,
+  Claim c,
+  String reason,
+) async {
+  final student = await StudentProfile.db.findById(
+    session,
+    c.studentId,
+    lockMode: LockMode.forUpdate,
+    transaction: tx,
+  );
+  await StudentProfile.db.updateRow(
+    session,
+    student!.copyWith(
+      treats: student.treats > 0 ? student.treats - 1 : 0,
+      strikes: c.strikeGiven ? student.strikes : student.strikes + 1,
+    ),
+    transaction: tx,
+  );
+  final shop = await Shop.db.findById(
+    session,
+    c.shopId,
+    lockMode: LockMode.forUpdate,
+    transaction: tx,
+  );
+  await Shop.db.updateRow(
+    session,
+    shop!.copyWith(
+      approvedProofs: shop.approvedProofs > 0 ? shop.approvedProofs - 1 : 0,
+    ),
+    transaction: tx,
+  );
+  return Claim.db.updateRow(
+    session,
+    c.copyWith(
+      status: ClaimStatus.rejected,
+      decidedAt: clock(),
+      verdictReason: reason,
+      strikeGiven: true,
+      appealed: true, // no appeal after a removal
+      shareOnWall: false,
+      stillUpCheckedAt: clock(),
+    ),
+    transaction: tx,
+  );
 }
 
 Future<void> _retryOrGiveUp(Session session, int claimId) async {

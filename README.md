@@ -2,7 +2,7 @@
 
 **Students get free treats from local places. Places get real, local social-media reach. An AI checks the posts.**
 
-A student grabs an offer ("medium filter coffee"), shows a QR code at the counter, the business scans it, the student posts an Instagram story / post, Google review or TikTok about the place and uploads a screenshot. Claude verifies the screenshot in the background and the treat is approved — or rejected with a reason and one appeal. Every step shows up **live** on both the student's phone and the business's panel.
+A student grabs an offer ("medium filter coffee"), shows a QR code at the counter, the business scans it, the student posts an Instagram story, feed post/Reel or TikTok about the place (tagged and disclosed as a gift) and uploads a screenshot. Claude verifies the screenshot in the background and the treat is approved — or rejected with a reason and one appeal. Every step shows up **live** on both the student's phone and the business's panel. After the visit the student rates it, and every place builds a **treat score** from verified visits, plus a public page and a printable Google-review counter card.
 
 Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web) + Serverpod 4**.
 
@@ -66,14 +66,15 @@ flowchart LR
 | Feature | Where |
 |---|---|
 | **Endpoints + generated client** | `profile`, `offer`, `shopOffers`, `claim`, `shop`, `social`, `leaderboard`, `demo` — all rules and authorization run on the server. |
+| **Web server (Relic)** | Server-rendered `/p/:id` public place pages (link previews, schema.org data for search) and `/card/:id` printable counter cards with QR codes drawn as SVG on the server; a gzip middleware for the Flutter bundle (3.96 MB → 1.13 MB). |
 | **Models + ORM + migrations** | `student_profile`, `shop`, `offer`, `claim` tables (`lib/src/models/*.spy.yaml`), relations to the auth user, indexes, includes. |
 | **Transactions + row locks** | Claiming locks the student and the offer (`LockMode.forUpdate`) so double taps and concurrent students can't beat caps or the frequency rule. Redeem is idempotent inside a locked transaction. |
 | **Streams (WebSockets)** | `claim.watch(id)` pushes the student's claim state; `shop.watchFeed()` pushes the business panel. |
 | **Server events** | `session.messages` channels `claim:<id>` / `shop:<id>` fan changes out to open streams; `watch` also re-checks the DB every 5 s so a missed message (e.g. multiple instances without Redis) only delays an update. |
-| **Future calls** | `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` runs the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
+| **Future calls / scheduled work** | An hourly job re-checks TikToks a week after approval through TikTok's public oEmbed API and takes the treat back if the video was deleted. `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` runs the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
 | **File uploads / cloud storage** | Proof screenshots go to **private** storage through upload descriptions; the server picks the path, checks type/size by magic bytes, and gives the business short-lived download links. |
 | **Authentication** | Serverpod email identity provider (sign-up, verification code, login) + our own student / business profiles. `.edu` e-mails are verified automatically. Demo mode adds a one-tap sign-in that creates a guest and issues its token server-side (`AuthServices.instance.tokenManager.issueToken`). |
-| **Testing** | `serverpod_test` (`withServerpod`): 92 tests — rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes and appeals, drops, demo sign-in. |
+| **Testing** | `serverpod_test` (`withServerpod`): 120+ tests — rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes and appeals, drops, demo sign-in and hardening, ratings, reports, post re-checks. |
 | **Serverpod Cloud** | Hosting of server + Flutter web app, Postgres, storage and e-mail. |
 
 ### Rules worth knowing (`treat_server/lib/src/domain/rules.dart`)
@@ -86,6 +87,18 @@ flowchart LR
 Claude (Anthropic Messages API, called with `package:http`) gets the screenshot plus the business name, its Instagram handle, the offer and the requested post type. The answer is **forced through a tool call** (`report_verdict`), so there is no free-text parsing. Reasons: `no_mention`, `no_disclosure`, `not_a_post`, `unreadable`.
 
 **Compliant by design.** Posting about a product you got for free is advertising. Turkey's Advertising Board guideline for social-media influencers (like the FTC and ASA rules elsewhere) requires saying so, so an Instagram/TikTok proof is only approved when it tags the place **and** carries a disclosure such as `#işbirliği`, `#reklam` or Instagram's *Paid partnership* label; otherwise the student gets `no_disclosure` with a one-tap "copy `@place #işbirliği`" fix and can appeal. The business panel states that every approved post is disclosed.
+
+### Why no Google reviews — and what places get instead
+Google forbids reviews in exchange for anything, so treat never asks for one: a place can't pick "Google review" as a proof. What places get instead:
+- **treat score** — students rate a visit (1–5, optional review, optional private note only the place sees) once the place scanned them in. Every rating is labelled *verified visit · free treat*, and it never affects the treat.
+- **Public page** `/p/<place>` with the score, verified reviews and open treats — for the Instagram bio and link previews.
+- **Google review counter card** `/card/<place>` — printable; the front's QR goes to the place's own Google review link for *every* customer (never tied to a treat), the back advertises its treat to students.
+
+### Against fake posts
+- AI check of tag + disclosure on every screenshot, one appeal.
+- Permanent posts (feed post, Reel, TikTok) come with their **link**; the place can open them from its panel.
+- The place can **report a post as removed** (48 h for stories, 7 days for permanent posts): treat taken back, strike, no appeal.
+- TikToks are **re-checked automatically** after 7 days.
 
 ## Run it locally
 

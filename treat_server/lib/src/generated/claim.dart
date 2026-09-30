@@ -46,6 +46,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    this.postUrl,
+    this.stillUpCheckedAt,
     this.thanksNote,
     this.rating,
     this.review,
@@ -82,6 +84,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    String? postUrl,
+    DateTime? stillUpCheckedAt,
     String? thanksNote,
     int? rating,
     String? review,
@@ -150,6 +154,12 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       shareOnWall: jsonSerialization['shareOnWall'] == null
           ? null
           : _is.BoolJsonExtension.fromJson(jsonSerialization['shareOnWall']),
+      postUrl: jsonSerialization['postUrl'] as String?,
+      stillUpCheckedAt: jsonSerialization['stillUpCheckedAt'] == null
+          ? null
+          : _is.DateTimeJsonExtension.fromJson(
+              jsonSerialization['stillUpCheckedAt'],
+            ),
       thanksNote: jsonSerialization['thanksNote'] as String?,
       rating: jsonSerialization['rating'] as int?,
       review: jsonSerialization['review'] as String?,
@@ -219,6 +229,13 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
   /// Student agreed to show the approved post on the place's public page.
   bool shareOnWall;
 
+  /// Link to the post for permanent kinds (Instagram feed post / Reel,
+  /// TikTok): the place can open it, and TikTok links are re-checked.
+  String? postUrl;
+
+  /// When the "is the TikTok still up?" check ran (7 days after approval).
+  DateTime? stillUpCheckedAt;
+
   /// Optional thank-you note to the place, written after approval.
   String? thanksNote;
 
@@ -264,6 +281,8 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    String? postUrl,
+    DateTime? stillUpCheckedAt,
     String? thanksNote,
     int? rating,
     String? review,
@@ -298,6 +317,9 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
+      if (postUrl != null) 'postUrl': postUrl,
+      if (stillUpCheckedAt != null)
+        'stillUpCheckedAt': stillUpCheckedAt?.toJson(),
       if (thanksNote != null) 'thanksNote': thanksNote,
       if (rating != null) 'rating': rating,
       if (review != null) 'review': review,
@@ -333,6 +355,9 @@ abstract class Claim implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
+      if (postUrl != null) 'postUrl': postUrl,
+      if (stillUpCheckedAt != null)
+        'stillUpCheckedAt': stillUpCheckedAt?.toJson(),
       if (thanksNote != null) 'thanksNote': thanksNote,
       if (rating != null) 'rating': rating,
       if (review != null) 'review': review,
@@ -402,6 +427,8 @@ class _ClaimImpl extends Claim {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    String? postUrl,
+    DateTime? stillUpCheckedAt,
     String? thanksNote,
     int? rating,
     String? review,
@@ -431,6 +458,8 @@ class _ClaimImpl extends Claim {
          verifyAttempts: verifyAttempts,
          strikeGiven: strikeGiven,
          shareOnWall: shareOnWall,
+         postUrl: postUrl,
+         stillUpCheckedAt: stillUpCheckedAt,
          thanksNote: thanksNote,
          rating: rating,
          review: review,
@@ -466,6 +495,8 @@ class _ClaimImpl extends Claim {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    Object? postUrl = _Undefined,
+    Object? stillUpCheckedAt = _Undefined,
     Object? thanksNote = _Undefined,
     Object? rating = _Undefined,
     Object? review = _Undefined,
@@ -502,6 +533,10 @@ class _ClaimImpl extends Claim {
       verifyAttempts: verifyAttempts ?? this.verifyAttempts,
       strikeGiven: strikeGiven ?? this.strikeGiven,
       shareOnWall: shareOnWall ?? this.shareOnWall,
+      postUrl: postUrl is String? ? postUrl : this.postUrl,
+      stillUpCheckedAt: stillUpCheckedAt is DateTime?
+          ? stillUpCheckedAt
+          : this.stillUpCheckedAt,
       thanksNote: thanksNote is String? ? thanksNote : this.thanksNote,
       rating: rating is int? ? rating : this.rating,
       review: review is String? ? review : this.review,
@@ -626,6 +661,17 @@ class ClaimUpdateTable extends _is.UpdateTable<ClaimTable> {
     value,
   );
 
+  _is.ColumnValue<String, String> postUrl(String? value) => _is.ColumnValue(
+    table.postUrl,
+    value,
+  );
+
+  _is.ColumnValue<DateTime, DateTime> stillUpCheckedAt(DateTime? value) =>
+      _is.ColumnValue(
+        table.stillUpCheckedAt,
+        value,
+      );
+
   _is.ColumnValue<String, String> thanksNote(String? value) => _is.ColumnValue(
     table.thanksNote,
     value,
@@ -745,6 +791,14 @@ class ClaimTable extends _is.Table<int?> {
       this,
       hasDefault: true,
     );
+    postUrl = _is.ColumnString(
+      'postUrl',
+      this,
+    );
+    stillUpCheckedAt = _is.ColumnDateTime(
+      'stillUpCheckedAt',
+      this,
+    );
     thanksNote = _is.ColumnString(
       'thanksNote',
       this,
@@ -821,6 +875,13 @@ class ClaimTable extends _is.Table<int?> {
   /// Student agreed to show the approved post on the place's public page.
   late final _is.ColumnBool shareOnWall;
 
+  /// Link to the post for permanent kinds (Instagram feed post / Reel,
+  /// TikTok): the place can open it, and TikTok links are re-checked.
+  late final _is.ColumnString postUrl;
+
+  /// When the "is the TikTok still up?" check ran (7 days after approval).
+  late final _is.ColumnDateTime stillUpCheckedAt;
+
   /// Optional thank-you note to the place, written after approval.
   late final _is.ColumnString thanksNote;
 
@@ -885,6 +946,8 @@ class ClaimTable extends _is.Table<int?> {
     verifyAttempts,
     strikeGiven,
     shareOnWall,
+    postUrl,
+    stillUpCheckedAt,
     thanksNote,
     rating,
     review,

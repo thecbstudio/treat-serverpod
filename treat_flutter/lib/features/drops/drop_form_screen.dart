@@ -43,7 +43,7 @@ class _DropFormScreenState extends State<DropFormScreen> {
           description: _desc.text,
           quantity: _quantity,
           durationMinutes: _minutes,
-          proofTypes: ProofType.values.where(_proofs.contains).toList(),
+          proofTypes: offerableProofTypes.where(_proofs.contains).toList(),
         ),
       );
       if (mounted) context.pop(true);
@@ -135,7 +135,7 @@ class _DropFormScreenState extends State<DropFormScreen> {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (final p in ProofType.values)
+                  for (final p in offerableProofTypes)
                     FilterChip(
                       label: Text(p.label(l)),
                       selected: _proofs.contains(p),

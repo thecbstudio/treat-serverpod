@@ -31,6 +31,11 @@ fields:
   strikeGiven: bool, default=false
   ### Student agreed to show the approved post on the place's public page.
   shareOnWall: bool, default=false
+  ### Link to the post for permanent kinds (Instagram feed post / Reel,
+  ### TikTok): the place can open it, and TikTok links are re-checked.
+  postUrl: String?
+  ### When the "is the TikTok still up?" check ran (7 days after approval).
+  stillUpCheckedAt: DateTime?
   ### Optional thank-you note to the place, written after approval.
   thanksNote: String?
   ### The visit's rating (1–5), from a student who was scanned in. Never

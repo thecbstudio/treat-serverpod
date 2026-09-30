@@ -561,5 +561,12 @@
   "repCardHint": "In Google Business Profile tap “Ask for reviews”, paste the link here and print the card. Anyone can scan it — it's never tied to a treat, which keeps it within Google's rules.",
   "repGoogleLabel": "Your Google review link",
   "repPrintCard": "Print card",
-  "err_invalid_google_link": "Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com)."
+  "err_invalid_google_link": "Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com).",
+  "err_proof_type_not_offered": "Pick Instagram or TikTok posts — treat never asks for Google reviews, because Google forbids rewarding them. Use the counter card from your Business tab instead.",
+  "proofLinkLabel": "Link to your post",
+  "proofLinkHelp": "Feed posts, Reels and TikToks stay online — the place can open yours. Keep it up: TikToks are checked again after a week.",
+  "dashOpenPost": "Open the post",
+  "rejectPostRemoved": "Your TikTok was no longer online a week after approval, so the treat was taken back. Keep permanent posts up.",
+  "err_post_link_required": "Paste the link to your post so the place can see it.",
+  "err_invalid_post_link": "Use the share link of your Instagram post/Reel or TikTok (it starts with https://)."
 }

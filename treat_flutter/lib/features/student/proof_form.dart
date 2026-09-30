@@ -12,6 +12,12 @@ import '../../ui/widgets.dart';
 /// Pick which post was made, pick the screenshot, upload, submit. Used for the
 /// first proof and for the one appeal. The claim screen follows the result
 /// live, so there's nothing to do after a successful submit.
+extension on List<ProofType> {
+  /// Never leave the form without a choice (an old offer might only list a
+  /// Google review).
+  List<ProofType> ifEmpty(ProofType fallback) => isEmpty ? [fallback] : this;
+}
+
 class ProofForm extends StatefulWidget {
   const ProofForm({
     super.key,
@@ -33,11 +39,25 @@ class ProofForm extends StatefulWidget {
 }
 
 class _ProofFormState extends State<ProofForm> {
-  late ProofType _type = widget.proofTypes.first;
+  // Older offers may still list a Google review; it's no longer accepted.
+  late final List<ProofType> _types = [
+    ...widget.proofTypes.where(offerableProofTypes.contains),
+  ].ifEmpty(ProofType.igStory);
+  late ProofType _type = _types.first;
   XFile? _file;
   Uint8List? _bytes;
   bool _busy = false;
   bool _share = true;
+  final _link = TextEditingController();
+
+  /// Feed posts, Reels and TikToks stay online: we ask for their link.
+  bool get _needsLink => _type == ProofType.igPost || _type == ProofType.tiktok;
+
+  @override
+  void dispose() {
+    _link.dispose();
+    super.dispose();
+  }
 
   Future<void> _pick() async {
     try {
@@ -74,6 +94,7 @@ class _ProofFormState extends State<ProofForm> {
         _type,
         upload.path,
         shareOnWall: _share,
+        postUrl: _needsLink ? _link.text : null,
       );
     } catch (e) {
       if (mounted) context.toast(errorMessage(e, context.l));
@@ -111,14 +132,14 @@ class _ProofFormState extends State<ProofForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.proofTypes.length > 1) ...[
+        if (_types.length > 1) ...[
           Text(l.proofPickOne, style: context.text.titleSmall),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final p in widget.proofTypes)
+              for (final p in _types)
                 ChoiceChip(
                   label: Text(p.label(l)),
                   selected: _type == p,
@@ -163,6 +184,23 @@ class _ProofFormState extends State<ProofForm> {
           icon: const Icon(Icons.image_outlined),
           label: Text(_file == null ? l.proofChoose : l.proofChange),
         ),
+        if (_needsLink) ...[
+          const SizedBox(height: 10),
+          TextField(
+            controller: _link,
+            keyboardType: TextInputType.url,
+            onChanged: (_) => setState(() {}),
+            decoration: InputDecoration(
+              labelText: l.proofLinkLabel,
+              hintText: _type == ProofType.tiktok
+                  ? 'https://www.tiktok.com/@you/video/…'
+                  : 'https://www.instagram.com/p/…',
+              helperText: l.proofLinkHelp,
+              helperMaxLines: 3,
+              prefixIcon: const Icon(Icons.link_rounded),
+            ),
+          ),
+        ],
         const SizedBox(height: 4),
         CheckboxListTile(
           value: _share,
@@ -175,7 +213,12 @@ class _ProofFormState extends State<ProofForm> {
         ),
         const SizedBox(height: 6),
         FilledButton.icon(
-          onPressed: _bytes == null || _busy ? null : _submit,
+          onPressed:
+              _bytes == null ||
+                  _busy ||
+                  (_needsLink && _link.text.trim().isEmpty)
+              ? null
+              : _submit,
           icon: _busy
               ? const SizedBox.square(
                   dimension: 20,

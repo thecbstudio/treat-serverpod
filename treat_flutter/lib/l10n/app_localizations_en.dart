@@ -1224,4 +1224,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get err_invalid_google_link =>
       'Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com).';
+
+  @override
+  String get err_proof_type_not_offered =>
+      'Pick Instagram or TikTok posts — treat never asks for Google reviews, because Google forbids rewarding them. Use the counter card from your Business tab instead.';
+
+  @override
+  String get proofLinkLabel => 'Link to your post';
+
+  @override
+  String get proofLinkHelp =>
+      'Feed posts, Reels and TikToks stay online — the place can open yours. Keep it up: TikToks are checked again after a week.';
+
+  @override
+  String get dashOpenPost => 'Open the post';
+
+  @override
+  String get rejectPostRemoved =>
+      'Your TikTok was no longer online a week after approval, so the treat was taken back. Keep permanent posts up.';
+
+  @override
+  String get err_post_link_required =>
+      'Paste the link to your post so the place can see it.';
+
+  @override
+  String get err_invalid_post_link =>
+      'Use the share link of your Instagram post/Reel or TikTok (it starts with https://).';
 }

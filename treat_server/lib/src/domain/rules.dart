@@ -249,8 +249,20 @@ String? validateDropInput(DropInput input) {
     return 'invalid_duration';
   }
   if (input.proofTypes.isEmpty) return 'proof_types_required';
+  if (!input.proofTypes.every(offerableProofTypes.contains)) {
+    return 'proof_type_not_offered';
+  }
   return null;
 }
+
+/// Posts a place can ask for. Google reviews are deliberately not one of
+/// them: Google forbids reviews in exchange for anything, so treat never
+/// asks for one (places get a counter card for honest reviews instead).
+const offerableProofTypes = {
+  ProofType.igStory,
+  ProofType.igPost,
+  ProofType.tiktok,
+};
 
 /// Validates a shop's offer form. Returns a [TreatException] code or null.
 String? validateOfferInput(OfferInput input) {
@@ -270,5 +282,8 @@ String? validateOfferInput(OfferInput input) {
     return 'invalid_cap';
   }
   if (input.proofTypes.isEmpty) return 'proof_types_required';
+  if (!input.proofTypes.every(offerableProofTypes.contains)) {
+    return 'proof_type_not_offered';
+  }
   return null;
 }

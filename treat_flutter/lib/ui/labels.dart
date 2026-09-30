@@ -37,6 +37,14 @@ String shopPhoto(Shop shop) => _shopPhotos.contains(shop.seedKey)
     ? 'assets/shop/${shop.seedKey}.jpg'
     : shop.category.imageAsset;
 
+/// Posts a place can ask for (mirrors the server). No Google reviews:
+/// Google forbids reviews in exchange for anything.
+const offerableProofTypes = [
+  ProofType.igStory,
+  ProofType.igPost,
+  ProofType.tiktok,
+];
+
 extension CategoryLabel on OfferCategory {
   String label(AppLocalizations l) => switch (this) {
     OfferCategory.coffee => l.categoryCoffee,
@@ -84,6 +92,7 @@ String rejectReasonText(String? key, AppLocalizations l) => switch (key) {
   'no_mention' => l.rejectNoMention,
   'no_disclosure' => l.rejectNoDisclosure,
   'flagged_by_place' => l.rejectFlagged,
+  'post_removed' => l.rejectPostRemoved,
   'not_a_post' => l.rejectNotAPost,
   _ => l.rejectUnreadable,
 };
@@ -187,6 +196,9 @@ String errorMessage(Object error, AppLocalizations l) {
       'demo_off' => l.err_demo_off,
       'demo_locked' => l.err_demo_locked,
       'invalid_rating' => l.err_invalid_rating,
+      'post_link_required' => l.err_post_link_required,
+      'invalid_post_link' => l.err_invalid_post_link,
+      'proof_type_not_offered' => l.err_proof_type_not_offered,
       'invalid_google_link' => l.err_invalid_google_link,
       'not_visited' => l.err_not_visited,
       'flag_window_over' => l.err_flag_window_over,

@@ -369,6 +369,11 @@ class Endpoints extends _is.EndpointDispatch {
               type: _is.getType<bool?>(),
               nullable: true,
             ),
+            'postUrl': _is.ParameterDescription(
+              name: 'postUrl',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -381,6 +386,7 @@ class Endpoints extends _is.EndpointDispatch {
                     params['proofType'],
                     params['path'],
                     shareOnWall: params['shareOnWall'],
+                    postUrl: params['postUrl'],
                   ),
         ),
         'submitSampleProof': _is.MethodConnector(

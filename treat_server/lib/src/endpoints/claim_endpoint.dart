@@ -36,12 +36,15 @@ class ClaimEndpoint extends Endpoint {
     // Nullable instead of `= false`: the generator turns a defaulted named
     // parameter into `required` on the client (FEEDBACK.md #8).
     bool? shareOnWall,
+    // Required for permanent posts (Instagram feed post/Reel, TikTok).
+    String? postUrl,
   }) => submitProofFor(
     session,
     claimId,
     proofType,
     path,
     shareOnWall: shareOnWall ?? false,
+    postUrl: postUrl,
   );
 
   /// Demo accounts only: submits a ready-made story screenshot ([kind])

@@ -10,6 +10,7 @@ import 'src/generated/serverpod.dart';
 import 'src/seed/demo_history.dart';
 import 'src/seed/demo_seed.dart';
 import 'src/services/jobs.dart';
+import 'src/services/proofs.dart';
 import 'src/web/gzip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
 import 'src/web/routes/place_card_route.dart';
@@ -127,6 +128,22 @@ void run(List<String> args) async {
         demoPassword: pod.getPassword('demoAccountPassword'),
       );
       await resumePendingVerifications(session);
+      // Every hour: are TikToks approved a week ago still online?
+      Timer.periodic(const Duration(hours: 1), (_) async {
+        final s = await pod.createSession(enableLogging: false);
+        try {
+          await checkPostsStillUp(s);
+        } catch (e, st) {
+          s.log(
+            'Still-up check failed',
+            level: LogLevel.warning,
+            exception: e,
+            stackTrace: st,
+          );
+        } finally {
+          await s.close();
+        }
+      });
       if (pod.getPassword('demoAccountPassword') != null) {
         // Demo mode: keep a live drop with stock around for anyone trying
         // the app, and clear offers judges created hours ago.

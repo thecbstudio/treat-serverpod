@@ -644,6 +644,7 @@ class _ClaimEndpoint {
     _ifhr8s8c.ProofType proofType,
     String path, {
     bool? shareOnWall,
+    String? postUrl,
   }) async {
     return _ist.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -661,6 +662,7 @@ class _ClaimEndpoint {
             'proofType': proofType,
             'path': path,
             'shareOnWall': shareOnWall,
+            'postUrl': postUrl,
           }),
           serializationManager: _serializationManager,
         );

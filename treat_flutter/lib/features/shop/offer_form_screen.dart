@@ -82,7 +82,7 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
       activeEndMin: _end,
       dailyCap: _cap(_dailyCap),
       totalCap: _cap(_totalCap),
-      proofTypes: ProofType.values.where(_proofs.contains).toList(),
+      proofTypes: offerableProofTypes.where(_proofs.contains).toList(),
     );
     try {
       if (widget.offer == null) {
@@ -211,7 +211,7 @@ class _OfferFormScreenState extends State<OfferFormScreen> {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (final p in ProofType.values)
+                  for (final p in offerableProofTypes)
                     FilterChip(
                       label: Text(p.label(l)),
                       selected: _proofs.contains(p),

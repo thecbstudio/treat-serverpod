@@ -76,8 +76,19 @@ void main() {
         'and dedupes proof types', () async {
       final offer = await endpoints.shopOffers.create(shop, offerInput());
       expect(offer.category, OfferCategory.coffee);
-      expect(offer.proofTypes, [ProofType.igStory, ProofType.googleReview]);
+      expect(offer.proofTypes, [ProofType.igStory, ProofType.igPost]);
       expect(offer.status, OfferStatus.active);
+    });
+
+    test('when the shop asks for a Google review then '
+        'proof_type_not_offered (Google forbids rewarded reviews)', () async {
+      await expectLater(
+        endpoints.shopOffers.create(
+          shop,
+          offerInput().copyWith(proofTypes: [ProofType.googleReview]),
+        ),
+        throwsTreat('proof_type_not_offered'),
+      );
     });
 
     test('when a student tries to create an offer then not_a_shop', () async {

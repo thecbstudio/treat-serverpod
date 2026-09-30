@@ -45,6 +45,8 @@ abstract class Claim
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    this.postUrl,
+    this.stillUpCheckedAt,
     this.thanksNote,
     this.rating,
     this.review,
@@ -80,6 +82,8 @@ abstract class Claim
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    String? postUrl,
+    DateTime? stillUpCheckedAt,
     String? thanksNote,
     int? rating,
     String? review,
@@ -149,6 +153,12 @@ abstract class Claim
       shareOnWall: jsonSerialization['shareOnWall'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['shareOnWall']),
+      postUrl: jsonSerialization['postUrl'] as String?,
+      stillUpCheckedAt: jsonSerialization['stillUpCheckedAt'] == null
+          ? null
+          : _isc.DateTimeJsonExtension.fromJson(
+              jsonSerialization['stillUpCheckedAt'],
+            ),
       thanksNote: jsonSerialization['thanksNote'] as String?,
       rating: jsonSerialization['rating'] as int?,
       review: jsonSerialization['review'] as String?,
@@ -213,6 +223,13 @@ abstract class Claim
   /// Student agreed to show the approved post on the place's public page.
   bool shareOnWall;
 
+  /// Link to the post for permanent kinds (Instagram feed post / Reel,
+  /// TikTok): the place can open it, and TikTok links are re-checked.
+  String? postUrl;
+
+  /// When the "is the TikTok still up?" check ran (7 days after approval).
+  DateTime? stillUpCheckedAt;
+
   /// Optional thank-you note to the place, written after approval.
   String? thanksNote;
 
@@ -254,6 +271,8 @@ abstract class Claim
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    String? postUrl,
+    DateTime? stillUpCheckedAt,
     String? thanksNote,
     int? rating,
     String? review,
@@ -287,6 +306,9 @@ abstract class Claim
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
+      if (postUrl != null) 'postUrl': postUrl,
+      if (stillUpCheckedAt != null)
+        'stillUpCheckedAt': stillUpCheckedAt?.toJson(),
       if (thanksNote != null) 'thanksNote': thanksNote,
       if (rating != null) 'rating': rating,
       if (review != null) 'review': review,
@@ -322,6 +344,9 @@ abstract class Claim
       'verifyAttempts': verifyAttempts,
       'strikeGiven': strikeGiven,
       'shareOnWall': shareOnWall,
+      if (postUrl != null) 'postUrl': postUrl,
+      if (stillUpCheckedAt != null)
+        'stillUpCheckedAt': stillUpCheckedAt?.toJson(),
       if (thanksNote != null) 'thanksNote': thanksNote,
       if (rating != null) 'rating': rating,
       if (review != null) 'review': review,
@@ -362,6 +387,8 @@ class _ClaimImpl extends Claim {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    String? postUrl,
+    DateTime? stillUpCheckedAt,
     String? thanksNote,
     int? rating,
     String? review,
@@ -390,6 +417,8 @@ class _ClaimImpl extends Claim {
          verifyAttempts: verifyAttempts,
          strikeGiven: strikeGiven,
          shareOnWall: shareOnWall,
+         postUrl: postUrl,
+         stillUpCheckedAt: stillUpCheckedAt,
          thanksNote: thanksNote,
          rating: rating,
          review: review,
@@ -424,6 +453,8 @@ class _ClaimImpl extends Claim {
     int? verifyAttempts,
     bool? strikeGiven,
     bool? shareOnWall,
+    Object? postUrl = _Undefined,
+    Object? stillUpCheckedAt = _Undefined,
     Object? thanksNote = _Undefined,
     Object? rating = _Undefined,
     Object? review = _Undefined,
@@ -459,6 +490,10 @@ class _ClaimImpl extends Claim {
       verifyAttempts: verifyAttempts ?? this.verifyAttempts,
       strikeGiven: strikeGiven ?? this.strikeGiven,
       shareOnWall: shareOnWall ?? this.shareOnWall,
+      postUrl: postUrl is String? ? postUrl : this.postUrl,
+      stillUpCheckedAt: stillUpCheckedAt is DateTime?
+          ? stillUpCheckedAt
+          : this.stillUpCheckedAt,
       thanksNote: thanksNote is String? ? thanksNote : this.thanksNote,
       rating: rating is int? ? rating : this.rating,
       review: review is String? ? review : this.review,

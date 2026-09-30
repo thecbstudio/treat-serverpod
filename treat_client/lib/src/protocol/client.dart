@@ -293,6 +293,7 @@ class EndpointClaim extends _isc.EndpointRef {
     _i99q6qgz.ProofType proofType,
     String path, {
     bool? shareOnWall,
+    String? postUrl,
   }) => caller.callServerEndpoint<_iq1pcdgl.ClaimView>(
     'claim',
     'submitProof',
@@ -301,6 +302,7 @@ class EndpointClaim extends _isc.EndpointRef {
       'proofType': proofType,
       'path': path,
       'shareOnWall': shareOnWall,
+      'postUrl': postUrl,
     },
   );
 

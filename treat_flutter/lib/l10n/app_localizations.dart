@@ -2223,6 +2223,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com).'**
   String get err_invalid_google_link;
+
+  /// No description provided for @err_proof_type_not_offered.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Instagram or TikTok posts — treat never asks for Google reviews, because Google forbids rewarding them. Use the counter card from your Business tab instead.'**
+  String get err_proof_type_not_offered;
+
+  /// No description provided for @proofLinkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Link to your post'**
+  String get proofLinkLabel;
+
+  /// No description provided for @proofLinkHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Feed posts, Reels and TikToks stay online — the place can open yours. Keep it up: TikToks are checked again after a week.'**
+  String get proofLinkHelp;
+
+  /// No description provided for @dashOpenPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the post'**
+  String get dashOpenPost;
+
+  /// No description provided for @rejectPostRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your TikTok was no longer online a week after approval, so the treat was taken back. Keep permanent posts up.'**
+  String get rejectPostRemoved;
+
+  /// No description provided for @err_post_link_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the link to your post so the place can see it.'**
+  String get err_post_link_required;
+
+  /// No description provided for @err_invalid_post_link.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the share link of your Instagram post/Reel or TikTok (it starts with https://).'**
+  String get err_invalid_post_link;
 }
 
 class _AppLocalizationsDelegate
