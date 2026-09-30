@@ -2157,6 +2157,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can rate the place after it scans your code.'**
   String get err_not_visited;
+
+  /// No description provided for @repTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reputation kit'**
+  String get repTitle;
+
+  /// No description provided for @repIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn treat visits into lasting reputation: a public page with your verified treat score, and a counter card that brings in Google reviews from all your customers.'**
+  String get repIntro;
+
+  /// No description provided for @repPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your public page'**
+  String get repPageTitle;
+
+  /// No description provided for @repOpenPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Open page'**
+  String get repOpenPage;
+
+  /// No description provided for @repCopyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get repCopyLink;
+
+  /// No description provided for @repLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied — put it in your Instagram bio'**
+  String get repLinkCopied;
+
+  /// No description provided for @repCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Google review counter card'**
+  String get repCardTitle;
+
+  /// No description provided for @repCardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'In Google Business Profile tap “Ask for reviews”, paste the link here and print the card. Anyone can scan it — it\'s never tied to a treat, which keeps it within Google\'s rules.'**
+  String get repCardHint;
+
+  /// No description provided for @repGoogleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Google review link'**
+  String get repGoogleLabel;
+
+  /// No description provided for @repPrintCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Print card'**
+  String get repPrintCard;
+
+  /// No description provided for @err_invalid_google_link.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com).'**
+  String get err_invalid_google_link;
 }
 
 class _AppLocalizationsDelegate

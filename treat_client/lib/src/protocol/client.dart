@@ -510,6 +510,16 @@ class EndpointProfile extends _isc.EndpointRef {
         'updateShop',
         {'input': input},
       );
+
+  /// The place's Google review link for its printable counter card (null
+  /// removes it). Google links only, so this stays open on the shared demo
+  /// place too.
+  _ida.Future<_ij1m347g.Shop> setGoogleReviewUrl(String? url) =>
+      caller.callServerEndpoint<_ij1m347g.Shop>(
+        'profile',
+        'setGoogleReviewUrl',
+        {'url': url},
+      );
 }
 
 /// Business-side actions at the counter and the live panel.

@@ -5,6 +5,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import 'reputation_tools.dart';
 import 'shop_profile_form.dart';
 
 class ShopProfileScreen extends StatelessWidget {
@@ -39,6 +40,8 @@ class ShopProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
+              ReputationTools(shop: shop),
               const SizedBox(height: 16),
               TreatCard(
                 child: ShopProfileForm(

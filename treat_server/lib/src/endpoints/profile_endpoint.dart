@@ -5,6 +5,7 @@ import '../domain/rules.dart';
 import '../generated/protocol.dart';
 import '../services/accounts.dart';
 import '../services/demo.dart';
+import '../services/google_review.dart';
 
 /// The signed-in user's own profile and onboarding (role choice).
 class ProfileEndpoint extends Endpoint {
@@ -124,6 +125,17 @@ class ProfileEndpoint extends Endpoint {
         bio: clean.bio,
         instagramHandle: clean.instagramHandle,
       ),
+    );
+  }
+
+  /// The place's Google review link for its printable counter card (null
+  /// removes it). Google links only, so this stays open on the shared demo
+  /// place too.
+  Future<Shop> setGoogleReviewUrl(Session session, String? url) async {
+    final shop = await requireShop(session);
+    return Shop.db.updateRow(
+      session,
+      shop.copyWith(googleReviewUrl: validGoogleReviewUrl(url)),
     );
   }
 

@@ -550,5 +550,16 @@
   "dashRatingTitle": "Your treat score",
   "dashPrivateNote": "Only you see this",
   "err_invalid_rating": "Pick 1 to 5 stars.",
-  "err_not_visited": "You can rate the place after it scans your code."
+  "err_not_visited": "You can rate the place after it scans your code.",
+  "repTitle": "Reputation kit",
+  "repIntro": "Turn treat visits into lasting reputation: a public page with your verified treat score, and a counter card that brings in Google reviews from all your customers.",
+  "repPageTitle": "Your public page",
+  "repOpenPage": "Open page",
+  "repCopyLink": "Copy link",
+  "repLinkCopied": "Link copied — put it in your Instagram bio",
+  "repCardTitle": "Google review counter card",
+  "repCardHint": "In Google Business Profile tap “Ask for reviews”, paste the link here and print the card. Anyone can scan it — it's never tied to a treat, which keeps it within Google's rules.",
+  "repGoogleLabel": "Your Google review link",
+  "repPrintCard": "Print card",
+  "err_invalid_google_link": "Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com)."
 }

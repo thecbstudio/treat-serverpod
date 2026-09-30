@@ -1188,4 +1188,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get err_not_visited =>
       'You can rate the place after it scans your code.';
+
+  @override
+  String get repTitle => 'Reputation kit';
+
+  @override
+  String get repIntro =>
+      'Turn treat visits into lasting reputation: a public page with your verified treat score, and a counter card that brings in Google reviews from all your customers.';
+
+  @override
+  String get repPageTitle => 'Your public page';
+
+  @override
+  String get repOpenPage => 'Open page';
+
+  @override
+  String get repCopyLink => 'Copy link';
+
+  @override
+  String get repLinkCopied => 'Link copied — put it in your Instagram bio';
+
+  @override
+  String get repCardTitle => 'Google review counter card';
+
+  @override
+  String get repCardHint =>
+      'In Google Business Profile tap “Ask for reviews”, paste the link here and print the card. Anyone can scan it — it\'s never tied to a treat, which keeps it within Google\'s rules.';
+
+  @override
+  String get repGoogleLabel => 'Your Google review link';
+
+  @override
+  String get repPrintCard => 'Print card';
+
+  @override
+  String get err_invalid_google_link =>
+      'Paste the review link from your Google Business Profile (it starts with https://g.page or https://search.google.com).';
 }

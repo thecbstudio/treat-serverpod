@@ -30,6 +30,7 @@ abstract class Shop
     required this.address,
     required this.bio,
     this.instagramHandle,
+    this.googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -50,6 +51,7 @@ abstract class Shop
     required String address,
     required String bio,
     String? instagramHandle,
+    String? googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -76,6 +78,7 @@ abstract class Shop
       address: jsonSerialization['address'] as String,
       bio: jsonSerialization['bio'] as String,
       instagramHandle: jsonSerialization['instagramHandle'] as String?,
+      googleReviewUrl: jsonSerialization['googleReviewUrl'] as String?,
       verified: jsonSerialization['verified'] == null
           ? null
           : _isc.BoolJsonExtension.fromJson(jsonSerialization['verified']),
@@ -112,6 +115,11 @@ abstract class Shop
   /// Without "@". Used by the AI proof verifier.
   String? instagramHandle;
 
+  /// The place's own Google "ask for reviews" link, printed as a QR on its
+  /// counter card for every customer. Never shown to students in the treat
+  /// flow and never rewarded.
+  String? googleReviewUrl;
+
   bool verified;
 
   int totalRedeems;
@@ -134,6 +142,7 @@ abstract class Shop
     String? address,
     String? bio,
     String? instagramHandle,
+    String? googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -153,6 +162,7 @@ abstract class Shop
       'address': address,
       'bio': bio,
       if (instagramHandle != null) 'instagramHandle': instagramHandle,
+      if (googleReviewUrl != null) 'googleReviewUrl': googleReviewUrl,
       'verified': verified,
       'totalRedeems': totalRedeems,
       'approvedProofs': approvedProofs,
@@ -174,6 +184,7 @@ abstract class Shop
       'address': address,
       'bio': bio,
       if (instagramHandle != null) 'instagramHandle': instagramHandle,
+      if (googleReviewUrl != null) 'googleReviewUrl': googleReviewUrl,
       'verified': verified,
       'totalRedeems': totalRedeems,
       'approvedProofs': approvedProofs,
@@ -201,6 +212,7 @@ class _ShopImpl extends Shop {
     required String address,
     required String bio,
     String? instagramHandle,
+    String? googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -216,6 +228,7 @@ class _ShopImpl extends Shop {
          address: address,
          bio: bio,
          instagramHandle: instagramHandle,
+         googleReviewUrl: googleReviewUrl,
          verified: verified,
          totalRedeems: totalRedeems,
          approvedProofs: approvedProofs,
@@ -237,6 +250,7 @@ class _ShopImpl extends Shop {
     String? address,
     String? bio,
     Object? instagramHandle = _Undefined,
+    Object? googleReviewUrl = _Undefined,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -255,6 +269,9 @@ class _ShopImpl extends Shop {
       instagramHandle: instagramHandle is String?
           ? instagramHandle
           : this.instagramHandle,
+      googleReviewUrl: googleReviewUrl is String?
+          ? googleReviewUrl
+          : this.googleReviewUrl,
       verified: verified ?? this.verified,
       totalRedeems: totalRedeems ?? this.totalRedeems,
       approvedProofs: approvedProofs ?? this.approvedProofs,

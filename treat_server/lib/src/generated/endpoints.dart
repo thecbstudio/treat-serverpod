@@ -704,6 +704,25 @@ class Endpoints extends _is.EndpointDispatch {
                     params['input'],
                   ),
         ),
+        'setGoogleReviewUrl': _is.MethodConnector(
+          name: 'setGoogleReviewUrl',
+          params: {
+            'url': _is.ParameterDescription(
+              name: 'url',
+              type: _is.getType<String?>(),
+              nullable: true,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['profile'] as _i2cx2pww.ProfileEndpoint)
+                  .setGoogleReviewUrl(
+                    session,
+                    params['url'],
+                  ),
+        ),
       },
     );
     connectors['shop'] = _is.EndpointConnector(

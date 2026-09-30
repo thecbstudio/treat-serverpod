@@ -30,6 +30,7 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
     required this.address,
     required this.bio,
     this.instagramHandle,
+    this.googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -50,6 +51,7 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
     required String address,
     required String bio,
     String? instagramHandle,
+    String? googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -76,6 +78,7 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
       address: jsonSerialization['address'] as String,
       bio: jsonSerialization['bio'] as String,
       instagramHandle: jsonSerialization['instagramHandle'] as String?,
+      googleReviewUrl: jsonSerialization['googleReviewUrl'] as String?,
       verified: jsonSerialization['verified'] == null
           ? null
           : _is.BoolJsonExtension.fromJson(jsonSerialization['verified']),
@@ -114,6 +117,11 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
   /// Without "@". Used by the AI proof verifier.
   String? instagramHandle;
 
+  /// The place's own Google "ask for reviews" link, printed as a QR on its
+  /// counter card for every customer. Never shown to students in the treat
+  /// flow and never rewarded.
+  String? googleReviewUrl;
+
   bool verified;
 
   int totalRedeems;
@@ -139,6 +147,7 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
     String? address,
     String? bio,
     String? instagramHandle,
+    String? googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -158,6 +167,7 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'address': address,
       'bio': bio,
       if (instagramHandle != null) 'instagramHandle': instagramHandle,
+      if (googleReviewUrl != null) 'googleReviewUrl': googleReviewUrl,
       'verified': verified,
       'totalRedeems': totalRedeems,
       'approvedProofs': approvedProofs,
@@ -179,6 +189,7 @@ abstract class Shop implements _is.TableRow<int?>, _is.ProtocolSerialization {
       'address': address,
       'bio': bio,
       if (instagramHandle != null) 'instagramHandle': instagramHandle,
+      if (googleReviewUrl != null) 'googleReviewUrl': googleReviewUrl,
       'verified': verified,
       'totalRedeems': totalRedeems,
       'approvedProofs': approvedProofs,
@@ -228,6 +239,7 @@ class _ShopImpl extends Shop {
     required String address,
     required String bio,
     String? instagramHandle,
+    String? googleReviewUrl,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -243,6 +255,7 @@ class _ShopImpl extends Shop {
          address: address,
          bio: bio,
          instagramHandle: instagramHandle,
+         googleReviewUrl: googleReviewUrl,
          verified: verified,
          totalRedeems: totalRedeems,
          approvedProofs: approvedProofs,
@@ -264,6 +277,7 @@ class _ShopImpl extends Shop {
     String? address,
     String? bio,
     Object? instagramHandle = _Undefined,
+    Object? googleReviewUrl = _Undefined,
     bool? verified,
     int? totalRedeems,
     int? approvedProofs,
@@ -282,6 +296,9 @@ class _ShopImpl extends Shop {
       instagramHandle: instagramHandle is String?
           ? instagramHandle
           : this.instagramHandle,
+      googleReviewUrl: googleReviewUrl is String?
+          ? googleReviewUrl
+          : this.googleReviewUrl,
       verified: verified ?? this.verified,
       totalRedeems: totalRedeems ?? this.totalRedeems,
       approvedProofs: approvedProofs ?? this.approvedProofs,
@@ -334,6 +351,12 @@ class ShopUpdateTable extends _is.UpdateTable<ShopTable> {
   _is.ColumnValue<String, String> instagramHandle(String? value) =>
       _is.ColumnValue(
         table.instagramHandle,
+        value,
+      );
+
+  _is.ColumnValue<String, String> googleReviewUrl(String? value) =>
+      _is.ColumnValue(
+        table.googleReviewUrl,
         value,
       );
 
@@ -395,6 +418,10 @@ class ShopTable extends _is.Table<int?> {
       'instagramHandle',
       this,
     );
+    googleReviewUrl = _is.ColumnString(
+      'googleReviewUrl',
+      this,
+    );
     verified = _is.ColumnBool(
       'verified',
       this,
@@ -439,6 +466,11 @@ class ShopTable extends _is.Table<int?> {
   /// Without "@". Used by the AI proof verifier.
   late final _is.ColumnString instagramHandle;
 
+  /// The place's own Google "ask for reviews" link, printed as a QR on its
+  /// counter card for every customer. Never shown to students in the treat
+  /// flow and never rewarded.
+  late final _is.ColumnString googleReviewUrl;
+
   late final _is.ColumnBool verified;
 
   late final _is.ColumnInt totalRedeems;
@@ -471,6 +503,7 @@ class ShopTable extends _is.Table<int?> {
     address,
     bio,
     instagramHandle,
+    googleReviewUrl,
     verified,
     totalRedeems,
     approvedProofs,

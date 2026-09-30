@@ -12,6 +12,10 @@ fields:
   bio: String
   ### Without "@". Used by the AI proof verifier.
   instagramHandle: String?
+  ### The place's own Google "ask for reviews" link, printed as a QR on its
+  ### counter card for every customer. Never shown to students in the treat
+  ### flow and never rewarded.
+  googleReviewUrl: String?
   verified: bool, default=false
   totalRedeems: int, default=0
   approvedProofs: int, default=0

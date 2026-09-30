@@ -1262,6 +1262,37 @@ class _ProfileEndpoint {
       }
     });
   }
+
+  _ida.Future<_it3lip7k.Shop> setGoogleReviewUrl(
+    _ist.TestSessionBuilder sessionBuilder,
+    String? url,
+  ) async {
+    return _ist.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _ist.InternalTestSessionBuilder).internalBuild(
+            endpoint: 'profile',
+            method: 'setGoogleReviewUrl',
+          );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
+          createSessionCallback: (_) => _localUniqueSession,
+          endpointPath: 'profile',
+          methodName: 'setGoogleReviewUrl',
+          parameters: _ist.testObjectToJson({'url': url}),
+          serializationManager: _serializationManager,
+        );
+        var _localReturnValue =
+            await (_localCallContext.method.call(
+                  _localUniqueSession,
+                  _localCallContext.arguments,
+                )
+                as _ida.Future<_it3lip7k.Shop>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
+  }
 }
 
 class _ShopEndpoint {
