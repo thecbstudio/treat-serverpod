@@ -100,10 +100,17 @@ Google forbids reviews in exchange for anything, so treat never asks for one: a 
 - The place can **report a post as removed** (48 h for stories, 7 days for permanent posts): treat taken back, strike, no appeal.
 - TikToks are **re-checked automatically** after 7 days.
 
+### Gifting ("treatleme") with real payments
+- A verified student pays for a treat at a **verified place** (the ones that passed the document check) and gives it to another verified student, picked by e-mail or from their profile. 20–1000 TL, 15 % commission (`giftSplit`: exact in kuruş), 10 gifts a day.
+- Payment runs on **iyzico's hosted checkout form** against the **iyzico sandbox**: card data never touches our server, the browser comes back to `POST /pay/iyzico/:id`, and the server then **asks iyzico** for the result with its own signed request (IYZWSv2) — the browser's word is never trusted. Amount and conversation id must match the gift.
+- The recipient shows a QR (`GIFT:<id>:<code>`) at the counter; the place scans it in the same scanner as treat claims. The gift counts as a treat. The sender can cancel until then; unclaimed gifts expire after 30 days. Both end in a **real refund** through iyzico (same-day: cancel, later: refund), retried every 5 minutes by a sweep if iyzico is unreachable; deleting an account refunds its open gifts.
+- Honest limits: iyzico requires an identity number, phone and address for every buyer, so the sandbox build sends iyzico's placeholder values; and **paying gift money out to places is not automated** (the panel shows what is owed, net of the 15 %). Production would use iyzico marketplace sub-merchants.
+
 ### Student cards and business documents
 - `.edu` e-mails are verified on sign-up. Everyone else sends a photo of their **student ID card**; Claude checks it's a student card, that name and university match the profile and that it hasn't expired. Only then can they claim.
 - Businesses send a **tax certificate (vergi levhası), licence or registry record** for the **verified badge**; the legal trade name often differs from the sign, so the name *or* the address must match. Renaming the place removes the badge.
 - The photo sits in private storage only until the verdict and is then deleted; only the result is kept. 3 tries a day, one at a time.
+- Judges: welcome screen → **Try the student-card check** signs in an unverified guest and offers two ready-made sample cards (one matching, one someone else's) that the real AI checks.
 
 ### Safety for user content
 - Anyone can **report** a review, a wall post or a place. A review or post reported by 2 different users leaves public pages (a review's stars still count); places are only recorded, so two accounts can't take a business off the app. Demo guests' reports never hide anything.

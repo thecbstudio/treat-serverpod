@@ -1,0 +1,9 @@
+### Who gets the treat: a verified student, by the e-mail they signed up with
+### or by profile (from their public page). Exactly one of the two.
+class: GiftInput
+fields:
+  shopId: int
+  amountTl: int
+  recipientEmail: String?
+  recipientStudentId: int?
+  message: String?

@@ -8,6 +8,7 @@ import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
 import '../../ui/widgets.dart';
+import '../gifts/gift_ui.dart' show formatTl;
 import '../social/reviews.dart';
 import '../student/claim_screen.dart' show claimTone;
 
@@ -264,6 +265,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _statRow(stats.sublist(2)),
       const SizedBox(height: 10),
       _RoiCard(data: d),
+      _GiftsCard(stats: d.gifts),
       _reviews(d),
       ..._feedSection(d),
       ..._topStudents(d),
@@ -294,6 +296,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               const SizedBox(height: 20),
               _RoiCard(data: d),
+              _GiftsCard(stats: d.gifts),
               _reviews(d),
               ..._topStudents(d),
             ],
@@ -490,6 +493,64 @@ class _FeedRow extends StatelessWidget {
             ),
           Pill(c.status.label(l), tone: claimTone(c.status)),
         ],
+      ),
+    );
+  }
+}
+
+/// Money from gifts: collected ones net of treat's 15 %, and paid gifts still
+/// waiting at the counter.
+class _GiftsCard extends StatelessWidget {
+  const _GiftsCard({required this.stats});
+  final GiftShopStats stats;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l;
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: TreatCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.card_giftcard_rounded, color: T.accent),
+                const SizedBox(width: 8),
+                Text(l.dashGiftsTitle, style: context.text.titleMedium),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Pill(
+                  '${l.dashGiftsCollected} ${stats.redeemed}',
+                  tone: PillTone.green,
+                ),
+                const SizedBox(width: 8),
+                Pill(
+                  '${l.dashGiftsWaiting} ${stats.waiting}',
+                  tone: PillTone.amber,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              l.dashGiftsNet(formatTl(stats.netRedeemedTl)),
+              style: context.text.bodyMedium,
+            ),
+            if (stats.waiting > 0)
+              Text(
+                l.dashGiftsWaitingNet(formatTl(stats.waitingNetTl)),
+                style: context.text.bodySmall?.copyWith(color: T.inkSecondary),
+              ),
+            const SizedBox(height: 6),
+            Text(
+              l.dashGiftsHint,
+              style: context.text.bodySmall?.copyWith(color: T.inkTertiary),
+            ),
+          ],
+        ),
       ),
     );
   }

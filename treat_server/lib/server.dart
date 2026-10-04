@@ -10,11 +10,13 @@ import 'src/generated/serverpod.dart';
 import 'src/seed/demo_history.dart';
 import 'src/seed/demo_seed.dart';
 import 'src/services/jobs.dart';
+import 'src/services/gifts.dart';
 import 'src/services/identity_checks.dart';
 import 'src/services/proofs.dart';
 import 'src/web/gzip_middleware.dart';
 import 'src/web/routes/app_config_route.dart';
 import 'src/web/routes/legal_routes.dart';
+import 'src/web/routes/payment_callback_route.dart';
 import 'src/web/routes/place_card_route.dart';
 import 'src/web/routes/public_place_route.dart';
 
@@ -66,6 +68,7 @@ void run(List<String> args) async {
   // its printable counter card with the Google review QR.
   pod.webServer.addRoute(PublicPlaceRoute(), '/p/:id');
   pod.webServer.addRoute(PlaceCardRoute(), '/card/:id');
+  pod.webServer.addRoute(IyzicoCallbackRoute(), '/pay/iyzico/:id');
   pod.webServer.addRoute(PrivacyRoute(), '/privacy');
   pod.webServer.addRoute(TermsRoute(), '/terms');
 
@@ -133,6 +136,23 @@ void run(List<String> args) async {
       );
       await resumePendingVerifications(session);
       await resumePendingIdentityChecks(session);
+      // Every 5 minutes: finish payments whose browser never came back,
+      // expire old gifts, retry refunds.
+      Timer.periodic(const Duration(minutes: 5), (_) async {
+        final s = await pod.createSession(enableLogging: false);
+        try {
+          await sweepGifts(s);
+        } catch (e, st) {
+          s.log(
+            'Gift sweep failed',
+            level: LogLevel.warning,
+            exception: e,
+            stackTrace: st,
+          );
+        } finally {
+          await s.close();
+        }
+      });
       // Every hour: are TikToks approved a week ago still online?
       Timer.periodic(const Duration(hours: 1), (_) async {
         final s = await pod.createSession(enableLogging: false);

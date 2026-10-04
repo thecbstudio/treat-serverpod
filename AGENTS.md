@@ -7,7 +7,7 @@ Built for "Build Something Real: The Serverpod Hackathon". **Deadline 14 Oct 202
 ## Hard rules
 - Written from scratch during the hackathon. The old React/Firebase prototype at `C:\Users\cinar\Downloads\treat` is **spec/reference only — read it, never copy code**. Re-implement logic in Dart. Design tokens, copy text and category photos may be reused.
 - UI language: **English** (ARB i18n from day one; TR later). Talk to Çınar in Turkish.
-- Scope is fixed: core barter loop + live server features (streams, future calls). **NO** gifts/donations/discounts/subscriptions/payments/admin/PWA/notification center. Scope changes only with Çınar's approval.
+- Scope (changed 30 Sep 2026 by Çınar): parity with the original prototype's feature table (gifting with 15 % commission via the **real iyzico sandbox**, discounts + shop subscription, settings, AI student/shop verification, notifications, TR). **NO** donations/askıda, **NO** chat, **NO** mock payments. Read `docs/HANDOFF.md` first. Further scope changes only with Çınar's approval.
 - Stop at the end of every milestone (M0…M5), report, wait for approval.
 - All authorization and business rules live on the server, inside transactions. Never swallow errors — every screen has error + retry states.
 - Time zone for business rules: **Europe/Istanbul** (active hours, daily cap day, Monday-based streak weeks).

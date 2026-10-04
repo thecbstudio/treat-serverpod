@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SectionTitle(l.settingsLegal),
               const LegalLinks(),
               SectionTitle(l.settingsAccount),
-              // One-tap demo guests have no e-mail login.
+              // One-tap demo guests have no e-mail login, but a gift address.
               if (me.email.isNotEmpty) ...[
                 Text(
                   l.settingsSignedInAs(me.email),
@@ -124,6 +124,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const SizedBox(height: 12),
               ],
+              TreatCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.giftYourAddress,
+                      style: context.text.labelLarge?.copyWith(
+                        color: T.inkSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    SelectableText(
+                      student.email,
+                      style: context.text.titleMedium,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
               OutlinedButton.icon(
                 onPressed: appSession.signOut,
                 icon: const Icon(Icons.logout_rounded),

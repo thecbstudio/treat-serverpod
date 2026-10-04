@@ -18,8 +18,10 @@ import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
 import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
 import 'package:treat_server/src/generated/claim_view.dart' as _iuhj4d1o;
+import 'package:treat_server/src/generated/gift_view.dart' as _iwrralbs;
 import 'package:treat_server/src/generated/leaderboard_entry.dart' as _ikcio32l;
 import 'package:treat_server/src/generated/offer_card.dart' as _ipkteuk5;
+import 'package:treat_server/src/generated/shop.dart' as _it3lip7k;
 import 'package:treat_server/src/generated/wall_post.dart' as _ikxwgva9;
 import 'badge_id.dart' as _i14xwlyb;
 import 'check_status.dart' as _i152b260;
@@ -37,6 +39,12 @@ import 'future_calls_generated_models/verify_identity_call_verify_model.dart'
     as _ikgpjhb7;
 import 'future_calls_generated_models/verify_proof_call_verify_model.dart'
     as _idz7zgl8;
+import 'gift.dart' as _ihguimva;
+import 'gift_checkout.dart' as _ikda28fu;
+import 'gift_input.dart' as _i3c4zqk2;
+import 'gift_shop_stats.dart' as _iglfqzwp;
+import 'gift_status.dart' as _igcewz2w;
+import 'gift_view.dart' as _iuqcotpz;
 import 'identity_check.dart' as _ib8wvp93;
 import 'leaderboard_entry.dart' as _ikawkn1p;
 import 'me.dart' as _i22ljs0z;
@@ -55,6 +63,7 @@ import 'report.dart' as _i2t8i3ij;
 import 'report_kind.dart' as _imx1jrz0;
 import 'report_reason.dart' as _ijgj7dn0;
 import 'review.dart' as _itqm5y01;
+import 'sample_card.dart' as _ionf1vdm;
 import 'sample_proof.dart' as _iyeld2s2;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_dashboard.dart' as _iqgdamt7;
@@ -78,6 +87,12 @@ export 'drop_input.dart';
 export 'drop_signal.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
+export 'gift.dart';
+export 'gift_checkout.dart';
+export 'gift_input.dart';
+export 'gift_shop_stats.dart';
+export 'gift_status.dart';
+export 'gift_view.dart';
 export 'identity_check.dart';
 export 'leaderboard_entry.dart';
 export 'me.dart';
@@ -96,6 +111,7 @@ export 'report.dart';
 export 'report_kind.dart';
 export 'report_reason.dart';
 export 'review.dart';
+export 'sample_card.dart';
 export 'sample_proof.dart';
 export 'shop.dart';
 export 'shop_dashboard.dart';
@@ -401,6 +417,252 @@ class Protocol extends _is.DatabaseSerializationManager {
             _isp.IndexElementDefinition(
               type: _isp.IndexElementDefinitionType.column,
               definition: 'offerId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+      ],
+      managed: true,
+    ),
+    _isp.TableDefinition(
+      name: 'gift',
+      dartName: 'Gift',
+      schema: 'public',
+      module: 'treat',
+      columns: [
+        _isp.ColumnDefinition(
+          name: 'id',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'serial',
+        ),
+        _isp.ColumnDefinition(
+          name: 'senderId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'recipientId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'shopId',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: true,
+          dartType: 'int?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'senderName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'recipientName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'shopName',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _isp.ColumnDefinition(
+          name: 'amountTl',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'commissionKurus',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'netKurus',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _isp.ColumnDefinition(
+          name: 'message',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'status',
+          columnType: _isp.ColumnType.text,
+          isNullable: false,
+          dartType: 'protocol:GiftStatus',
+        ),
+        _isp.ColumnDefinition(
+          name: 'code',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'createdAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: false,
+          dartType: 'DateTime',
+          columnDefault: 'now',
+        ),
+        _isp.ColumnDefinition(
+          name: 'paidAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'expiresAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'redeemedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'closedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'conversationId',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'paymentToken',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'paymentId',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'paymentTransactionId',
+          columnType: _isp.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'refundedAt',
+          columnType: _isp.ColumnType.timestampWithoutTimeZone,
+          isNullable: true,
+          dartType: 'DateTime?',
+        ),
+        _isp.ColumnDefinition(
+          name: 'refundAttempts',
+          columnType: _isp.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+          columnDefault: '0',
+        ),
+      ],
+      foreignKeys: [
+        _isp.ForeignKeyDefinition(
+          constraintName: 'gift_fk_0',
+          columns: ['senderId'],
+          referenceTable: 'student_profile',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'gift_fk_1',
+          columns: ['recipientId'],
+          referenceTable: 'student_profile',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+        _isp.ForeignKeyDefinition(
+          constraintName: 'gift_fk_2',
+          columns: ['shopId'],
+          referenceTable: 'shop',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _isp.ForeignKeyAction.noAction,
+          onDelete: _isp.ForeignKeyAction.setNull,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _isp.IndexDefinition(
+          indexName: 'gift_sender_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'senderId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'gift_recipient_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'recipientId',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'gift_shop_status_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'shopId',
+            ),
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'status',
+            ),
+          ],
+          type: 'btree',
+          isUnique: false,
+          isPrimary: false,
+        ),
+        _isp.IndexDefinition(
+          indexName: 'gift_token_idx',
+          tableSpace: null,
+          elements: [
+            _isp.IndexElementDefinition(
+              type: _isp.IndexElementDefinitionType.column,
+              definition: 'paymentToken',
             ),
           ],
           type: 'btree',
@@ -1097,6 +1359,24 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (t == _idz7zgl8.VerifyProofCallVerifyModel) {
       return _idz7zgl8.VerifyProofCallVerifyModel.fromJson(data) as T;
     }
+    if (t == _ihguimva.Gift) {
+      return _ihguimva.Gift.fromJson(data) as T;
+    }
+    if (t == _ikda28fu.GiftCheckout) {
+      return _ikda28fu.GiftCheckout.fromJson(data) as T;
+    }
+    if (t == _i3c4zqk2.GiftInput) {
+      return _i3c4zqk2.GiftInput.fromJson(data) as T;
+    }
+    if (t == _iglfqzwp.GiftShopStats) {
+      return _iglfqzwp.GiftShopStats.fromJson(data) as T;
+    }
+    if (t == _igcewz2w.GiftStatus) {
+      return _igcewz2w.GiftStatus.fromJson(data) as T;
+    }
+    if (t == _iuqcotpz.GiftView) {
+      return _iuqcotpz.GiftView.fromJson(data) as T;
+    }
     if (t == _ib8wvp93.IdentityCheck) {
       return _ib8wvp93.IdentityCheck.fromJson(data) as T;
     }
@@ -1150,6 +1430,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _itqm5y01.Review) {
       return _itqm5y01.Review.fromJson(data) as T;
+    }
+    if (t == _ionf1vdm.SampleCard) {
+      return _ionf1vdm.SampleCard.fromJson(data) as T;
     }
     if (t == _iyeld2s2.SampleProof) {
       return _iyeld2s2.SampleProof.fromJson(data) as T;
@@ -1239,6 +1522,25 @@ class Protocol extends _is.DatabaseSerializationManager {
               : null)
           as T;
     }
+    if (t == _is.getType<_ihguimva.Gift?>()) {
+      return (data != null ? _ihguimva.Gift.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ikda28fu.GiftCheckout?>()) {
+      return (data != null ? _ikda28fu.GiftCheckout.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_i3c4zqk2.GiftInput?>()) {
+      return (data != null ? _i3c4zqk2.GiftInput.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iglfqzwp.GiftShopStats?>()) {
+      return (data != null ? _iglfqzwp.GiftShopStats.fromJson(data) : null)
+          as T;
+    }
+    if (t == _is.getType<_igcewz2w.GiftStatus?>()) {
+      return (data != null ? _igcewz2w.GiftStatus.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_iuqcotpz.GiftView?>()) {
+      return (data != null ? _iuqcotpz.GiftView.fromJson(data) : null) as T;
+    }
     if (t == _is.getType<_ib8wvp93.IdentityCheck?>()) {
       return (data != null ? _ib8wvp93.IdentityCheck.fromJson(data) : null)
           as T;
@@ -1297,6 +1599,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (t == _is.getType<_itqm5y01.Review?>()) {
       return (data != null ? _itqm5y01.Review.fromJson(data) : null) as T;
+    }
+    if (t == _is.getType<_ionf1vdm.SampleCard?>()) {
+      return (data != null ? _ionf1vdm.SampleCard.fromJson(data) : null) as T;
     }
     if (t == _is.getType<_iyeld2s2.SampleProof?>()) {
       return (data != null ? _iyeld2s2.SampleProof.fromJson(data) : null) as T;
@@ -1401,6 +1706,16 @@ class Protocol extends _is.DatabaseSerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_it3lip7k.Shop>) {
+      return (data as List).map((e) => deserialize<_it3lip7k.Shop>(e)).toList()
+          as T;
+    }
+    if (t == List<_iwrralbs.GiftView>) {
+      return (data as List)
+              .map((e) => deserialize<_iwrralbs.GiftView>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_ikcio32l.LeaderboardEntry>) {
       return (data as List)
               .map((e) => deserialize<_ikcio32l.LeaderboardEntry>(e))
@@ -1447,6 +1762,12 @@ class Protocol extends _is.DatabaseSerializationManager {
       _ikgpjhb7.VerifyIdentityCallVerifyModel =>
         'VerifyIdentityCallVerifyModel',
       _idz7zgl8.VerifyProofCallVerifyModel => 'VerifyProofCallVerifyModel',
+      _ihguimva.Gift => 'Gift',
+      _ikda28fu.GiftCheckout => 'GiftCheckout',
+      _i3c4zqk2.GiftInput => 'GiftInput',
+      _iglfqzwp.GiftShopStats => 'GiftShopStats',
+      _igcewz2w.GiftStatus => 'GiftStatus',
+      _iuqcotpz.GiftView => 'GiftView',
       _ib8wvp93.IdentityCheck => 'IdentityCheck',
       _ikawkn1p.LeaderboardEntry => 'LeaderboardEntry',
       _i22ljs0z.Me => 'Me',
@@ -1465,6 +1786,7 @@ class Protocol extends _is.DatabaseSerializationManager {
       _imx1jrz0.ReportKind => 'ReportKind',
       _ijgj7dn0.ReportReason => 'ReportReason',
       _itqm5y01.Review => 'Review',
+      _ionf1vdm.SampleCard => 'SampleCard',
       _iyeld2s2.SampleProof => 'SampleProof',
       _isgf2ncs.Shop => 'Shop',
       _iqgdamt7.ShopDashboard => 'ShopDashboard',
@@ -1518,6 +1840,18 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'VerifyIdentityCallVerifyModel';
       case _idz7zgl8.VerifyProofCallVerifyModel():
         return 'VerifyProofCallVerifyModel';
+      case _ihguimva.Gift():
+        return 'Gift';
+      case _ikda28fu.GiftCheckout():
+        return 'GiftCheckout';
+      case _i3c4zqk2.GiftInput():
+        return 'GiftInput';
+      case _iglfqzwp.GiftShopStats():
+        return 'GiftShopStats';
+      case _igcewz2w.GiftStatus():
+        return 'GiftStatus';
+      case _iuqcotpz.GiftView():
+        return 'GiftView';
       case _ib8wvp93.IdentityCheck():
         return 'IdentityCheck';
       case _ikawkn1p.LeaderboardEntry():
@@ -1554,6 +1888,8 @@ class Protocol extends _is.DatabaseSerializationManager {
         return 'ReportReason';
       case _itqm5y01.Review():
         return 'Review';
+      case _ionf1vdm.SampleCard():
+        return 'SampleCard';
       case _iyeld2s2.SampleProof():
         return 'SampleProof';
       case _isgf2ncs.Shop():
@@ -1648,6 +1984,24 @@ class Protocol extends _is.DatabaseSerializationManager {
     if (dataClassName == 'VerifyProofCallVerifyModel') {
       return deserialize<_idz7zgl8.VerifyProofCallVerifyModel>(data['data']);
     }
+    if (dataClassName == 'Gift') {
+      return deserialize<_ihguimva.Gift>(data['data']);
+    }
+    if (dataClassName == 'GiftCheckout') {
+      return deserialize<_ikda28fu.GiftCheckout>(data['data']);
+    }
+    if (dataClassName == 'GiftInput') {
+      return deserialize<_i3c4zqk2.GiftInput>(data['data']);
+    }
+    if (dataClassName == 'GiftShopStats') {
+      return deserialize<_iglfqzwp.GiftShopStats>(data['data']);
+    }
+    if (dataClassName == 'GiftStatus') {
+      return deserialize<_igcewz2w.GiftStatus>(data['data']);
+    }
+    if (dataClassName == 'GiftView') {
+      return deserialize<_iuqcotpz.GiftView>(data['data']);
+    }
     if (dataClassName == 'IdentityCheck') {
       return deserialize<_ib8wvp93.IdentityCheck>(data['data']);
     }
@@ -1701,6 +2055,9 @@ class Protocol extends _is.DatabaseSerializationManager {
     }
     if (dataClassName == 'Review') {
       return deserialize<_itqm5y01.Review>(data['data']);
+    }
+    if (dataClassName == 'SampleCard') {
+      return deserialize<_ionf1vdm.SampleCard>(data['data']);
     }
     if (dataClassName == 'SampleProof') {
       return deserialize<_iyeld2s2.SampleProof>(data['data']);
@@ -1787,6 +2144,8 @@ class Protocol extends _is.DatabaseSerializationManager {
     switch (t) {
       case _iywv5oz4.Claim:
         return _iywv5oz4.Claim.t;
+      case _ihguimva.Gift:
+        return _ihguimva.Gift.t;
       case _ib8wvp93.IdentityCheck:
         return _ib8wvp93.IdentityCheck.t;
       case _iqlmmtnc.Offer:

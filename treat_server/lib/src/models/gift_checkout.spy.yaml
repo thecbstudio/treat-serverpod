@@ -1,0 +1,5 @@
+### A new gift and where to pay for it (iyzico's hosted checkout page).
+class: GiftCheckout
+fields:
+  gift: Gift
+  paymentPageUrl: String

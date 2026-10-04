@@ -17,17 +17,20 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
     as _iais;
 import 'package:treat_server/src/generated/drop_input.dart' as _io47mjlk;
 import 'package:treat_server/src/generated/future_calls.dart' as _ipmzuoh2;
+import 'package:treat_server/src/generated/gift_input.dart' as _iaoejlok;
 import 'package:treat_server/src/generated/offer_input.dart' as _ivcf9jef;
 import 'package:treat_server/src/generated/offer_status.dart' as _ithrfobl;
 import 'package:treat_server/src/generated/proof_type.dart' as _ifhr8s8c;
 import 'package:treat_server/src/generated/report_kind.dart' as _ijp19xdp;
 import 'package:treat_server/src/generated/report_reason.dart' as _il5b19py;
+import 'package:treat_server/src/generated/sample_card.dart' as _it2cqkrs;
 import 'package:treat_server/src/generated/sample_proof.dart' as _i41sjtmr;
 import 'package:treat_server/src/generated/shop_input.dart' as _iveqqcdz;
 import '../auth/email_idp_endpoint.dart' as _iuc1hd5t;
 import '../auth/jwt_refresh_endpoint.dart' as _inwq3ztq;
 import '../endpoints/claim_endpoint.dart' as _i0cek2rs;
 import '../endpoints/demo_endpoint.dart' as _irow5ity;
+import '../endpoints/gift_endpoint.dart' as _ig0hwiig;
 import '../endpoints/leaderboard_endpoint.dart' as _iy80ldha;
 import '../endpoints/offer_endpoint.dart' as _i96ujqr4;
 import '../endpoints/profile_endpoint.dart' as _i2cx2pww;
@@ -63,6 +66,12 @@ class Endpoints extends _is.EndpointDispatch {
         ..initialize(
           server,
           'demo',
+          null,
+        ),
+      'gift': _ig0hwiig.GiftEndpoint()
+        ..initialize(
+          server,
+          'gift',
           null,
         ),
       'leaderboard': _iy80ldha.LeaderboardEndpoint()
@@ -565,6 +574,16 @@ class Endpoints extends _is.EndpointDispatch {
               ) async => (endpoints['demo'] as _irow5ity.DemoEndpoint)
                   .signInAsGuestStudent(session),
         ),
+        'signInAsUnverifiedStudent': _is.MethodConnector(
+          name: 'signInAsUnverifiedStudent',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['demo'] as _irow5ity.DemoEndpoint)
+                  .signInAsUnverifiedStudent(session),
+        ),
         'signInAsDemoShop': _is.MethodConnector(
           name: 'signInAsDemoShop',
           params: {},
@@ -574,6 +593,125 @@ class Endpoints extends _is.EndpointDispatch {
                 Map<String, dynamic> params,
               ) async => (endpoints['demo'] as _irow5ity.DemoEndpoint)
                   .signInAsDemoShop(session),
+        ),
+      },
+    );
+    connectors['gift'] = _is.EndpointConnector(
+      name: 'gift',
+      endpoint: endpoints['gift']!,
+      methodConnectors: {
+        'mode': _is.MethodConnector(
+          name: 'mode',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['gift'] as _ig0hwiig.GiftEndpoint).mode(session),
+        ),
+        'places': _is.MethodConnector(
+          name: 'places',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['gift'] as _ig0hwiig.GiftEndpoint).places(session),
+        ),
+        'send': _is.MethodConnector(
+          name: 'send',
+          params: {
+            'input': _is.ParameterDescription(
+              name: 'input',
+              type: _is.getType<_iaoejlok.GiftInput>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['gift'] as _ig0hwiig.GiftEndpoint).send(
+                session,
+                params['input'],
+              ),
+        ),
+        'sent': _is.MethodConnector(
+          name: 'sent',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['gift'] as _ig0hwiig.GiftEndpoint).sent(session),
+        ),
+        'received': _is.MethodConnector(
+          name: 'received',
+          params: {},
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['gift'] as _ig0hwiig.GiftEndpoint).received(
+                session,
+              ),
+        ),
+        'get': _is.MethodConnector(
+          name: 'get',
+          params: {
+            'giftId': _is.ParameterDescription(
+              name: 'giftId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['gift'] as _ig0hwiig.GiftEndpoint).get(
+                session,
+                params['giftId'],
+              ),
+        ),
+        'confirm': _is.MethodConnector(
+          name: 'confirm',
+          params: {
+            'giftId': _is.ParameterDescription(
+              name: 'giftId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['gift'] as _ig0hwiig.GiftEndpoint).confirm(
+                session,
+                params['giftId'],
+              ),
+        ),
+        'cancel': _is.MethodConnector(
+          name: 'cancel',
+          params: {
+            'giftId': _is.ParameterDescription(
+              name: 'giftId',
+              type: _is.getType<int>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['gift'] as _ig0hwiig.GiftEndpoint).cancel(
+                session,
+                params['giftId'],
+              ),
         ),
       },
     );
@@ -1099,6 +1237,26 @@ class Endpoints extends _is.EndpointDispatch {
                       .submit(
                         session,
                         params['path'],
+                      ),
+        ),
+        'submitSample': _is.MethodConnector(
+          name: 'submitSample',
+          params: {
+            'kind': _is.ParameterDescription(
+              name: 'kind',
+              type: _is.getType<_it2cqkrs.SampleCard>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _is.Session session,
+                Map<String, dynamic> params,
+              ) async =>
+                  (endpoints['verification'] as _ie4zs15l.VerificationEndpoint)
+                      .submitSample(
+                        session,
+                        params['kind'],
                       ),
         ),
       },

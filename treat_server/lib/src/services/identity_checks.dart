@@ -10,6 +10,7 @@ import '../domain/rules.dart';
 import '../generated/future_calls.dart';
 import '../generated/protocol.dart';
 import 'accounts.dart';
+import 'demo.dart';
 import 'jobs.dart' show futureCallsEnabled;
 import 'proofs.dart' show proofStorage, maxProofBytes, verifyFailedReason;
 
@@ -77,6 +78,27 @@ Future<ProofUpload> startCheckUpload(Session session) async {
     options: const UploadOptions(maxFileSize: maxProofBytes),
   );
   return ProofUpload(path: path, uploadDescription: description);
+}
+
+/// Demo only: checks a ready-made student card photo instead of an upload,
+/// for demo students. The AI judges it like any other photo.
+Future<IdentityCheck> submitSampleCard(Session session, SampleCard kind) async {
+  requireDemoMode(session);
+  final student = await requireStudent(session);
+  if (!isDemoStudent(student)) {
+    throw treatError('demo_only', 'Samples are for demo students.');
+  }
+  final authUserId = requireAuthUserId(session);
+  final path =
+      'verifications/${authUserId.uuid}/sample-'
+      '${clock().millisecondsSinceEpoch}.img';
+  final bytes = await sampleCardBytes(kind);
+  await session.storage.storeFile(
+    storageId: proofStorage,
+    path: path,
+    byteData: ByteData.sublistView(Uint8List.fromList(bytes)),
+  );
+  return submitCheck(session, path);
 }
 
 /// Starts the AI check of an uploaded photo.

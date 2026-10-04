@@ -647,7 +647,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get err_claim_not_found => 'This claim doesn\'t exist.';
 
   @override
-  String get navLeaderboard => 'Leaderboard';
+  String get navLeaderboard => 'Ranking';
 
   @override
   String get navPanel => 'Panel';
@@ -1452,4 +1452,269 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_no_role => 'Finish setting up your account first.';
+
+  @override
+  String get navGifts => 'Gifts';
+
+  @override
+  String get giftsTitle => 'Gifts';
+
+  @override
+  String get giftsIntro =>
+      'Pay for a treat at a verified place and give it to a friend. They show a QR at the counter; the place gets 85 %.';
+
+  @override
+  String get giftsReceived => 'Received';
+
+  @override
+  String get giftsSent => 'Sent';
+
+  @override
+  String get giftsSend => 'Send a gift';
+
+  @override
+  String get giftsEmptyReceived =>
+      'No gifts yet. A friend can gift you a treat with the e-mail you signed up with.';
+
+  @override
+  String get giftsEmptySent => 'You haven\'t sent a gift yet.';
+
+  @override
+  String get giftsOff =>
+      'Gifts need payments, which aren\'t set up on this server.';
+
+  @override
+  String get giftStatusAwaitingPayment => 'Waiting for payment';
+
+  @override
+  String get giftStatusPending => 'Ready to collect';
+
+  @override
+  String get giftStatusRedeemed => 'Collected';
+
+  @override
+  String get giftStatusCancelled => 'Cancelled';
+
+  @override
+  String get giftStatusExpired => 'Expired';
+
+  @override
+  String get giftStatusFailed => 'Payment failed';
+
+  @override
+  String giftFrom(String name) {
+    return 'From $name';
+  }
+
+  @override
+  String giftTo(String name) {
+    return 'To $name';
+  }
+
+  @override
+  String get giftSendTitle => 'Send a gift';
+
+  @override
+  String get giftPlace => 'Place';
+
+  @override
+  String get giftNoPlaces =>
+      'No verified places yet — gifts go to places that passed the document check.';
+
+  @override
+  String get giftAmountLabel => 'Amount (TL)';
+
+  @override
+  String get giftAmountHelp => '20 to 1000 TL';
+
+  @override
+  String get giftRecipient => 'Friend\'s e-mail';
+
+  @override
+  String get giftRecipientHelp => 'The e-mail they signed up to treat with';
+
+  @override
+  String giftToName(String name) {
+    return 'Gift to $name';
+  }
+
+  @override
+  String get giftMessage => 'Message (optional)';
+
+  @override
+  String giftSplit(String place, String net, String commission) {
+    return '$place gets $net TL · treat keeps $commission TL (15 %)';
+  }
+
+  @override
+  String giftPay(int n) {
+    return 'Pay $n TL';
+  }
+
+  @override
+  String get giftSecure =>
+      'You pay by card on iyzico\'s secure page — treat never sees your card.';
+
+  @override
+  String get giftSandboxHint =>
+      'Test mode: use card 5528 7900 0000 0008, any future date, CVC 123, SMS code 283126. No real money moves.';
+
+  @override
+  String get giftDetailTitle => 'Gift';
+
+  @override
+  String get giftConfirming => 'Confirming your payment…';
+
+  @override
+  String get giftPaidOk => 'Payment received — your friend can collect it now.';
+
+  @override
+  String get giftPayFailed =>
+      'The payment didn\'t go through, so nothing was charged.';
+
+  @override
+  String get giftPayUnknown =>
+      'iyzico hasn\'t confirmed yet. Pull down to check again in a minute.';
+
+  @override
+  String giftShowQr(String place) {
+    return 'Show this at $place';
+  }
+
+  @override
+  String giftValidUntil(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get giftCancel => 'Cancel gift';
+
+  @override
+  String get giftCancelTitle => 'Cancel this gift?';
+
+  @override
+  String get giftCancelBody =>
+      'You get a full refund and your friend can no longer collect it.';
+
+  @override
+  String get giftCancelDone => 'Gift cancelled';
+
+  @override
+  String get giftRefundPending => 'Your refund is on its way.';
+
+  @override
+  String get giftRefunded => 'Refunded to your card.';
+
+  @override
+  String giftRedeemedNote(String place) {
+    return 'Collected at $place.';
+  }
+
+  @override
+  String get giftReceivedNote =>
+      'Collecting it counts as a treat on your profile.';
+
+  @override
+  String giftWaitingNote(String name, String place, String date) {
+    return '$name can collect it at $place until $date.';
+  }
+
+  @override
+  String get giftCta => 'Gift a treat';
+
+  @override
+  String get giftYourAddress => 'Friends can gift you with this e-mail';
+
+  @override
+  String get scanGiftSuccess => 'Gift handed over';
+
+  @override
+  String scanGiftFor(String name, int n) {
+    return 'Gift for $name · $n TL';
+  }
+
+  @override
+  String get dashGiftsTitle => 'Gifts';
+
+  @override
+  String get dashGiftsCollected => 'Collected';
+
+  @override
+  String get dashGiftsWaiting => 'Waiting';
+
+  @override
+  String dashGiftsNet(String n) {
+    return '$n TL for you after treat\'s 15 %';
+  }
+
+  @override
+  String dashGiftsWaitingNet(String n) {
+    return '$n TL paid in, not collected yet';
+  }
+
+  @override
+  String get dashGiftsHint =>
+      'Gift payments are collected by treat; paying them out to places is not automated in this build.';
+
+  @override
+  String get err_gift_to_self => 'You can\'t gift yourself — pick a friend.';
+
+  @override
+  String get err_recipient_not_found => 'No student on treat has that e-mail.';
+
+  @override
+  String get err_recipient_not_verified =>
+      'Only verified students can receive gifts.';
+
+  @override
+  String get err_invalid_recipient => 'Enter your friend\'s e-mail.';
+
+  @override
+  String get err_shop_not_giftable => 'Gifts go to verified places only.';
+
+  @override
+  String get err_invalid_amount => 'Gifts are 20 to 1000 TL.';
+
+  @override
+  String get err_daily_gift_cap =>
+      'That\'s 10 gifts today — try again tomorrow.';
+
+  @override
+  String get err_payment_unavailable =>
+      'The payment page isn\'t available right now. Try again in a moment.';
+
+  @override
+  String get err_payments_unavailable =>
+      'Payments aren\'t set up on this server.';
+
+  @override
+  String get err_gift_redeemed => 'The place already handed this gift over.';
+
+  @override
+  String get err_gift_closed => 'This gift is no longer valid.';
+
+  @override
+  String get err_not_verified => 'Verify your student status first.';
+
+  @override
+  String get demoUnverified => 'Try the student-card check';
+
+  @override
+  String get demoUnverifiedHint => 'A student who isn\'t verified yet';
+
+  @override
+  String get verifySampleTitle => 'Demo: no card at hand?';
+
+  @override
+  String get verifySampleMatching => 'Use the sample card';
+
+  @override
+  String get verifySampleOther => 'Use someone else\'s card';
+
+  @override
+  String get verifySampleHint =>
+      'Ready-made card photos. The real AI checks them like any upload — the second one shows a rejection.';
+
+  @override
+  String get err_demo_only => 'Samples are only for demo students.';
 }

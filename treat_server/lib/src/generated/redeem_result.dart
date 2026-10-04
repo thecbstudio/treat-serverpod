@@ -13,33 +13,47 @@
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:treat_server/src/generated/protocol.dart' as _iegszk5h;
 import 'claim_view.dart' as _i48lh927;
+import 'gift.dart' as _ihguimva;
 
 /// Result of scanning a code. `alreadyRedeemed`: this exact claim was already
 /// redeemed by this shop (double scan) — nothing was counted twice.
 abstract class RedeemResult
     implements _is.SerializableModel, _is.ProtocolSerialization {
   RedeemResult._({
-    required this.view,
+    this.view,
+    this.gift,
     required this.alreadyRedeemed,
   });
 
   factory RedeemResult({
-    required _i48lh927.ClaimView view,
+    _i48lh927.ClaimView? view,
+    _ihguimva.Gift? gift,
     required bool alreadyRedeemed,
   }) = _RedeemResultImpl;
 
   factory RedeemResult.fromJson(Map<String, dynamic> jsonSerialization) {
     return RedeemResult(
-      view: _iegszk5h.Protocol().deserialize<_i48lh927.ClaimView>(
-        jsonSerialization['view'],
-      ),
+      view: jsonSerialization['view'] == null
+          ? null
+          : _iegszk5h.Protocol().deserialize<_i48lh927.ClaimView>(
+              jsonSerialization['view'],
+            ),
+      gift: jsonSerialization['gift'] == null
+          ? null
+          : _iegszk5h.Protocol().deserialize<_ihguimva.Gift>(
+              jsonSerialization['gift'],
+            ),
       alreadyRedeemed: _is.BoolJsonExtension.fromJson(
         jsonSerialization['alreadyRedeemed'],
       ),
     );
   }
 
-  _i48lh927.ClaimView view;
+  /// A treat claim ...
+  _i48lh927.ClaimView? view;
+
+  /// ... or a paid gift (exactly one of the two).
+  _ihguimva.Gift? gift;
 
   bool alreadyRedeemed;
 
@@ -48,13 +62,15 @@ abstract class RedeemResult
   @_is.useResult
   RedeemResult copyWith({
     _i48lh927.ClaimView? view,
+    _ihguimva.Gift? gift,
     bool? alreadyRedeemed,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       '__className__': 'RedeemResult',
-      'view': view.toJson(),
+      if (view != null) 'view': view?.toJson(),
+      if (gift != null) 'gift': gift?.toJson(),
       'alreadyRedeemed': alreadyRedeemed,
     };
   }
@@ -63,7 +79,8 @@ abstract class RedeemResult
   Map<String, dynamic> toJsonForProtocol() {
     return {
       '__className__': 'RedeemResult',
-      'view': view.toJsonForProtocol(),
+      if (view != null) 'view': view?.toJsonForProtocol(),
+      if (gift != null) 'gift': gift?.toJsonForProtocol(),
       'alreadyRedeemed': alreadyRedeemed,
     };
   }
@@ -74,12 +91,16 @@ abstract class RedeemResult
   }
 }
 
+class _Undefined {}
+
 class _RedeemResultImpl extends RedeemResult {
   _RedeemResultImpl({
-    required _i48lh927.ClaimView view,
+    _i48lh927.ClaimView? view,
+    _ihguimva.Gift? gift,
     required bool alreadyRedeemed,
   }) : super._(
          view: view,
+         gift: gift,
          alreadyRedeemed: alreadyRedeemed,
        );
 
@@ -88,11 +109,13 @@ class _RedeemResultImpl extends RedeemResult {
   @_is.useResult
   @override
   RedeemResult copyWith({
-    _i48lh927.ClaimView? view,
+    Object? view = _Undefined,
+    Object? gift = _Undefined,
     bool? alreadyRedeemed,
   }) {
     return RedeemResult(
-      view: view ?? this.view.copyWith(),
+      view: view is _i48lh927.ClaimView? ? view : this.view?.copyWith(),
+      gift: gift is _ihguimva.Gift? ? gift : this.gift?.copyWith(),
       alreadyRedeemed: alreadyRedeemed ?? this.alreadyRedeemed,
     );
   }

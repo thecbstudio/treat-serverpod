@@ -1,0 +1,10 @@
+### awaitingPayment: the checkout page is open. pending: paid, waiting at the
+### place. cancelled/expired: closed, money goes back to the sender.
+enum: GiftStatus
+values:
+  - awaitingPayment
+  - pending
+  - redeemed
+  - cancelled
+  - expired
+  - paymentFailed

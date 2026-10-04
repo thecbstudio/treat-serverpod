@@ -1,0 +1,8 @@
+### A gift for one viewer: the sender never sees the code; `mine` tells which
+### side the viewer is.
+class: GiftView
+fields:
+  gift: Gift
+  viewerIsSender: bool
+  ### Cancelled/expired and the refund hasn't gone through yet.
+  refundPending: bool

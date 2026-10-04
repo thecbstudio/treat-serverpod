@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:treat_client/treat_client.dart';
 
+import '../../app/session.dart';
 import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
@@ -71,6 +72,21 @@ class _StudentScreenState extends State<StudentScreen> {
                     ),
                   ],
                 ),
+                if (appSession.status == SessionStatus.student &&
+                    appSession.me?.student?.id != s.id &&
+                    s.badges.contains(BadgeId.verifiedStudent)) ...[
+                  const SizedBox(height: 14),
+                  OutlinedButton.icon(
+                    onPressed: () => context.push(
+                      Uri(
+                        path: '/gifts/new',
+                        queryParameters: {'to': '${s.id}', 'name': s.name},
+                      ).toString(),
+                    ),
+                    icon: const Icon(Icons.card_giftcard_rounded),
+                    label: Text(l.giftCta),
+                  ),
+                ],
                 const SizedBox(height: 16),
                 Row(
                   children: [

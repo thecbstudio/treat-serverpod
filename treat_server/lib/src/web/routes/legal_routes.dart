@@ -3,7 +3,7 @@ import 'package:serverpod/serverpod.dart';
 import '../html.dart';
 
 /// Where people reach us about their data. Shown on both pages.
-const contactEmail = 'CONTACT_EMAIL_TBD';
+const contactEmail = 'info@thecb.studio';
 
 const _updated = '30 September 2026';
 

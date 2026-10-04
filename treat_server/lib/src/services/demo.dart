@@ -41,6 +41,15 @@ bool isGuest(StudentProfile s) => s.university == guestUniversity;
 
 const guestUniversity = 'Demo University';
 
+/// The unverified demo guest carries this name, like the sample card photos.
+const unverifiedGuestName = 'Ali Yılmaz';
+
+/// Sample student card photos (see [SampleCard]) for demo students.
+Future<List<int>> sampleCardBytes(SampleCard kind) => File(
+  'seed_assets/samples/cards/'
+  '${kind == SampleCard.matching ? 'matching' : 'someone_else'}.jpg',
+).readAsBytes();
+
 /// File-name marker for demo sample proofs (see [isSampleProof]).
 const sampleProofMarker = '/sample-';
 

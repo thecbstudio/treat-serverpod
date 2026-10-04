@@ -17,8 +17,10 @@ import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
     as _iaic;
 import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
+import 'package:treat_client/src/protocol/gift_view.dart' as _izkyxboi;
 import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/offer_card.dart' as _i1fp4eeg;
+import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
 import 'package:treat_client/src/protocol/wall_post.dart' as _ie03ixnw;
 import 'badge_id.dart' as _i14xwlyb;
 import 'check_status.dart' as _i152b260;
@@ -30,6 +32,12 @@ import 'drop_input.dart' as _ippz03u2;
 import 'drop_signal.dart' as _i1c14r0n;
 import 'eligibility.dart' as _iapxm79h;
 import 'eligibility_reason.dart' as _ixt5yy28;
+import 'gift.dart' as _ihguimva;
+import 'gift_checkout.dart' as _ikda28fu;
+import 'gift_input.dart' as _i3c4zqk2;
+import 'gift_shop_stats.dart' as _iglfqzwp;
+import 'gift_status.dart' as _igcewz2w;
+import 'gift_view.dart' as _iuqcotpz;
 import 'identity_check.dart' as _ib8wvp93;
 import 'leaderboard_entry.dart' as _ikawkn1p;
 import 'me.dart' as _i22ljs0z;
@@ -48,6 +56,7 @@ import 'report.dart' as _i2t8i3ij;
 import 'report_kind.dart' as _imx1jrz0;
 import 'report_reason.dart' as _ijgj7dn0;
 import 'review.dart' as _itqm5y01;
+import 'sample_card.dart' as _ionf1vdm;
 import 'sample_proof.dart' as _iyeld2s2;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_dashboard.dart' as _iqgdamt7;
@@ -71,6 +80,12 @@ export 'drop_input.dart';
 export 'drop_signal.dart';
 export 'eligibility.dart';
 export 'eligibility_reason.dart';
+export 'gift.dart';
+export 'gift_checkout.dart';
+export 'gift_input.dart';
+export 'gift_shop_stats.dart';
+export 'gift_status.dart';
+export 'gift_view.dart';
 export 'identity_check.dart';
 export 'leaderboard_entry.dart';
 export 'me.dart';
@@ -89,6 +104,7 @@ export 'report.dart';
 export 'report_kind.dart';
 export 'report_reason.dart';
 export 'review.dart';
+export 'sample_card.dart';
 export 'sample_proof.dart';
 export 'shop.dart';
 export 'shop_dashboard.dart';
@@ -168,6 +184,24 @@ class Protocol extends _isc.SerializationManager {
     if (t == _ixt5yy28.EligibilityReason) {
       return _ixt5yy28.EligibilityReason.fromJson(data) as T;
     }
+    if (t == _ihguimva.Gift) {
+      return _ihguimva.Gift.fromJson(data) as T;
+    }
+    if (t == _ikda28fu.GiftCheckout) {
+      return _ikda28fu.GiftCheckout.fromJson(data) as T;
+    }
+    if (t == _i3c4zqk2.GiftInput) {
+      return _i3c4zqk2.GiftInput.fromJson(data) as T;
+    }
+    if (t == _iglfqzwp.GiftShopStats) {
+      return _iglfqzwp.GiftShopStats.fromJson(data) as T;
+    }
+    if (t == _igcewz2w.GiftStatus) {
+      return _igcewz2w.GiftStatus.fromJson(data) as T;
+    }
+    if (t == _iuqcotpz.GiftView) {
+      return _iuqcotpz.GiftView.fromJson(data) as T;
+    }
     if (t == _ib8wvp93.IdentityCheck) {
       return _ib8wvp93.IdentityCheck.fromJson(data) as T;
     }
@@ -221,6 +255,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _itqm5y01.Review) {
       return _itqm5y01.Review.fromJson(data) as T;
+    }
+    if (t == _ionf1vdm.SampleCard) {
+      return _ionf1vdm.SampleCard.fromJson(data) as T;
     }
     if (t == _iyeld2s2.SampleProof) {
       return _iyeld2s2.SampleProof.fromJson(data) as T;
@@ -292,6 +329,25 @@ class Protocol extends _isc.SerializationManager {
       return (data != null ? _ixt5yy28.EligibilityReason.fromJson(data) : null)
           as T;
     }
+    if (t == _isc.getType<_ihguimva.Gift?>()) {
+      return (data != null ? _ihguimva.Gift.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ikda28fu.GiftCheckout?>()) {
+      return (data != null ? _ikda28fu.GiftCheckout.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_i3c4zqk2.GiftInput?>()) {
+      return (data != null ? _i3c4zqk2.GiftInput.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iglfqzwp.GiftShopStats?>()) {
+      return (data != null ? _iglfqzwp.GiftShopStats.fromJson(data) : null)
+          as T;
+    }
+    if (t == _isc.getType<_igcewz2w.GiftStatus?>()) {
+      return (data != null ? _igcewz2w.GiftStatus.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_iuqcotpz.GiftView?>()) {
+      return (data != null ? _iuqcotpz.GiftView.fromJson(data) : null) as T;
+    }
     if (t == _isc.getType<_ib8wvp93.IdentityCheck?>()) {
       return (data != null ? _ib8wvp93.IdentityCheck.fromJson(data) : null)
           as T;
@@ -350,6 +406,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (t == _isc.getType<_itqm5y01.Review?>()) {
       return (data != null ? _itqm5y01.Review.fromJson(data) : null) as T;
+    }
+    if (t == _isc.getType<_ionf1vdm.SampleCard?>()) {
+      return (data != null ? _ionf1vdm.SampleCard.fromJson(data) : null) as T;
     }
     if (t == _isc.getType<_iyeld2s2.SampleProof?>()) {
       return (data != null ? _iyeld2s2.SampleProof.fromJson(data) : null) as T;
@@ -454,6 +513,16 @@ class Protocol extends _isc.SerializationManager {
               .toList()
           as T;
     }
+    if (t == List<_ij1m347g.Shop>) {
+      return (data as List).map((e) => deserialize<_ij1m347g.Shop>(e)).toList()
+          as T;
+    }
+    if (t == List<_izkyxboi.GiftView>) {
+      return (data as List)
+              .map((e) => deserialize<_izkyxboi.GiftView>(e))
+              .toList()
+          as T;
+    }
     if (t == List<_inztnej7.LeaderboardEntry>) {
       return (data as List)
               .map((e) => deserialize<_inztnej7.LeaderboardEntry>(e))
@@ -493,6 +562,12 @@ class Protocol extends _isc.SerializationManager {
       _i1c14r0n.DropSignal => 'DropSignal',
       _iapxm79h.Eligibility => 'Eligibility',
       _ixt5yy28.EligibilityReason => 'EligibilityReason',
+      _ihguimva.Gift => 'Gift',
+      _ikda28fu.GiftCheckout => 'GiftCheckout',
+      _i3c4zqk2.GiftInput => 'GiftInput',
+      _iglfqzwp.GiftShopStats => 'GiftShopStats',
+      _igcewz2w.GiftStatus => 'GiftStatus',
+      _iuqcotpz.GiftView => 'GiftView',
       _ib8wvp93.IdentityCheck => 'IdentityCheck',
       _ikawkn1p.LeaderboardEntry => 'LeaderboardEntry',
       _i22ljs0z.Me => 'Me',
@@ -511,6 +586,7 @@ class Protocol extends _isc.SerializationManager {
       _imx1jrz0.ReportKind => 'ReportKind',
       _ijgj7dn0.ReportReason => 'ReportReason',
       _itqm5y01.Review => 'Review',
+      _ionf1vdm.SampleCard => 'SampleCard',
       _iyeld2s2.SampleProof => 'SampleProof',
       _isgf2ncs.Shop => 'Shop',
       _iqgdamt7.ShopDashboard => 'ShopDashboard',
@@ -558,6 +634,18 @@ class Protocol extends _isc.SerializationManager {
         return 'Eligibility';
       case _ixt5yy28.EligibilityReason():
         return 'EligibilityReason';
+      case _ihguimva.Gift():
+        return 'Gift';
+      case _ikda28fu.GiftCheckout():
+        return 'GiftCheckout';
+      case _i3c4zqk2.GiftInput():
+        return 'GiftInput';
+      case _iglfqzwp.GiftShopStats():
+        return 'GiftShopStats';
+      case _igcewz2w.GiftStatus():
+        return 'GiftStatus';
+      case _iuqcotpz.GiftView():
+        return 'GiftView';
       case _ib8wvp93.IdentityCheck():
         return 'IdentityCheck';
       case _ikawkn1p.LeaderboardEntry():
@@ -594,6 +682,8 @@ class Protocol extends _isc.SerializationManager {
         return 'ReportReason';
       case _itqm5y01.Review():
         return 'Review';
+      case _ionf1vdm.SampleCard():
+        return 'SampleCard';
       case _iyeld2s2.SampleProof():
         return 'SampleProof';
       case _isgf2ncs.Shop():
@@ -675,6 +765,24 @@ class Protocol extends _isc.SerializationManager {
     if (dataClassName == 'EligibilityReason') {
       return deserialize<_ixt5yy28.EligibilityReason>(data['data']);
     }
+    if (dataClassName == 'Gift') {
+      return deserialize<_ihguimva.Gift>(data['data']);
+    }
+    if (dataClassName == 'GiftCheckout') {
+      return deserialize<_ikda28fu.GiftCheckout>(data['data']);
+    }
+    if (dataClassName == 'GiftInput') {
+      return deserialize<_i3c4zqk2.GiftInput>(data['data']);
+    }
+    if (dataClassName == 'GiftShopStats') {
+      return deserialize<_iglfqzwp.GiftShopStats>(data['data']);
+    }
+    if (dataClassName == 'GiftStatus') {
+      return deserialize<_igcewz2w.GiftStatus>(data['data']);
+    }
+    if (dataClassName == 'GiftView') {
+      return deserialize<_iuqcotpz.GiftView>(data['data']);
+    }
     if (dataClassName == 'IdentityCheck') {
       return deserialize<_ib8wvp93.IdentityCheck>(data['data']);
     }
@@ -728,6 +836,9 @@ class Protocol extends _isc.SerializationManager {
     }
     if (dataClassName == 'Review') {
       return deserialize<_itqm5y01.Review>(data['data']);
+    }
+    if (dataClassName == 'SampleCard') {
+      return deserialize<_ionf1vdm.SampleCard>(data['data']);
     }
     if (dataClassName == 'SampleProof') {
       return deserialize<_iyeld2s2.SampleProof>(data['data']);

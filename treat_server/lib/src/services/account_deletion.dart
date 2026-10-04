@@ -4,6 +4,7 @@ import 'package:serverpod_auth_idp_server/core.dart';
 import '../generated/protocol.dart';
 import 'accounts.dart';
 import 'demo.dart';
+import 'gifts.dart';
 import 'proofs.dart';
 
 /// Deletes the signed-in user for good: their screenshots in storage, their
@@ -36,7 +37,15 @@ Future<void> deleteAccount(Session session) async {
       ...await Claim.db.find(session, where: (t) => t.shopId.equals(shop.id!)),
   ];
 
+  var giftsToRefund = <int>[];
   await session.db.transaction((tx) async {
+    // Open gifts are cancelled (refund below) and names blanked first.
+    giftsToRefund = await closeGiftsOf(
+      session,
+      student: student,
+      shop: shop,
+      tx: tx,
+    );
     // Claims cascade from the student profile / the place.
     if (student != null) {
       await StudentProfile.db.deleteRow(session, student, transaction: tx);
@@ -50,6 +59,19 @@ Future<void> deleteAccount(Session session) async {
       transaction: tx,
     );
   });
+
+  // Money back to the senders (retried by the sweep if iyzico is down).
+  for (final id in giftsToRefund) {
+    try {
+      await refundGift(session, id);
+    } catch (e) {
+      session.log(
+        'Refund of gift $id after account deletion failed',
+        level: LogLevel.warning,
+        exception: e,
+      );
+    }
+  }
 
   // Files last: a failed transaction must not leave claims without images.
   for (final path in [...claims.map((c) => c.proofPath), ...checkImages]) {

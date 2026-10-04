@@ -178,6 +178,7 @@ class _ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l;
     final view = result.view;
+    final gift = result.gift;
     final already = result.alreadyRedeemed;
     return TreatCard(
       padding: const EdgeInsets.all(20),
@@ -198,25 +199,31 @@ class _ResultCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            already ? l.scanAlready : l.scanSuccess,
+            already
+                ? l.scanAlready
+                : gift != null
+                ? l.scanGiftSuccess
+                : l.scanSuccess,
             style: context.text.titleLarge,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
           Row(
             children: [
-              InitialsAvatar(view.claim.studentName),
+              InitialsAvatar(gift?.recipientName ?? view!.claim.studentName),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      view.claim.studentName,
+                      gift?.recipientName ?? view!.claim.studentName,
                       style: context.text.titleMedium,
                     ),
                     Text(
-                      view.offer.title,
+                      gift != null
+                          ? l.scanGiftFor(gift.recipientName, gift.amountTl)
+                          : view!.offer.title,
                       style: context.text.bodyMedium?.copyWith(
                         color: T.inkSecondary,
                       ),

@@ -1,0 +1,7 @@
+### Demo only: a ready-made student card photo, checked by the real AI like
+### any upload. `matching` carries the unverified demo guest's name;
+### `someoneElse` a different name, to see a rejection.
+enum: SampleCard
+values:
+  - matching
+  - someoneElse

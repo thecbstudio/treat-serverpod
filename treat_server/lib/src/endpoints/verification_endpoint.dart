@@ -18,4 +18,8 @@ class VerificationEndpoint extends Endpoint {
 
   Future<IdentityCheck> submit(Session session, String path) =>
       checks.submitCheck(session, path);
+
+  /// Demo mode, demo students only: check a ready-made sample card.
+  Future<IdentityCheck> submitSample(Session session, SampleCard kind) =>
+      checks.submitSampleCard(session, kind);
 }

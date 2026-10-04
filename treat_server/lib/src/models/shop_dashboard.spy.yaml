@@ -11,3 +11,4 @@ fields:
   rating: ShopRating
   ### Newest first, with private notes.
   reviews: List<Review>
+  gifts: GiftShopStats

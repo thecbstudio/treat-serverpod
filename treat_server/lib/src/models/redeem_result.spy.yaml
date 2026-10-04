@@ -2,5 +2,8 @@
 ### redeemed by this shop (double scan) — nothing was counted twice.
 class: RedeemResult
 fields:
-  view: ClaimView
+  ### A treat claim ...
+  view: ClaimView?
+  ### ... or a paid gift (exactly one of the two).
+  gift: Gift?
   alreadyRedeemed: bool

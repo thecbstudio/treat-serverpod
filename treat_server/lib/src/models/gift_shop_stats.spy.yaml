@@ -1,0 +1,8 @@
+### A place's gift money, for its panel. "To pay out" = redeemed, net of the
+### 15 % commission; "waiting" = paid gifts not collected yet.
+class: GiftShopStats
+fields:
+  redeemed: int
+  netRedeemedTl: double
+  waiting: int
+  waitingNetTl: double

@@ -9,6 +9,9 @@ import '../features/auth/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
 import '../features/auth/welcome_screen.dart';
 import '../features/drops/drop_form_screen.dart';
+import '../features/gifts/gift_screen.dart';
+import '../features/gifts/gifts_screen.dart';
+import '../features/gifts/send_gift_screen.dart';
 import '../features/shop/dashboard_screen.dart';
 import '../features/shop/offer_form_screen.dart';
 import '../features/shop/scan_screen.dart';
@@ -110,6 +113,7 @@ final router = GoRouter(
             Icons.confirmation_number_outlined,
             Icons.confirmation_number,
           ),
+          _Tab('/gifts', Icons.card_giftcard_outlined, Icons.card_giftcard),
           _Tab(
             '/leaderboard',
             Icons.emoji_events_outlined,
@@ -122,12 +126,27 @@ final router = GoRouter(
       routes: [
         GoRoute(path: '/discover', builder: (_, _) => const DiscoverScreen()),
         GoRoute(path: '/claims', builder: (_, _) => const MyClaimsScreen()),
+        GoRoute(path: '/gifts', builder: (_, _) => const GiftsScreen()),
         GoRoute(
           path: '/leaderboard',
           builder: (_, _) => const LeaderboardScreen(),
         ),
         GoRoute(path: '/me', builder: (_, _) => const ProfileScreen()),
       ],
+    ),
+    GoRoute(
+      path: '/gifts/new',
+      builder: (_, state) => SendGiftScreen(
+        toStudentId: int.tryParse(state.uri.queryParameters['to'] ?? ''),
+        toName: state.uri.queryParameters['name'],
+      ),
+    ),
+    GoRoute(
+      path: '/gift/:id',
+      builder: (_, state) => GiftScreen(
+        giftId: int.parse(state.pathParameters['id']!),
+        payResult: state.uri.queryParameters['pay'],
+      ),
     ),
     GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
     GoRoute(path: '/verify', builder: (_, _) => const VerifyScreen()),
@@ -205,6 +224,7 @@ bool _isStudentOnly(String p) =>
     p == '/me' ||
     p == '/settings' ||
     p == '/claims' ||
+    p.startsWith('/gift') ||
     p == '/leaderboard' ||
     p.startsWith('/claim/');
 bool _isGate(String p) =>
@@ -232,6 +252,7 @@ class _NavShell extends StatelessWidget {
     '/discover' => context.l.navDiscover,
     '/me' => context.l.navProfile,
     '/claims' => context.l.navMyTreats,
+    '/gifts' => context.l.navGifts,
     '/shop/scan' => context.l.navScan,
     '/shop/panel' => context.l.navPanel,
     '/leaderboard' => context.l.navLeaderboard,

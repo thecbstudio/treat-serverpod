@@ -22,7 +22,15 @@ class DemoEndpoint extends Endpoint {
 
   Future<bool> enabled(Session session) async => demoModeOn(session);
 
-  Future<AuthSuccess> signInAsGuestStudent(Session session) async {
+  Future<AuthSuccess> signInAsGuestStudent(Session session) =>
+      _guest(session, verified: true);
+
+  /// A guest who isn't verified yet, to try the student-card check: named
+  /// like the sample card photos.
+  Future<AuthSuccess> signInAsUnverifiedStudent(Session session) =>
+      _guest(session, verified: false);
+
+  Future<AuthSuccess> _guest(Session session, {required bool verified}) async {
     requireDemoMode(session);
     final now = clock();
     final recent = await StudentProfile.db.count(
@@ -47,10 +55,12 @@ class DemoEndpoint extends Endpoint {
         session,
         StudentProfile(
           authUserId: authUser.id,
-          name: 'Guest $number',
+          name: verified ? 'Guest $number' : unverifiedGuestName,
           email: 'guest-$number@demo.treat',
           university: guestUniversity,
-          verification: StudentVerification.verified,
+          verification: verified
+              ? StudentVerification.verified
+              : StudentVerification.pending,
           categoriesTried: [],
           joinedAt: now,
         ),

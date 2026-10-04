@@ -20,6 +20,9 @@ import 'package:serverpod_client/serverpod_client.dart' as _isc;
 import 'package:treat_client/src/protocol/claim_proof.dart' as _islgq58o;
 import 'package:treat_client/src/protocol/claim_view.dart' as _iq1pcdgl;
 import 'package:treat_client/src/protocol/drop_input.dart' as _id0be9cq;
+import 'package:treat_client/src/protocol/gift_checkout.dart' as _i60yage4;
+import 'package:treat_client/src/protocol/gift_input.dart' as _id6ephh2;
+import 'package:treat_client/src/protocol/gift_view.dart' as _izkyxboi;
 import 'package:treat_client/src/protocol/identity_check.dart' as _ivqabh3c;
 import 'package:treat_client/src/protocol/leaderboard_entry.dart' as _inztnej7;
 import 'package:treat_client/src/protocol/me.dart' as _iap2bcnj;
@@ -33,6 +36,7 @@ import 'package:treat_client/src/protocol/public_student.dart' as _ihfjemru;
 import 'package:treat_client/src/protocol/redeem_result.dart' as _i8ej1owz;
 import 'package:treat_client/src/protocol/report_kind.dart' as _i04iw30o;
 import 'package:treat_client/src/protocol/report_reason.dart' as _iak07t0u;
+import 'package:treat_client/src/protocol/sample_card.dart' as _idcnqgol;
 import 'package:treat_client/src/protocol/sample_proof.dart' as _ij1gidu7;
 import 'package:treat_client/src/protocol/shop.dart' as _ij1m347g;
 import 'package:treat_client/src/protocol/shop_dashboard.dart' as _iqqmplla;
@@ -414,11 +418,90 @@ class EndpointDemo extends _isc.EndpointRef {
         {},
       );
 
+  /// A guest who isn't verified yet, to try the student-card check: named
+  /// like the sample card photos.
+  _ida.Future<_iacc.AuthSuccess> signInAsUnverifiedStudent() =>
+      caller.callServerEndpoint<_iacc.AuthSuccess>(
+        'demo',
+        'signInAsUnverifiedStudent',
+        {},
+      );
+
   _ida.Future<_iacc.AuthSuccess> signInAsDemoShop() =>
       caller.callServerEndpoint<_iacc.AuthSuccess>(
         'demo',
         'signInAsDemoShop',
         {},
+      );
+}
+
+/// "Treatleme": a student pays for a treat at a verified place (iyzico's
+/// hosted payment page) and gives it to another verified student.
+/// {@category Endpoint}
+class EndpointGift extends _isc.EndpointRef {
+  EndpointGift(_isc.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'gift';
+
+  /// `off`, `sandbox` or `live`: whether and how this server takes payments.
+  _ida.Future<String> mode() => caller.callServerEndpoint<String>(
+    'gift',
+    'mode',
+    {},
+  );
+
+  /// Verified places a gift can go to.
+  _ida.Future<List<_ij1m347g.Shop>> places() =>
+      caller.callServerEndpoint<List<_ij1m347g.Shop>>(
+        'gift',
+        'places',
+        {},
+      );
+
+  /// Creates the gift and returns iyzico's payment page to open.
+  _ida.Future<_i60yage4.GiftCheckout> send(_id6ephh2.GiftInput input) =>
+      caller.callServerEndpoint<_i60yage4.GiftCheckout>(
+        'gift',
+        'send',
+        {'input': input},
+      );
+
+  _ida.Future<List<_izkyxboi.GiftView>> sent() =>
+      caller.callServerEndpoint<List<_izkyxboi.GiftView>>(
+        'gift',
+        'sent',
+        {},
+      );
+
+  _ida.Future<List<_izkyxboi.GiftView>> received() =>
+      caller.callServerEndpoint<List<_izkyxboi.GiftView>>(
+        'gift',
+        'received',
+        {},
+      );
+
+  _ida.Future<_izkyxboi.GiftView> get(int giftId) =>
+      caller.callServerEndpoint<_izkyxboi.GiftView>(
+        'gift',
+        'get',
+        {'giftId': giftId},
+      );
+
+  /// Sender: "I paid, where is my gift?" Asks iyzico and applies the result.
+  _ida.Future<_izkyxboi.GiftView> confirm(int giftId) =>
+      caller.callServerEndpoint<_izkyxboi.GiftView>(
+        'gift',
+        'confirm',
+        {'giftId': giftId},
+      );
+
+  /// Sender: take the gift back (refund) while it isn't collected.
+  _ida.Future<_izkyxboi.GiftView> cancel(int giftId) =>
+      caller.callServerEndpoint<_izkyxboi.GiftView>(
+        'gift',
+        'cancel',
+        {'giftId': giftId},
       );
 }
 
@@ -557,6 +640,9 @@ class EndpointShop extends _isc.EndpointRef {
   String get name => 'shop';
 
   /// [input]: the scanned QR payload or the 6-character code.
+  ///
+  /// A treat claim (`TREAT:` QR or its code) or a paid gift (`GIFT:` QR or
+  /// its code): claims are tried first, then gifts.
   _ida.Future<_i8ej1owz.RedeemResult> redeem(String input) =>
       caller.callServerEndpoint<_i8ej1owz.RedeemResult>(
         'shop',
@@ -737,6 +823,15 @@ class EndpointVerification extends _isc.EndpointRef {
         'submit',
         {'path': path},
       );
+
+  /// Demo mode, demo students only: check a ready-made sample card.
+  _ida.Future<_ivqabh3c.IdentityCheck> submitSample(
+    _idcnqgol.SampleCard kind,
+  ) => caller.callServerEndpoint<_ivqabh3c.IdentityCheck>(
+    'verification',
+    'submitSample',
+    {'kind': kind},
+  );
 }
 
 class Modules {
@@ -781,6 +876,7 @@ class Client extends _isc.ServerpodClientShared {
     jwtRefresh = EndpointJwtRefresh(this);
     claim = EndpointClaim(this);
     demo = EndpointDemo(this);
+    gift = EndpointGift(this);
     leaderboard = EndpointLeaderboard(this);
     offer = EndpointOffer(this);
     profile = EndpointProfile(this);
@@ -798,6 +894,8 @@ class Client extends _isc.ServerpodClientShared {
   late final EndpointClaim claim;
 
   late final EndpointDemo demo;
+
+  late final EndpointGift gift;
 
   late final EndpointLeaderboard leaderboard;
 
@@ -821,6 +919,7 @@ class Client extends _isc.ServerpodClientShared {
     'jwtRefresh': jwtRefresh,
     'claim': claim,
     'demo': demo,
+    'gift': gift,
     'leaderboard': leaderboard,
     'offer': offer,
     'profile': profile,

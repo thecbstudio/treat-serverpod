@@ -87,8 +87,8 @@ void main() {
 
       final first = await endpoints.shop.redeem(shop, qrPayloadOf(claim));
       expect(first.alreadyRedeemed, isFalse);
-      expect(first.view.claim.status, ClaimStatus.redeemed);
-      expect(first.view.claim.studentName, 'Selin');
+      expect(first.view!.claim.status, ClaimStatus.redeemed);
+      expect(first.view!.claim.studentName, 'Selin');
 
       final second = await endpoints.shop.redeem(shop, claim.code);
       expect(second.alreadyRedeemed, isTrue);

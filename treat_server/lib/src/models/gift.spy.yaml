@@ -1,0 +1,45 @@
+### A paid treat one student gives another, to collect at a place. The sender
+### pays through iyzico; the place hands it over against a QR/code; treat keeps
+### 15 % (the rest is the place's, shown as "to pay out"). Closed gifts are
+### refunded. Rows stay after an account is deleted (accounting), without names.
+class: Gift
+table: gift
+fields:
+  sender: StudentProfile?, relation(optional, onDelete=SetNull)
+  recipient: StudentProfile?, relation(optional, onDelete=SetNull)
+  shop: Shop?, relation(optional, onDelete=SetNull)
+  ### Blanked when the person deletes their account.
+  senderName: String
+  recipientName: String
+  shopName: String
+  ### Whole TL, 20–1000.
+  amountTl: int
+  commissionKurus: int
+  ### What the place earns: amount minus commission.
+  netKurus: int
+  message: String?
+  status: GiftStatus
+  ### 6 chars, only shown to the recipient. QR: GIFT:<id>:<code>.
+  code: String?
+  createdAt: DateTime, default=now
+  paidAt: DateTime?
+  expiresAt: DateTime?
+  redeemedAt: DateTime?
+  closedAt: DateTime?
+  ### iyzico bookkeeping, never sent to a client.
+  conversationId: String?, scope=serverOnly
+  paymentToken: String?, scope=serverOnly
+  paymentId: String?, scope=serverOnly
+  paymentTransactionId: String?, scope=serverOnly
+  ### Set once the money is back with the sender (cancelled/expired gifts).
+  refundedAt: DateTime?
+  refundAttempts: int, default=0
+indexes:
+  gift_sender_idx:
+    fields: senderId
+  gift_recipient_idx:
+    fields: recipientId
+  gift_shop_status_idx:
+    fields: shopId, status
+  gift_token_idx:
+    fields: paymentToken

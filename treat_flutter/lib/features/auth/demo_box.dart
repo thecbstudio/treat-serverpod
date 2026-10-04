@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:treat_client/treat_client.dart';
 
+import '../../app/router.dart' show router;
+import '../../app/session.dart';
 import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
@@ -22,6 +24,7 @@ class _DemoBoxState extends State<DemoBox> {
     (_) => false,
   );
   UserRole? _busy;
+  bool _busyUnverified = false;
 
   Future<void> _signIn(UserRole role) async {
     setState(() => _busy = role);
@@ -35,6 +38,25 @@ class _DemoBoxState extends State<DemoBox> {
       if (mounted) context.toast(errorMessage(e, context.l));
     } finally {
       if (mounted) setState(() => _busy = null);
+    }
+  }
+
+  /// A guest who still has to prove they're a student: lands on the check.
+  Future<void> _signInUnverified() async {
+    setState(() => _busyUnverified = true);
+    try {
+      final auth = await client.demo.signInAsUnverifiedStudent();
+      await client.auth.updateSignedInUser(auth);
+      // Wait for the profile, then open the student-card check.
+      for (var i = 0; i < 30; i++) {
+        if (appSession.status == SessionStatus.student) break;
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      }
+      router.go('/verify');
+    } catch (e) {
+      if (mounted) context.toast(errorMessage(e, context.l));
+    } finally {
+      if (mounted) setState(() => _busyUnverified = false);
     }
   }
 
@@ -100,6 +122,23 @@ class _DemoBoxState extends State<DemoBox> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 4),
+            TextButton.icon(
+              onPressed: _busy == null && !_busyUnverified
+                  ? _signInUnverified
+                  : null,
+              style: TextButton.styleFrom(foregroundColor: T.inkInverse),
+              icon: _busyUnverified
+                  ? const SizedBox.square(
+                      dimension: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: T.inkInverse,
+                      ),
+                    )
+                  : const Icon(Icons.badge_outlined, size: 18),
+              label: Text(l.demoUnverified),
             ),
           ],
         ),

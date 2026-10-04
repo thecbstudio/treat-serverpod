@@ -5,6 +5,7 @@ import 'package:treat_server/src/ai/document_verifier.dart';
 import 'package:treat_server/src/ai/proof_verifier.dart';
 import 'package:treat_server/src/domain/clock.dart';
 import 'package:treat_server/src/generated/protocol.dart';
+import 'package:treat_server/src/services/demo.dart';
 import 'package:treat_server/src/services/identity_checks.dart';
 import 'package:treat_server/src/services/proofs.dart';
 
@@ -279,5 +280,55 @@ void main() {
         );
       },
     );
+  });
+
+  withServerpod('Given demo mode', (sessionBuilder, endpoints) {
+    setUp(() => demoOverride = true);
+    tearDown(() => demoOverride = null);
+
+    test(
+      'when an unverified demo guest sends the sample card then the real '
+      'check runs on it (here: a fake AI) and the photo is deleted',
+      () async {
+        final guest = await signedInAs(sessionBuilder, 'guest-1@demo.treat');
+        await endpoints.profile.createStudent(
+          guest,
+          unverifiedGuestName,
+          guestUniversity,
+        );
+        final check = await endpoints.verification.submitSample(
+          guest,
+          SampleCard.matching,
+        );
+        fake.answers.add(const DocumentVerdict.approved());
+        await runIdentityCheck(sessionBuilder.build(), check.id!);
+        expect(fake.seen.single.name, unverifiedGuestName);
+        expect(fake.seen.single.detail, guestUniversity);
+        expect(fake.seen.single.image.length, greaterThan(1000));
+        expect(
+          (await endpoints.profile.getMe(guest)).student!.verification,
+          StudentVerification.verified,
+        );
+      },
+    );
+
+    test('when a real student asks for a sample then demo_only', () async {
+      final real = await signedInAs(sessionBuilder, 'real@gmail.com');
+      await endpoints.profile.createStudent(real, 'Real', 'AU');
+      await expectLater(
+        endpoints.verification.submitSample(real, SampleCard.matching),
+        throwsTreat('demo_only'),
+      );
+    });
+
+    test('when demo mode is off then demo_off', () async {
+      demoOverride = false;
+      final guest = await signedInAs(sessionBuilder, 'guest-2@demo.treat');
+      await endpoints.profile.createStudent(guest, 'G', guestUniversity);
+      await expectLater(
+        endpoints.verification.submitSample(guest, SampleCard.matching),
+        throwsTreat('demo_off'),
+      );
+    });
   });
 }

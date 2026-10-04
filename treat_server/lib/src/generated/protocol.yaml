@@ -22,7 +22,17 @@ claim:
 demo:
   - enabled:
   - signInAsGuestStudent:
+  - signInAsUnverifiedStudent:
   - signInAsDemoShop:
+gift:
+  - mode:
+  - places:
+  - send:
+  - sent:
+  - received:
+  - get:
+  - confirm:
+  - cancel:
 leaderboard:
   - top:
 offer:
@@ -58,3 +68,4 @@ verification:
   - latest:
   - upload:
   - submit:
+  - submitSample:

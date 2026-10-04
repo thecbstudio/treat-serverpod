@@ -32,6 +32,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
 
   bool get _isShop => appSession.status == SessionStatus.shop;
 
+  /// Demo students can send ready-made sample cards.
+  bool _demo = false;
+
   bool get _done {
     final me = appSession.me;
     return _isShop
@@ -43,6 +46,29 @@ class _VerifyScreenState extends State<VerifyScreen> {
   void initState() {
     super.initState();
     _load();
+    client.demo
+        .enabled()
+        .then((on) {
+          final email = appSession.me?.student?.email ?? '';
+          if (mounted && on && email.endsWith('@demo.treat')) {
+            setState(() => _demo = true);
+          }
+        })
+        .catchError((_) {});
+  }
+
+  Future<void> _sendSample(SampleCard kind) async {
+    setState(() => _busy = true);
+    try {
+      final check = await client.verification.submitSample(kind);
+      if (!mounted) return;
+      setState(() => _check = check);
+      _watch();
+    } catch (e) {
+      if (mounted) context.toast(errorMessage(e, context.l));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
   @override
@@ -259,6 +285,41 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   child: CircularProgressIndicator(strokeWidth: 2.5),
                 )
               : Text(l.verifySend),
+        ),
+      ],
+      if (_demo && !pending && !_isShop) ...[
+        const SizedBox(height: 16),
+        TreatCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l.verifySampleTitle, style: context.text.titleSmall),
+              const SizedBox(height: 4),
+              Text(
+                l.verifySampleHint,
+                style: context.text.bodySmall?.copyWith(color: T.inkSecondary),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  OutlinedButton(
+                    onPressed: _busy
+                        ? null
+                        : () => _sendSample(SampleCard.matching),
+                    child: Text(l.verifySampleMatching),
+                  ),
+                  OutlinedButton(
+                    onPressed: _busy
+                        ? null
+                        : () => _sendSample(SampleCard.someoneElse),
+                    child: Text(l.verifySampleOther),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
       const SizedBox(height: 16),

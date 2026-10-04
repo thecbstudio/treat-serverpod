@@ -1261,7 +1261,7 @@ abstract class AppLocalizations {
   /// No description provided for @navLeaderboard.
   ///
   /// In en, this message translates to:
-  /// **'Leaderboard'**
+  /// **'Ranking'**
   String get navLeaderboard;
 
   /// No description provided for @navPanel.
@@ -2619,6 +2619,456 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finish setting up your account first.'**
   String get err_no_role;
+
+  /// No description provided for @navGifts.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get navGifts;
+
+  /// No description provided for @giftsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get giftsTitle;
+
+  /// No description provided for @giftsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay for a treat at a verified place and give it to a friend. They show a QR at the counter; the place gets 85 %.'**
+  String get giftsIntro;
+
+  /// No description provided for @giftsReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get giftsReceived;
+
+  /// No description provided for @giftsSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get giftsSent;
+
+  /// No description provided for @giftsSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a gift'**
+  String get giftsSend;
+
+  /// No description provided for @giftsEmptyReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'No gifts yet. A friend can gift you a treat with the e-mail you signed up with.'**
+  String get giftsEmptyReceived;
+
+  /// No description provided for @giftsEmptySent.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t sent a gift yet.'**
+  String get giftsEmptySent;
+
+  /// No description provided for @giftsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts need payments, which aren\'t set up on this server.'**
+  String get giftsOff;
+
+  /// No description provided for @giftStatusAwaitingPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for payment'**
+  String get giftStatusAwaitingPayment;
+
+  /// No description provided for @giftStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to collect'**
+  String get giftStatusPending;
+
+  /// No description provided for @giftStatusRedeemed.
+  ///
+  /// In en, this message translates to:
+  /// **'Collected'**
+  String get giftStatusRedeemed;
+
+  /// No description provided for @giftStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get giftStatusCancelled;
+
+  /// No description provided for @giftStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get giftStatusExpired;
+
+  /// No description provided for @giftStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment failed'**
+  String get giftStatusFailed;
+
+  /// No description provided for @giftFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From {name}'**
+  String giftFrom(String name);
+
+  /// No description provided for @giftTo.
+  ///
+  /// In en, this message translates to:
+  /// **'To {name}'**
+  String giftTo(String name);
+
+  /// No description provided for @giftSendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a gift'**
+  String get giftSendTitle;
+
+  /// No description provided for @giftPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get giftPlace;
+
+  /// No description provided for @giftNoPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'No verified places yet — gifts go to places that passed the document check.'**
+  String get giftNoPlaces;
+
+  /// No description provided for @giftAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (TL)'**
+  String get giftAmountLabel;
+
+  /// No description provided for @giftAmountHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'20 to 1000 TL'**
+  String get giftAmountHelp;
+
+  /// No description provided for @giftRecipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend\'s e-mail'**
+  String get giftRecipient;
+
+  /// No description provided for @giftRecipientHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'The e-mail they signed up to treat with'**
+  String get giftRecipientHelp;
+
+  /// No description provided for @giftToName.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift to {name}'**
+  String giftToName(String name);
+
+  /// No description provided for @giftMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message (optional)'**
+  String get giftMessage;
+
+  /// No description provided for @giftSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'{place} gets {net} TL · treat keeps {commission} TL (15 %)'**
+  String giftSplit(String place, String net, String commission);
+
+  /// No description provided for @giftPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay {n} TL'**
+  String giftPay(int n);
+
+  /// No description provided for @giftSecure.
+  ///
+  /// In en, this message translates to:
+  /// **'You pay by card on iyzico\'s secure page — treat never sees your card.'**
+  String get giftSecure;
+
+  /// No description provided for @giftSandboxHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Test mode: use card 5528 7900 0000 0008, any future date, CVC 123, SMS code 283126. No real money moves.'**
+  String get giftSandboxHint;
+
+  /// No description provided for @giftDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift'**
+  String get giftDetailTitle;
+
+  /// No description provided for @giftConfirming.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirming your payment…'**
+  String get giftConfirming;
+
+  /// No description provided for @giftPaidOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received — your friend can collect it now.'**
+  String get giftPaidOk;
+
+  /// No description provided for @giftPayFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The payment didn\'t go through, so nothing was charged.'**
+  String get giftPayFailed;
+
+  /// No description provided for @giftPayUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'iyzico hasn\'t confirmed yet. Pull down to check again in a minute.'**
+  String get giftPayUnknown;
+
+  /// No description provided for @giftShowQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this at {place}'**
+  String giftShowQr(String place);
+
+  /// No description provided for @giftValidUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid until {date}'**
+  String giftValidUntil(String date);
+
+  /// No description provided for @giftCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel gift'**
+  String get giftCancel;
+
+  /// No description provided for @giftCancelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this gift?'**
+  String get giftCancelTitle;
+
+  /// No description provided for @giftCancelBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You get a full refund and your friend can no longer collect it.'**
+  String get giftCancelBody;
+
+  /// No description provided for @giftCancelDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift cancelled'**
+  String get giftCancelDone;
+
+  /// No description provided for @giftRefundPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Your refund is on its way.'**
+  String get giftRefundPending;
+
+  /// No description provided for @giftRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded to your card.'**
+  String get giftRefunded;
+
+  /// No description provided for @giftRedeemedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Collected at {place}.'**
+  String giftRedeemedNote(String place);
+
+  /// No description provided for @giftReceivedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Collecting it counts as a treat on your profile.'**
+  String get giftReceivedNote;
+
+  /// No description provided for @giftWaitingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} can collect it at {place} until {date}.'**
+  String giftWaitingNote(String name, String place, String date);
+
+  /// No description provided for @giftCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift a treat'**
+  String get giftCta;
+
+  /// No description provided for @giftYourAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends can gift you with this e-mail'**
+  String get giftYourAddress;
+
+  /// No description provided for @scanGiftSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift handed over'**
+  String get scanGiftSuccess;
+
+  /// No description provided for @scanGiftFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift for {name} · {n} TL'**
+  String scanGiftFor(String name, int n);
+
+  /// No description provided for @dashGiftsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts'**
+  String get dashGiftsTitle;
+
+  /// No description provided for @dashGiftsCollected.
+  ///
+  /// In en, this message translates to:
+  /// **'Collected'**
+  String get dashGiftsCollected;
+
+  /// No description provided for @dashGiftsWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get dashGiftsWaiting;
+
+  /// No description provided for @dashGiftsNet.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} TL for you after treat\'s 15 %'**
+  String dashGiftsNet(String n);
+
+  /// No description provided for @dashGiftsWaitingNet.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} TL paid in, not collected yet'**
+  String dashGiftsWaitingNet(String n);
+
+  /// No description provided for @dashGiftsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift payments are collected by treat; paying them out to places is not automated in this build.'**
+  String get dashGiftsHint;
+
+  /// No description provided for @err_gift_to_self.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t gift yourself — pick a friend.'**
+  String get err_gift_to_self;
+
+  /// No description provided for @err_recipient_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No student on treat has that e-mail.'**
+  String get err_recipient_not_found;
+
+  /// No description provided for @err_recipient_not_verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Only verified students can receive gifts.'**
+  String get err_recipient_not_verified;
+
+  /// No description provided for @err_invalid_recipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your friend\'s e-mail.'**
+  String get err_invalid_recipient;
+
+  /// No description provided for @err_shop_not_giftable.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts go to verified places only.'**
+  String get err_shop_not_giftable;
+
+  /// No description provided for @err_invalid_amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Gifts are 20 to 1000 TL.'**
+  String get err_invalid_amount;
+
+  /// No description provided for @err_daily_gift_cap.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s 10 gifts today — try again tomorrow.'**
+  String get err_daily_gift_cap;
+
+  /// No description provided for @err_payment_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The payment page isn\'t available right now. Try again in a moment.'**
+  String get err_payment_unavailable;
+
+  /// No description provided for @err_payments_unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments aren\'t set up on this server.'**
+  String get err_payments_unavailable;
+
+  /// No description provided for @err_gift_redeemed.
+  ///
+  /// In en, this message translates to:
+  /// **'The place already handed this gift over.'**
+  String get err_gift_redeemed;
+
+  /// No description provided for @err_gift_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'This gift is no longer valid.'**
+  String get err_gift_closed;
+
+  /// No description provided for @err_not_verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your student status first.'**
+  String get err_not_verified;
+
+  /// No description provided for @demoUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Try the student-card check'**
+  String get demoUnverified;
+
+  /// No description provided for @demoUnverifiedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A student who isn\'t verified yet'**
+  String get demoUnverifiedHint;
+
+  /// No description provided for @verifySampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: no card at hand?'**
+  String get verifySampleTitle;
+
+  /// No description provided for @verifySampleMatching.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the sample card'**
+  String get verifySampleMatching;
+
+  /// No description provided for @verifySampleOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Use someone else\'s card'**
+  String get verifySampleOther;
+
+  /// No description provided for @verifySampleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready-made card photos. The real AI checks them like any upload — the second one shows a rejection.'**
+  String get verifySampleHint;
+
+  /// No description provided for @err_demo_only.
+  ///
+  /// In en, this message translates to:
+  /// **'Samples are only for demo students.'**
+  String get err_demo_only;
 }
 
 class _AppLocalizationsDelegate

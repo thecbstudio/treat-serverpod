@@ -13,6 +13,7 @@
 import 'package:serverpod/serverpod.dart' as _is;
 import 'package:treat_server/src/generated/protocol.dart' as _iegszk5h;
 import 'claim_view.dart' as _i48lh927;
+import 'gift_shop_stats.dart' as _iglfqzwp;
 import 'review.dart' as _itqm5y01;
 import 'shop.dart' as _isgf2ncs;
 import 'shop_rating.dart' as _i7zra0pp;
@@ -31,6 +32,7 @@ abstract class ShopDashboard
     required this.topStudents,
     required this.rating,
     required this.reviews,
+    required this.gifts,
   });
 
   factory ShopDashboard({
@@ -43,6 +45,7 @@ abstract class ShopDashboard
     required List<_iub4wqas.TopStudent> topStudents,
     required _i7zra0pp.ShopRating rating,
     required List<_itqm5y01.Review> reviews,
+    required _iglfqzwp.GiftShopStats gifts,
   }) = _ShopDashboardImpl;
 
   factory ShopDashboard.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -66,6 +69,9 @@ abstract class ShopDashboard
       reviews: _iegszk5h.Protocol().deserialize<List<_itqm5y01.Review>>(
         jsonSerialization['reviews'],
       ),
+      gifts: _iegszk5h.Protocol().deserialize<_iglfqzwp.GiftShopStats>(
+        jsonSerialization['gifts'],
+      ),
     );
   }
 
@@ -88,6 +94,8 @@ abstract class ShopDashboard
   /// Newest first, with private notes.
   List<_itqm5y01.Review> reviews;
 
+  _iglfqzwp.GiftShopStats gifts;
+
   /// Returns a shallow copy of this [ShopDashboard]
   /// with some or all fields replaced by the given arguments.
   @_is.useResult
@@ -101,6 +109,7 @@ abstract class ShopDashboard
     List<_iub4wqas.TopStudent>? topStudents,
     _i7zra0pp.ShopRating? rating,
     List<_itqm5y01.Review>? reviews,
+    _iglfqzwp.GiftShopStats? gifts,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -115,6 +124,7 @@ abstract class ShopDashboard
       'topStudents': topStudents.toJson(valueToJson: (v) => v.toJson()),
       'rating': rating.toJson(),
       'reviews': reviews.toJson(valueToJson: (v) => v.toJson()),
+      'gifts': gifts.toJson(),
     };
   }
 
@@ -133,6 +143,7 @@ abstract class ShopDashboard
       ),
       'rating': rating.toJsonForProtocol(),
       'reviews': reviews.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      'gifts': gifts.toJsonForProtocol(),
     };
   }
 
@@ -153,6 +164,7 @@ class _ShopDashboardImpl extends ShopDashboard {
     required List<_iub4wqas.TopStudent> topStudents,
     required _i7zra0pp.ShopRating rating,
     required List<_itqm5y01.Review> reviews,
+    required _iglfqzwp.GiftShopStats gifts,
   }) : super._(
          shop: shop,
          activeOffers: activeOffers,
@@ -163,6 +175,7 @@ class _ShopDashboardImpl extends ShopDashboard {
          topStudents: topStudents,
          rating: rating,
          reviews: reviews,
+         gifts: gifts,
        );
 
   /// Returns a shallow copy of this [ShopDashboard]
@@ -179,6 +192,7 @@ class _ShopDashboardImpl extends ShopDashboard {
     List<_iub4wqas.TopStudent>? topStudents,
     _i7zra0pp.ShopRating? rating,
     List<_itqm5y01.Review>? reviews,
+    _iglfqzwp.GiftShopStats? gifts,
   }) {
     return ShopDashboard(
       shop: shop ?? this.shop.copyWith(),
@@ -191,6 +205,7 @@ class _ShopDashboardImpl extends ShopDashboard {
           topStudents ?? this.topStudents.map((e0) => e0.copyWith()).toList(),
       rating: rating ?? this.rating.copyWith(),
       reviews: reviews ?? this.reviews.map((e0) => e0.copyWith()).toList(),
+      gifts: gifts ?? this.gifts.copyWith(),
     );
   }
 }

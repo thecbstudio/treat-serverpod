@@ -7,6 +7,7 @@ import '../generated/protocol.dart';
 import '../services/accounts.dart';
 import '../services/claims.dart';
 import '../services/demo.dart';
+import '../services/gifts.dart' as gifts;
 import '../services/proofs.dart';
 import '../services/ratings.dart';
 
@@ -16,8 +17,25 @@ class ShopEndpoint extends Endpoint {
   bool get requireLogin => true;
 
   /// [input]: the scanned QR payload or the 6-character code.
-  Future<RedeemResult> redeem(Session session, String input) =>
-      redeemClaim(session, input);
+  ///
+  /// A treat claim (`TREAT:` QR or its code) or a paid gift (`GIFT:` QR or
+  /// its code): claims are tried first, then gifts.
+  Future<RedeemResult> redeem(Session session, String input) async {
+    if (input.trim().toUpperCase().startsWith('GIFT:')) {
+      return gifts.redeemGift(session, input);
+    }
+    try {
+      return await redeemClaim(session, input);
+    } on TreatException catch (e) {
+      if (e.code != 'not_found') rethrow;
+      try {
+        return await gifts.redeemGift(session, input);
+      } on TreatException catch (g) {
+        // Neither: report the plain "no such code".
+        throw g.code == 'not_found' ? e : g;
+      }
+    }
+  }
 
   Future<ShopDashboard> dashboard(Session session) async {
     final shop = await requireShop(session);
@@ -78,6 +96,7 @@ class ShopEndpoint extends Endpoint {
       ],
       rating: (await ratingsFor(session, {shop.id!}))[shop.id!]!,
       reviews: await reviewsFor(session, shop.id!, forOwner: true),
+      gifts: await gifts.giftStatsFor(session, shop.id!),
     );
   }
 
