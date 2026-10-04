@@ -23,6 +23,22 @@ http.Response _json(Object body) => http.Response(
   headers: {'content-type': 'application/json; charset=utf-8'},
 );
 
+/// A retrieve answer signed the way iyzico signs it (formula confirmed
+/// against the live sandbox; numbers are written without ".0").
+Map<String, Object?> _signed(Map<String, Object?> r) => {
+  ...r,
+  'signature': iyzicoResultSignature([
+    r['paymentStatus']?.toString(),
+    r['paymentId']?.toString(),
+    r['currency']?.toString(),
+    r['basketId']?.toString(),
+    r['conversationId']?.toString(),
+    iyzicoNumber(r['paidPrice']),
+    iyzicoNumber(r['price']),
+    r['token']?.toString(),
+  ], 'sandbox-secret'),
+};
+
 IyzicoGateway _gateway(MockClient client) => IyzicoGateway(
   apiKey: 'sandbox-key',
   secretKey: 'sandbox-secret',
@@ -88,23 +104,15 @@ void main() {
     };
     final gateway = _gateway(
       MockClient(
-        (r) async => _json({
-          'status': 'success',
-          ...fields,
-          'itemTransactions': [
-            {'paymentTransactionId': '777'},
-          ],
-          'signature': iyzicoResultSignature([
-            'SUCCESS',
-            '555',
-            'TRY',
-            'gift-7',
-            'gift-abc',
-            '100.5',
-            '100.5',
-            'tok',
-          ], 'sandbox-secret'),
-        }),
+        (r) async => _json(
+          _signed({
+            'status': 'success',
+            ...fields,
+            'itemTransactions': [
+              {'paymentTransactionId': '777'},
+            ],
+          }),
+        ),
       ),
     );
     final result = await gateway.fetchResult('tok', 'gift-abc');
@@ -113,10 +121,19 @@ void main() {
     expect(result.paymentId, '555');
     expect(result.paymentTransactionId, '777');
     expect(result.conversationId, 'gift-abc');
-    expect(result.signatureMismatch, isFalse);
   });
 
-  test('a wrong result signature is flagged, not hidden', () async {
+  test(
+    'whole prices are signed without a decimal point, like iyzico',
+    () async {
+      expect(iyzicoNumber(20.0), '20');
+      expect(iyzicoNumber(20), '20');
+      expect(iyzicoNumber(100.5), '100.5');
+      expect(iyzicoNumber(null), isNull);
+    },
+  );
+
+  test('a result without a valid signature is not believed', () async {
     final gateway = _gateway(
       MockClient(
         (r) async => _json({
@@ -128,14 +145,21 @@ void main() {
         }),
       ),
     );
-    expect((await gateway.fetchResult('t', 'c')).signatureMismatch, isTrue);
+    await expectLater(
+      gateway.fetchResult('t', 'c'),
+      throwsA(
+        isA<PaymentException>().having((e) => e.code, 'code', 'signature'),
+      ),
+    );
   });
 
   test('a failed payment is not paid, and iyzico errors surface as '
       'PaymentException with code', () async {
     final unpaid = _gateway(
       MockClient(
-        (r) async => _json({'status': 'success', 'paymentStatus': 'FAILURE'}),
+        (r) async => _json(
+          _signed({'status': 'success', 'paymentStatus': 'FAILURE'}),
+        ),
       ),
     );
     expect((await unpaid.fetchResult('t', 'c')).paid, isFalse);

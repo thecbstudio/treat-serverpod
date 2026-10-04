@@ -9,6 +9,7 @@ import '../domain/rules.dart';
 import '../generated/protocol.dart';
 import '../payments/iyzico.dart';
 import 'accounts.dart';
+import 'demo.dart';
 
 /// Swappable for tests. Built from `iyzicoApiKey` / `iyzicoSecretKey` (and
 /// optionally `iyzicoBaseUrl`, default the iyzico sandbox) in passwords.yaml.
@@ -202,7 +203,10 @@ Future<GiftCheckout> startGift(Session session, GiftInput input) async {
         itemName: 'Treat gift at ${shop.name}',
         buyerId: 'student-${sender.id}',
         buyerName: sender.name,
-        buyerEmail: sender.email,
+        // iyzico validates e-mail domains: demo guests (@demo.treat) have none.
+        buyerEmail: isDemoStudent(sender)
+            ? 'demo-student@example.com'
+            : sender.email,
         buyerIp: clientIp(session),
         callbackUrl: '${publicBaseUrl(session)}/pay/iyzico/${gift.id}',
       ),
@@ -254,18 +258,12 @@ Future<Gift> settleGift(
   } on PaymentException catch (e) {
     session.log(
       'Gift $giftId: no payment result yet: $e',
-      level: LogLevel.debug,
+      level: e.code == 'signature' ? LogLevel.error : LogLevel.debug,
     );
     // An error is not "unpaid": the money may have moved. Only give up on
     // gifts that never got an answer for days.
     final stale = clock().difference(gift.createdAt) > const Duration(days: 3);
     return definitive && stale ? _closeUnpaid(session, gift) : gift;
-  }
-  if (result.signatureMismatch) {
-    session.log(
-      'Gift $giftId: iyzico result signature did not match',
-      level: LogLevel.warning,
-    );
   }
   if (!result.paid) {
     return definitive ? _closeUnpaid(session, gift) : gift;

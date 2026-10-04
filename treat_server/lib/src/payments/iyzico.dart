@@ -56,7 +56,6 @@ class CheckoutResult {
     this.paymentId,
     this.paymentTransactionId,
     this.failureMessage,
-    this.signatureMismatch = false,
   });
 
   final bool paid;
@@ -65,11 +64,6 @@ class CheckoutResult {
   final String? paymentId;
   final String? paymentTransactionId;
   final String? failureMessage;
-
-  /// iyzico's integrity signature didn't match our computation. The answer
-  /// still came over TLS in reply to our own signed request, so it is logged
-  /// rather than fatal until the formula is confirmed against live answers.
-  final bool signatureMismatch;
 }
 
 abstract interface class PaymentGateway {
@@ -117,11 +111,22 @@ String iyzicoAuthorization({
 }
 
 /// The result signature iyzico adds to a retrieved checkout form: HMAC-SHA256
-/// (hex) of the listed fields joined with ":".
+/// (hex) of the listed fields joined with ":". Confirmed against the live
+/// sandbox, including how numbers are written (see [iyzicoNumber]).
 String iyzicoResultSignature(List<String?> fields, String secretKey) => Hmac(
   sha256,
   utf8.encode(secretKey),
 ).convert(utf8.encode(fields.map((f) => f ?? '').join(':'))).toString();
+
+/// A JSON number the way iyzico writes it into its signature: whole values
+/// without a decimal point (`20.0` is `20`), others as they are (`100.5`).
+String? iyzicoNumber(Object? v) {
+  if (v == null) return null;
+  if (v is num && v.isFinite && v == v.roundToDouble()) {
+    return v.toInt().toString();
+  }
+  return v.toString();
+}
 
 /// iyzico's REST API (sandbox or live, by [baseUrl]) via the hosted checkout
 /// form: card data never touches treat's server.
@@ -268,21 +273,23 @@ class IyzicoGateway implements PaymentGateway {
       'conversationId': conversationId,
       'token': token,
     });
-    // Integrity: the answer is signed with our secret key.
-    final signature = r['signature'];
-    var mismatch = false;
-    if (signature is String) {
-      final expected = iyzicoResultSignature([
-        r['paymentStatus']?.toString(),
-        r['paymentId']?.toString(),
-        r['currency']?.toString(),
-        r['basketId']?.toString(),
-        r['conversationId']?.toString(),
-        r['paidPrice']?.toString(),
-        r['price']?.toString(),
-        r['token']?.toString(),
-      ], secretKey);
-      mismatch = expected != signature;
+    // Integrity: the answer is signed with our secret key. Without a valid
+    // signature nothing is believed.
+    final expected = iyzicoResultSignature([
+      r['paymentStatus']?.toString(),
+      r['paymentId']?.toString(),
+      r['currency']?.toString(),
+      r['basketId']?.toString(),
+      r['conversationId']?.toString(),
+      iyzicoNumber(r['paidPrice']),
+      iyzicoNumber(r['price']),
+      r['token']?.toString(),
+    ], secretKey);
+    if (r['signature'] != expected) {
+      throw PaymentException(
+        'iyzico answer has a wrong signature',
+        code: 'signature',
+      );
     }
     final items = r['itemTransactions'];
     final tx = items is List && items.isNotEmpty && items.first is Map
@@ -296,7 +303,6 @@ class IyzicoGateway implements PaymentGateway {
       paymentId: r['paymentId']?.toString(),
       paymentTransactionId: tx,
       failureMessage: paid ? null : r['errorMessage']?.toString(),
-      signatureMismatch: mismatch,
     );
   }
 

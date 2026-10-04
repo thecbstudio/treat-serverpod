@@ -171,6 +171,14 @@ class _SendGiftScreenState extends State<SendGiftScreen> {
                         for (final p in _presets)
                           ChoiceChip(
                             label: Text('$p TL'),
+                            showCheckmark: false,
+                            selectedColor: T.accent,
+                            labelStyle: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              color: _amount == p && _custom.text.isEmpty
+                                  ? T.inkInverse
+                                  : T.ink,
+                            ),
                             selected: _amount == p && _custom.text.isEmpty,
                             onSelected: (_) => setState(() {
                               _amount = p;
