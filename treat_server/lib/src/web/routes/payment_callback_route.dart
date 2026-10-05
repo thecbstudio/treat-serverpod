@@ -17,6 +17,9 @@ class IyzicoCallbackRoute extends Route {
     var outcome = 'failed';
     if (id != null) {
       try {
+        // The form only carries a token: refuse anything big.
+        final length = request.body.contentLength;
+        if (length != null && length > 8192) throw const FormatException();
         final form = Uri.splitQueryString(await request.readAsString());
         final gift = await Gift.db.findById(session, id);
         // Ignore tokens that aren't the one we issued for this gift.

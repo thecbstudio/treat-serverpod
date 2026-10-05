@@ -5,6 +5,7 @@ import 'package:treat_server/src/domain/clock.dart';
 import 'package:treat_server/src/domain/gift_rules.dart';
 import 'package:treat_server/src/generated/protocol.dart';
 import 'package:treat_server/src/payments/iyzico.dart';
+import 'package:treat_server/src/services/demo.dart';
 import 'package:treat_server/src/services/gifts.dart';
 
 import 'helpers.dart';
@@ -236,9 +237,10 @@ void main() {
         );
         final cem = await signedInAs(sessionBuilder, 'cem@gmail.com');
         await endpoints.profile.createStudent(cem, 'Cem', 'AU');
+        // Same answer as for an unknown e-mail: no hint who is registered.
         await expectLater(
           endpoints.gift.send(ali, input(email: 'cem@gmail.com')),
-          throwsTreat('recipient_not_verified'),
+          throwsTreat('recipient_not_found'),
         );
         await expectLater(
           endpoints.gift.send(cem, input()),
@@ -284,6 +286,23 @@ void main() {
           throwsTreat('payment_unavailable'),
         );
         expect(await endpoints.gift.sent(ali), isEmpty);
+      });
+
+      test('when someone probes e-mails over and over then '
+          'too_many_lookups', () async {
+        for (var i = 0; i < 20; i++) {
+          await expectLater(
+            endpoints.gift.send(ali, input(email: 'nobody$i@x.edu.tr')),
+            throwsTreat('recipient_not_found'),
+          );
+        }
+        await expectLater(
+          endpoints.gift.send(ali, input()),
+          throwsTreat('too_many_lookups'),
+        );
+        // The hour passes: lookups work again.
+        now = now.add(const Duration(hours: 1, minutes: 1));
+        await endpoints.gift.send(ali, input());
       });
 
       test('when ten gifts were started today then daily_gift_cap; '
@@ -586,6 +605,66 @@ void main() {
           GiftStatus.cancelled,
         );
       });
+    });
+  });
+
+  withServerpod('Given demo mode', (sessionBuilder, endpoints) {
+    setUp(() => demoOverride = true);
+    tearDown(() => demoOverride = null);
+
+    test('when a demo guest gifts themselves then it works (one judge can '
+        'try the whole loop), but a real student cannot', () async {
+      final owner = await signedInAs(sessionBuilder, 'owner@place.com');
+      final shop = (await endpoints.profile.createShop(
+        owner,
+        shopInput(),
+      )).shop!;
+      await Shop.db.updateRow(
+        sessionBuilder.build(),
+        shop.copyWith(verified: true),
+      );
+      final guest = await signedInAs(sessionBuilder, 'guest-9@demo.treat');
+      await endpoints.profile.createStudent(guest, 'Guest 9', guestUniversity);
+      // .demo.treat is not .edu: verify the guest like the demo does.
+      await StudentProfile.db.updateRow(
+        sessionBuilder.build(),
+        (await endpoints.profile.getMe(guest)).student!.copyWith(
+          verification: StudentVerification.verified,
+        ),
+      );
+      final checkout = await endpoints.gift.send(
+        guest,
+        GiftInput(
+          shopId: shop.id!,
+          amountTl: 20,
+          recipientEmail: 'guest-9@demo.treat',
+        ),
+      );
+      expect(checkout.gift.recipientName, 'Guest 9');
+      gateway.payFor(gateway.started.last);
+      final view = await endpoints.gift.confirm(guest, checkout.gift.id!);
+      expect(view.gift.status, GiftStatus.pending);
+      // The same person is both sides: they see the code (QR) on the gift.
+      expect(await endpoints.gift.received(guest), hasLength(1));
+      expect(
+        (await endpoints.gift.get(guest, checkout.gift.id!)).gift.code,
+        hasLength(6),
+      );
+      expect(view.gift.code, hasLength(6));
+
+      final real = await signedInAs(sessionBuilder, 'real@ogr.anadolu.edu.tr');
+      await endpoints.profile.createStudent(real, 'Real', 'AU');
+      await expectLater(
+        endpoints.gift.send(
+          real,
+          GiftInput(
+            shopId: shop.id!,
+            amountTl: 20,
+            recipientEmail: 'real@ogr.anadolu.edu.tr',
+          ),
+        ),
+        throwsTreat('gift_to_self'),
+      );
     });
   });
 }

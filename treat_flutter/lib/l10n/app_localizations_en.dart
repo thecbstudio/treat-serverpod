@@ -1660,7 +1660,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get err_gift_to_self => 'You can\'t gift yourself — pick a friend.';
 
   @override
-  String get err_recipient_not_found => 'No student on treat has that e-mail.';
+  String get err_recipient_not_found =>
+      'No verified student on treat has that e-mail.';
 
   @override
   String get err_recipient_not_verified =>
@@ -1717,4 +1718,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_demo_only => 'Samples are only for demo students.';
+
+  @override
+  String get err_too_many_lookups =>
+      'Too many e-mail lookups — try again in an hour, or pick your friend from their profile.';
+
+  @override
+  String get giftUseMyself => 'Demo: use my own e-mail';
 }

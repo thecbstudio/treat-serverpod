@@ -207,6 +207,7 @@ String errorMessage(Object error, AppLocalizations l) {
       'own_content' => l.err_own_content,
       'demo_only' => l.err_demo_only,
       'gift_to_self' => l.err_gift_to_self,
+      'too_many_lookups' => l.err_too_many_lookups,
       'recipient_not_found' => l.err_recipient_not_found,
       'recipient_not_verified' => l.err_recipient_not_verified,
       'invalid_recipient' => l.err_invalid_recipient,

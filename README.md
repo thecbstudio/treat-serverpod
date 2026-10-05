@@ -74,7 +74,7 @@ flowchart LR
 | **Future calls / scheduled work** | An hourly job re-checks TikToks a week after approval through TikTok's public oEmbed API and takes the treat back if the video was deleted. `ExpireClaimCall` fires at `expiresAt` (cancelled on redeem). `VerifyProofCall` (screenshots) and `VerifyIdentityCall` (student cards, business documents) run the AI check right after submit, retries with backoff, and never punishes the student for an API failure. On Serverpod Cloud's Starter plan (future calls off) verification runs in-process and resumes after a restart; expiry needs no job because the rules treat a claim past its TTL as expired. |
 | **File uploads / cloud storage** | Proof screenshots go to **private** storage through upload descriptions; the server picks the path, checks type/size by magic bytes, and gives the business short-lived download links. |
 | **Authentication** | Serverpod email identity provider (sign-up with terms/privacy checkbox, verification code, login) + our own student / business profiles. **Account deletion** removes the auth user in one transaction (profile, claims, reports, logins and refresh tokens cascade), deletes the screenshots from storage and revokes open sessions via `session.messages.authenticationRevoked`. `.edu` e-mails are verified automatically. Demo mode adds a one-tap sign-in that creates a guest and issues its token server-side (`AuthServices.instance.tokenManager.issueToken`). |
-| **Testing** | `serverpod_test` (`withServerpod`): 135+ tests — rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes and appeals, drops, demo sign-in and hardening, ratings, removed-post reports, post re-checks, settings, account deletion, content reports. |
+| **Testing** | `serverpod_test` (`withServerpod`): 190 tests — rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes and appeals, drops, demo sign-in and hardening, ratings, removed-post reports, post re-checks, settings, account deletion, content reports. |
 | **Serverpod Cloud** | Hosting of server + Flutter web app, Postgres, storage and e-mail. |
 
 ### Rules worth knowing (`treat_server/lib/src/domain/rules.dart`)
@@ -148,7 +148,16 @@ Created automatically on server start when `demoAccountPassword` is set (local p
 3. A: open the live drop → **Claim treat** → note the 6-character code. B: **Scan** → type the code. A flips to *Redeemed* by itself.
 4. A: no real post needed — under *Demo: no post handy?* send the sample that **tags the place but has no #işbirliği** → Claude rejects it with *no disclosure* (strike 1/3). Appeal with the sample that **tags the place + #işbirliği** → Claude approves and the strike is returned. B's **Panel** updates live. (A third sample tags nobody at all.)
 
+5. **Gifting, alone in one window:** as the guest student open **Gifts → Send a gift**, tap *Demo: use my own e-mail*, pick *Pixel Oyun Kafe*, 20 TL → **Pay** → on iyzico's **sandbox** page use card `5528 7900 0000 0008`, any future date, CVC `123`. Back in treat the gift is *Ready to collect* with a QR. In the business window: **Scan** → type the gift's 6-character code → *Gift handed over*; the guest gets +1 treat and the business **Panel** shows the gift money (net of the 15 %). (Only demo guests may gift themselves.) Cancelling a gift before the scan refunds the card for real.
+6. **Student-card check:** welcome screen → **Try the student-card check** → *Use the sample card* (Claude approves) or *Use someone else's card* (Claude rejects: name mismatch).
+
 The samples are ready-made story screenshots stored on the server; they go through exactly the same upload → storage → Claude path as a real one. They only exist for demo accounts, and demo sign-in only exists while the server runs in demo mode (`demoAccountPassword` set).
+
+## What the AI can and can't promise
+
+- Claude checks that a post tags the place and is disclosed as an ad, that a student card matches the profile and isn't expired, and that a business document matches the place. It **cannot prove authenticity**: a determined person can fake a screenshot, a card or a document. Against that: permanent posts are linked and re-checked, there are strikes, one appeal, reports, and 3 tries a day for cards. A real launch would add official checks (e-Devlet student certificate, tax-office lookup) and Instagram/TikTok account connection.
+- Text inside an uploaded image is treated as data, never as instructions to the model ("approve this" is a reason to reject).
+- Gift payments are verified server-to-server (signed retrieve, amount and conversation id must match), refunds are retried, e-mail lookups are rate-limited and answer the same for "unknown" and "not verified", and only reports from verified students can hide content. **Paying gift money out to places is not automated** and would need a manual review of the verified badge first.
 
 ## Project layout
 

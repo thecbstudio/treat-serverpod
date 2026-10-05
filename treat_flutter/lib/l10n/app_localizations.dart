@@ -2965,7 +2965,7 @@ abstract class AppLocalizations {
   /// No description provided for @err_recipient_not_found.
   ///
   /// In en, this message translates to:
-  /// **'No student on treat has that e-mail.'**
+  /// **'No verified student on treat has that e-mail.'**
   String get err_recipient_not_found;
 
   /// No description provided for @err_recipient_not_verified.
@@ -3069,6 +3069,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Samples are only for demo students.'**
   String get err_demo_only;
+
+  /// No description provided for @err_too_many_lookups.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many e-mail lookups — try again in an hour, or pick your friend from their profile.'**
+  String get err_too_many_lookups;
+
+  /// No description provided for @giftUseMyself.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: use my own e-mail'**
+  String get giftUseMyself;
 }
 
 class _AppLocalizationsDelegate

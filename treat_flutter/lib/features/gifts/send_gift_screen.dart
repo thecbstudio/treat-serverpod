@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:treat_client/treat_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/session.dart';
 import '../../app/theme.dart';
 import '../../client.dart';
 import '../../ui/labels.dart';
@@ -34,12 +35,29 @@ class _SendGiftScreenState extends State<SendGiftScreen> {
   int _amount = 50;
   bool _busy = false;
 
+  /// Demo guests may gift themselves, so one judge can try the whole loop.
+  bool _demoSelf = false;
+
   Future<({List<Shop> places, String mode})> _load() async {
     final results = await Future.wait([
       client.gift.places(),
       client.gift.mode(),
     ]);
     return (places: results[0] as List<Shop>, mode: results[1] as String);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final email = appSession.me?.student?.email ?? '';
+    if (email.endsWith('@demo.treat')) {
+      client.demo
+          .enabled()
+          .then((on) {
+            if (mounted && on) setState(() => _demoSelf = true);
+          })
+          .catchError((_) {});
+    }
   }
 
   @override
@@ -143,6 +161,18 @@ class _SendGiftScreenState extends State<SendGiftScreen> {
                         validator: (v) => (v == null || !v.contains('@'))
                             ? l.fieldRequired
                             : null,
+                      ),
+                    if (_demoSelf && widget.toStudentId == null)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          onPressed: () => setState(
+                            () => _email.text =
+                                appSession.me?.student?.email ?? '',
+                          ),
+                          icon: const Icon(Icons.person_outline_rounded),
+                          label: Text(l.giftUseMyself),
+                        ),
                       ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<int>(

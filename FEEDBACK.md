@@ -58,3 +58,14 @@ Environment: Windows 11 Home (26200), Flutter 3.47.5, Dart 3.13.4, serverpod_cli
 - **What:** `.github/workflows/*.yml` pin `flutter-version: '3.44.4'`; the project was created and developed with Flutter 3.47.5 and depends on `intl ^0.20.3`. On CI, 3.44.4's `flutter_localizations` pins `intl 0.20.2`, so `flutter pub get` fails and **all three** workflows (Tests, Analyze, Format) went red on every push before any of our code ran.
 - **Impact:** A healthy project looks broken on GitHub — the first thing reviewers see.
 - **Suggestion:** Write the Flutter version `serverpod create` ran with into the workflows (or use `channel: stable` without a pin), and mention the pin in the create output.
+
+## 12. A `serverOnly` field must be nullable, so required server-side values need `!` everywhere
+- **What:** `conversationId: String, scope=serverOnly` fails generation with "must be nullable when the scope property is set to serverOnly". For a value that is always set (the id that ties a payment to a gift) we have to declare `String?` and write `gift.conversationId!` at every use.
+- **Impact:** The type no longer says what is true, and a forgotten `!` becomes a runtime null instead of a compile error.
+- **Suggestion:** Allow non-nullable `serverOnly` fields (the client class simply doesn't have them), or generate a server-side extension that exposes them as non-null.
+
+## 13. Generated `toJson()` includes `serverOnly` fields; only `toJsonForProtocol()` leaves them out
+- **What:** In a test asserting that payment ids never reach a client, `gift.toJson()` contained `paymentId` (a `serverOnly` field) while `toJsonForProtocol()` did not. Endpoints are safe because they use the protocol serialization, but any hand-written JSON route or log line that calls `toJson()` leaks them.
+- **Impact:** Easy to leak secrets by accident in raw web routes (webhooks, server-rendered pages), which Serverpod 4 encourages through Relic.
+- **Suggestion:** Make `toJson()` omit `serverOnly` fields too (and add an explicit `toJsonWithServerOnly()` for storage), or document the difference next to the `scope` docs.
+

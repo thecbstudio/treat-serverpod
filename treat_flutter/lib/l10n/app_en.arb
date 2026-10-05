@@ -698,7 +698,7 @@
   "@dashGiftsWaitingNet": {"placeholders": {"n": {"type": "String"}}},
   "dashGiftsHint": "Gift payments are collected by treat; paying them out to places is not automated in this build.",
   "err_gift_to_self": "You can't gift yourself — pick a friend.",
-  "err_recipient_not_found": "No student on treat has that e-mail.",
+  "err_recipient_not_found": "No verified student on treat has that e-mail.",
   "err_recipient_not_verified": "Only verified students can receive gifts.",
   "err_invalid_recipient": "Enter your friend's e-mail.",
   "err_shop_not_giftable": "Gifts go to verified places only.",
@@ -715,5 +715,7 @@
   "verifySampleMatching": "Use the sample card",
   "verifySampleOther": "Use someone else's card",
   "verifySampleHint": "Ready-made card photos. The real AI checks them like any upload — the second one shows a rejection.",
-  "err_demo_only": "Samples are only for demo students."
+  "err_demo_only": "Samples are only for demo students.",
+  "err_too_many_lookups": "Too many e-mail lookups — try again in an hour, or pick your friend from their profile.",
+  "giftUseMyself": "Demo: use my own e-mail"
 }

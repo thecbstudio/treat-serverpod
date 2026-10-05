@@ -219,6 +219,26 @@ void main() {
         expect(panel.reviews.single.review, 'Lovely place');
       });
 
+      test('when two unverified accounts report a review then it stays '
+          '(sock puppets cannot hide it)', () async {
+        final claim = await approvedVisit();
+        for (final n in [1, 2]) {
+          final puppet = await signedInAs(sessionBuilder, 'puppet$n@gmail.com');
+          await endpoints.profile.createStudent(puppet, 'Puppet $n', 'AU');
+          await endpoints.social.report(
+            puppet,
+            ReportKind.review,
+            claim.id!,
+            ReportReason.fake,
+          );
+        }
+        expect(
+          (await endpoints.social.shopPage(bea, shopId)).reviews,
+          hasLength(1),
+        );
+        expect(await Report.db.count(sessionBuilder.build()), 2);
+      });
+
       test(
         'when two users report a wall post then it leaves the walls',
         () async {

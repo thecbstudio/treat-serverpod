@@ -1,77 +1,84 @@
-﻿# Submission kit
+# Submission kit
 
-Everything needed for the BuilderBase form. Fill the `TODO`s on submission day.
+Everything needed for the BuilderBase form. Fill the `TODO`s on submission day (13 Oct; the deadline is 14 Oct 23:59 CEST). The demo video must be **under 2 minutes** (YouTube or Vimeo).
 
 ---
 
 ## 1. Title & tagline
 
-**treat. â€” free treats for students, real local reach for small businesses, verified by AI**
+**treat. — free treats for students, verified local reach for small businesses**
 
 ## 2. Description (what it does)
 
-treat is a barter marketplace between university students and the small businesses around campus. A cafÃ©, barber or gaming lounge offers something small for free â€” a coffee, a haircut, an hour of console. A student claims it, shows a QR code at the counter, and in return posts about the place on Instagram, Google Reviews or TikTok. They upload a screenshot, and Claude checks it within seconds: approved â†’ the treat counts toward the student's streak, badges and the leaderboard; rejected â†’ a clear reason and one appeal.
+treat is a marketplace between university students and the small businesses around campus. A café, barber or gaming lounge offers something small for free — a coffee, a haircut, an hour of console. A student claims it, shows a QR code at the counter, and in return posts about the place on Instagram or TikTok, tagged and disclosed as an ad (#işbirliği). They upload a screenshot and Claude checks it within seconds: approved → the treat counts toward their streak, badges and the leaderboard; rejected → a clear reason and one appeal.
 
-Businesses get word-of-mouth from real local customers instead of paid ads, with a live panel that shows every claim, scan, post and verdict as it happens, plus an estimate of the reach they earned. Students get free things for doing what they already do.
+What businesses get: word-of-mouth from real local customers instead of paid ads, a live panel with every claim, scan, post and verdict as it happens, a **verified in-app treat score** from students the place actually scanned in, a public page, and a printable counter card whose QR asks *every* customer for a Google review (Google forbids rewarding reviews, so treat never does). Students can also **gift** a paid treat to a friend: card payment on iyzico, QR at the counter, 15 % commission, real refunds.
 
-One user, one problem, one flow: *show QR â†’ get scanned â†’ post â†’ get approved*, live on both phones.
+One loop, live on both phones: *claim → show QR → get scanned → post → get verified* — and, as a second loop, *pay → friend shows QR → place scans*.
 
 ## 3. How it's built
 
-- **Flutter web** client (phone-first; one link for judges), **Serverpod 4** backend, deployed on **Serverpod Cloud** (server, Postgres, file storage, e-mail).
-- **All rules on the server, in transactions:** eligibility (verification, strikes, once-a-week per place, active hours in Europe/Istanbul, daily/total caps) is computed from the claims table â€” no counters to drift â€” and claiming locks the student and offer rows so double taps and races can't beat a cap. Redeem is idempotent.
-- **Streams + server events:** `claim.watch` and `shop.watchFeed` push state over WebSockets; changes are posted to `claim:<id>` / `shop:<id>` channels, with a periodic DB re-check so a missed message never leaves a screen wrong.
-- **Future calls:** `ExpireClaimCall` expires unused QR codes at their deadline (cancelled on redeem); `VerifyProofCall` runs the AI check in the background with retries and backoff â€” a technical failure never costs the student a strike.
-- **File uploads:** proof screenshots go to private cloud storage via upload descriptions; the server chooses the path and validates the file; businesses get short-lived links.
-- **Auth:** Serverpod's e-mail identity provider; `.edu` addresses are verified automatically.
-- **AI:** Claude via the Anthropic Messages API; the verdict is forced through a tool call (structured JSON, no text parsing).
-- **Tests:** 92 `serverpod_test` tests (rules, claim/redeem/expiry, live streams, proof verification with a fake AI, strikes & appeals, drops, demo sign-in).
+- **Flutter web** client (phone-first, wide layout on desktop), **Serverpod 4** backend on **Serverpod Cloud** (server, Postgres, private file storage, e-mail).
+- **All rules on the server, in transactions:** eligibility (verification, strikes, once-a-week per place, active hours in Europe/Istanbul, caps) is computed from the claims table, and claiming locks the student and offer rows so double taps and races can't beat a cap. Redeem is idempotent; a gift can be redeemed or cancelled, never both.
+- **Streams + server events:** `claim.watch` and `shop.watchFeed` push state over WebSockets, with a periodic DB re-check so a missed message never leaves a screen wrong.
+- **Future calls:** `ExpireClaimCall` expires unused QR codes, `VerifyProofCall` / `VerifyIdentityCall` run the AI checks in the background with retries. On the Starter plan (future calls off) the same work runs in-process and resumes after a restart. A timer expires old gifts and retries refunds.
+- **Web server (Relic):** server-rendered public place pages (`/p/:id`, link previews + schema.org), the printable counter card with server-drawn QR codes, `/privacy`, `/terms`, and the iyzico payment callback (`POST /pay/iyzico/:id`).
+- **File uploads:** screenshots, student cards and documents go to private storage via upload descriptions; the server picks the path and validates the file. Card and document photos are deleted as soon as the AI has decided.
+- **Payments:** iyzico hosted checkout (card data never touches treat), signed IYZWSv2 requests, results fetched server-to-server and checked for amount and conversation id, refunds retried until they succeed. Tested against the real iyzico **sandbox**.
+- **Auth:** Serverpod's e-mail identity provider; `.edu` verified automatically, everyone else sends a student card that Claude checks. Account deletion removes everything personal and refunds open gifts.
+- **AI:** Claude via the Anthropic Messages API, every verdict forced through a tool call (structured, no text parsing); text inside photos is treated as data, never as instructions.
+- **Tests:** 190 `serverpod_test` tests plus gateway unit tests; CI (analyze, format, tests) is green.
 
 ## 4. AI disclosure
 
-Built with Claude Code (Anthropic) as a pair programmer: it wrote most of the code under my direction; I made the product and scope decisions, tested every flow on real devices and reviewed the changes. At runtime the app uses Claude (Anthropic API) to verify proof screenshots.
+Built with Claude Code (Anthropic) as a pair programmer: it wrote most of the code under my direction; I made the product and scope decisions and reviewed the changes. At runtime the app uses Claude (Anthropic API) to verify proof screenshots, student cards and business documents.
 
 ## 5. Prior-work disclosure
 
-The idea was explored earlier as a React/Firebase prototype. This submission is a new implementation written from scratch during the hackathon in Flutter + Serverpod; no code was reused (design tokens, copy and category photos were). *(Adjust after BuilderBase's answer to our rules e-mail.)*
+The idea was explored earlier as a React/Firebase prototype, used only as a feature reference. This submission is a new implementation written from scratch during the hackathon in Flutter + Serverpod (first commit 26 Sep 2026); no code was reused (design tokens, copy and category photos were). *(Adjust after BuilderBase's answer to our Help Desk question.)*
 
-## 6. Links & access
+## 6. Honest limits
 
-- Live app: https://treat-app.serverpod.space  `TODO confirm after deploy`
-- Repository: https://github.com/thecbstudio/treat-serverpod (private â€” shared with viktor@serverpod.dev, alexander@serverpod.dev, isak@serverpod.dev) `TODO share`
+- AI checks can't prove authenticity (a determined person can fake a screenshot, card or document); the README explains what we do about it.
+- Paying gift money out to places is not automated (the panel shows what is owed, net of 15 %); production would use iyzico marketplace sub-merchants. Payments run in the iyzico sandbox.
+- Instagram/TikTok accounts are not connected; web only; English UI.
+
+## 7. Links & access
+
+- Live app: `TODO https://<project>.serverpod.space after deploy`
+- Repository: https://github.com/thecbstudio/treat-serverpod (private — share with viktor@serverpod.dev, alexander@serverpod.dev, isak@serverpod.dev) `TODO share`
 - Video: `TODO YouTube/Vimeo link`
-- Demo logins (password: `TODO prod demo password`):
-  - Student: `student@demo.treat`
-  - Business: `pixel@demo.treat` (Pixel Oyun Kafe, open 13:00â€“23:00 Istanbul), `kirlangic@demo.treat` (09:00â€“18:00)
-- Test tip: no sign-up needed â€” on the welcome screen tap **Student** in one window and **Business** in another (incognito). Claim the live drop â†’ type the 6-character code on the business's **Scan** tab â†’ on the student side send the sample story that tags nobody (Claude rejects), then appeal with the one that tags the place (Claude approves) â†’ watch both screens.
+- No sign-up needed. On the welcome screen use **Student**, **Business** and **Try the student-card check** (one tap each). Demo logins (password `TODO production.demoAccountPassword from passwords.yaml`): `student@demo.treat`, `pixel@demo.treat` (Pixel Oyun Kafe), `kirlangic@demo.treat`.
+- Test card for the gift payment (iyzico sandbox): `5528 7900 0000 0008`, any future date, CVC `123`.
+- Step-by-step: README → "Demo accounts" (claim → scan → post → verdict, gifting alone in one window, student-card check).
 
-## 7. Build & run
+## 8. Build & run
 
-See README â†’ "Run it locally" (`cp config/passwords.example.yaml config/passwords.yaml && serverpod start`).
+See README → "Run it locally" (`cp config/passwords.example.yaml config/passwords.yaml` and add the Anthropic key, plus the iyzico sandbox keys for gifting, then `serverpod start`).
 
 ---
 
-# Video script (< 2:00)
+# Video script (< 2:00, aim for 1:50)
 
-Setup: **phone** = student (browser, logged in as `student@demo.treat`), **laptop** = business panel (`pixel@demo.treat`). Record the laptop screen + film the phone, or screen-record both and cut side by side. Do it during Pixel's open hours (13:00â€“23:00). Prepare a real Instagram story screenshot that tags the place.
+Setup: **phone** (or a narrow browser window) = student, **laptop** = business panel, both from the one-tap demo buttons on the live link. Record both and cut side by side. Have the iyzico test card ready.
 
 | Time | Shot | Voice-over / caption |
 |---|---|---|
-| 0:00â€“0:10 | Welcome screen on the phone | "Students want free stuff. Small businesses want real local reach. treat trades one for the other." |
-| 0:10â€“0:25 | Discover â†’ open "1 hour of console" â†’ rules card | "Every offer has rules â€” once a week per place, opening hours, daily slots. The server checks them for you, live." |
-| 0:25â€“0:35 | Tap **Claim treat** â†’ QR + code + countdown | "Claim it, and you get a QR code valid for two hours." |
-| 0:35â€“0:55 | Laptop: **Scan** â†’ type the code â†’ green "Valid". Cut to the phone: it flipped to **Redeemed** on its own | "At the counter the business scans it â€” and the student's screen updates instantly. Serverpod streams." |
-| 0:55â€“1:20 | Phone: pick the story screenshot â†’ Submit â†’ **Under review** â†’ **Approved** | "Post about the place, upload a screenshot, and Claude checks that it really tags the business." |
-| 1:20â€“1:35 | Laptop **Panel**: feed row turning Approved, reach / value card, open the proof | "The business sees every claim, scan and verified post in real time, and the reach it earned." |
-| 1:35â€“1:50 | Phone: profile (treats, streak, badges) â†’ leaderboard | "Students build streaks and badges; fake posts get a strike, and there's one fair appeal." |
-| 1:50â€“2:00 | Logo / link | "treat â€” built with Flutter and Serverpod 4 on Serverpod Cloud." |
+| 0:00–0:10 | Welcome screen | "Students want free stuff. Small businesses want real local reach. treat trades one for the other — and proves it happened." |
+| 0:10–0:25 | Student: open the live drop → **Claim treat** → QR + code | "Claim a treat, get a QR code. The server checks the rules — once a week, opening hours, stock — inside a locked transaction." |
+| 0:25–0:40 | Business: **Scan** → code. Cut to the student: flips to **Redeemed** by itself | "The place scans it and the student's phone updates instantly — Serverpod streams over WebSockets." |
+| 0:40–1:00 | Student: demo sample *tags the place, no #işbirliği* → Claude rejects *no disclosure*; appeal with the compliant sample → **Approved** | "Claude reads the screenshot: tagged the place, disclosed as an ad as Turkish rules require. One fair appeal." |
+| 1:00–1:25 | Student: **Gifts** → pay on iyzico's page (sandbox card) → gift with QR. Business: scan → **Gift handed over**; Panel shows 17 TL after the 15 % | "Students can also gift a paid treat. Real card checkout on iyzico, the server verifies the payment itself, and a cancel is a real refund." |
+| 1:25–1:40 | Business: treat score + reviews, **Reputation kit**, public page `/p/…` and the counter card | "Places earn a verified treat score and a public page — and a counter card that asks every customer for a Google review, never tied to a treat." |
+| 1:40–1:52 | Quick cut: student-card check approved; README "190 tests" / CI green | "No .edu e-mail? Claude checks the student card, then deletes the photo. Endpoints, streams, future calls, storage, auth, Relic pages, migrations — all Serverpod 4." |
+| 1:52–1:58 | Logo / link | "treat. — Flutter + Serverpod 4 on Serverpod Cloud." |
 
 ---
 
 # Hackathon post (Best Hackathon Post)
 
-> Built **treat** for the #Serverpod hackathon: students claim free treats from local cafÃ©s and shops, post about them, and Claude verifies the post â€” while the student's phone and the business's panel update live over Serverpod streams. Future calls expire QR codes and run the AI checks in the background; all eligibility rules run server-side in locked transactions. Flutter web + Serverpod 4 + Serverpod Cloud. ðŸŽ¥ `TODO video link`
+> Built **treat.** for the #Serverpod hackathon: students claim free treats from local cafés, post about them, and Claude verifies the post — while the student's phone and the business's panel update live over Serverpod streams. Future calls expire QR codes and run the AI checks; friends can gift a paid treat through iyzico with real refunds; all rules run server-side in locked transactions. Flutter web + Serverpod 4 + Serverpod Cloud, 190 tests. 🎥 `TODO video link`
 
 # Feedback form
 
-Use `FEEDBACK.md` (11 concrete issues with suggested fixes) â€” paste the top items into the Most Valuable Feedback form.
+Use `FEEDBACK.md` (13 concrete issues with suggested fixes) — paste the top items into the Most Valuable Feedback form.

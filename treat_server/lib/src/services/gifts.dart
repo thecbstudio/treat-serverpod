@@ -82,10 +82,15 @@ String? _cleanMessage(String? m) {
   return t;
 }
 
-/// What a viewer may see: never the code to the sender, never iyzico ids.
-GiftView presentGift(Gift g, {required bool viewerIsSender}) => GiftView(
+/// What a viewer may see: the code only to the recipient (also when they
+/// gifted themselves, in demo mode), never iyzico ids.
+GiftView presentGift(
+  Gift g, {
+  required bool viewerIsSender,
+  bool viewerIsRecipient = false,
+}) => GiftView(
   gift: g.copyWith(
-    code: !viewerIsSender && g.status == GiftStatus.pending ? g.code : null,
+    code: viewerIsRecipient && g.status == GiftStatus.pending ? g.code : null,
   ),
   viewerIsSender: viewerIsSender,
   refundPending:
@@ -102,6 +107,24 @@ Future<List<Shop>> giftableShops(Session session) => Shop.db.find(
   orderBy: (t) => t.name,
 );
 
+/// Looking friends up by e-mail tells whether an address belongs to a
+/// student, so it is rate-limited per sender (per server instance).
+const _maxLookupsPerHour = 20;
+final _lookups = <int, List<DateTime>>{};
+
+void _throttleLookups(int studentId) {
+  final now = clock();
+  final recent = _lookups[studentId] ??= [];
+  recent.removeWhere((t) => now.difference(t) > const Duration(hours: 1));
+  if (recent.length >= _maxLookupsPerHour) {
+    throw treatError(
+      'too_many_lookups',
+      'Too many e-mail lookups. Try again later.',
+    );
+  }
+  recent.add(now);
+}
+
 Future<StudentProfile> _recipientOf(
   Session session,
   GiftInput input,
@@ -112,24 +135,25 @@ Future<StudentProfile> _recipientOf(
   if (byEmail == (input.recipientStudentId != null)) {
     throw treatError('invalid_recipient');
   }
+  if (byEmail) _throttleLookups(sender.id!);
   final recipient = byEmail
       ? await StudentProfile.db.findFirstRow(
           session,
           where: (t) => t.email.equals(email),
         )
       : await StudentProfile.db.findById(session, input.recipientStudentId!);
-  if (recipient == null) {
+  // One answer for "unknown" and "not verified": no hint which e-mails exist.
+  if (recipient == null ||
+      recipient.verification != StudentVerification.verified) {
     throw treatError(
       'recipient_not_found',
-      'No student with that e-mail on treat.',
+      'No verified student with that e-mail on treat.',
     );
   }
-  if (recipient.id == sender.id) throw treatError('gift_to_self');
-  if (recipient.verification != StudentVerification.verified) {
-    throw treatError(
-      'recipient_not_verified',
-      'Only verified students can receive gifts.',
-    );
+  // Demo guests may gift themselves, so a judge can try pay → QR → scan alone.
+  final demoSelf = demoModeOn(session) && isGuest(sender);
+  if (recipient.id == sender.id && !demoSelf) {
+    throw treatError('gift_to_self');
   }
   return recipient;
 }
@@ -346,7 +370,11 @@ Future<GiftView> giftFor(Session session, int giftId) async {
       (gift.senderId != student.id && gift.recipientId != student.id)) {
     throw treatError('not_found', 'Gift not found.');
   }
-  return presentGift(gift, viewerIsSender: gift.senderId == student.id);
+  return presentGift(
+    gift,
+    viewerIsSender: gift.senderId == student.id,
+    viewerIsRecipient: gift.recipientId == student.id,
+  );
 }
 
 /// The sender asks for the payment state of their gift (the browser may not
@@ -355,7 +383,12 @@ Future<GiftView> confirmGift(Session session, int giftId) async {
   final view = await giftFor(session, giftId);
   if (!view.viewerIsSender) throw treatError('not_found', 'Gift not found.');
   final settled = await settleGift(session, giftId);
-  return presentGift(settled, viewerIsSender: true);
+  final student = await requireStudent(session);
+  return presentGift(
+    settled,
+    viewerIsSender: true,
+    viewerIsRecipient: settled.recipientId == student.id,
+  );
 }
 
 Future<List<GiftView>> sentGifts(Session session) async {
@@ -368,7 +401,14 @@ Future<List<GiftView>> sentGifts(Session session) async {
     orderBy: (t) => t.createdAt.desc(),
     limit: 50,
   );
-  return [for (final g in gifts) presentGift(g, viewerIsSender: true)];
+  return [
+    for (final g in gifts)
+      presentGift(
+        g,
+        viewerIsSender: true,
+        viewerIsRecipient: g.recipientId == student.id,
+      ),
+  ];
 }
 
 Future<List<GiftView>> receivedGifts(Session session) async {
@@ -381,7 +421,14 @@ Future<List<GiftView>> receivedGifts(Session session) async {
     orderBy: (t) => t.createdAt.desc(),
     limit: 50,
   );
-  return [for (final g in gifts) presentGift(g, viewerIsSender: false)];
+  return [
+    for (final g in gifts)
+      presentGift(
+        g,
+        viewerIsSender: g.senderId == student.id,
+        viewerIsRecipient: true,
+      ),
+  ];
 }
 
 /// The sender takes a gift back while the place hasn't handed it over. The
@@ -437,6 +484,18 @@ Future<void> refundGift(
   int giftId, {
   String ip = fallbackIp,
 }) async {
+  // Cancel button and sweep must not both call iyzico for the same gift.
+  if (!_refunding.add(giftId)) return;
+  try {
+    await _refundGift(session, giftId, ip);
+  } finally {
+    _refunding.remove(giftId);
+  }
+}
+
+final _refunding = <int>{};
+
+Future<void> _refundGift(Session session, int giftId, String ip) async {
   final gift = await Gift.db.findById(session, giftId);
   if (gift == null ||
       gift.refundedAt != null ||

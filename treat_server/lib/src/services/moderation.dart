@@ -9,7 +9,7 @@ const hideAfterReports = 2;
 
 /// Flags public content. Users can't report their own content and each user
 /// counts once per target. A review or wall post is hidden from public pages
-/// once [hideAfterReports] different users reported it; places are only
+/// once [hideAfterReports] different verified students reported it; places are only
 /// recorded. Demo guests' reports are recorded but never hide anything, so
 /// two one-tap guests can't empty the shared demo places.
 Future<void> report(
@@ -72,14 +72,16 @@ Future<void> report(
       where: (t) => t.kind.equals(kind) & t.targetId.equals(targetId),
       transaction: tx,
     );
-    final guests = await StudentProfile.db.find(
+    // Only verified (.edu or card-checked), non-guest students count: sock
+    // puppets must not be able to hide a place's bad reviews.
+    final counted = await StudentProfile.db.count(
       session,
       where: (t) =>
           t.authUserId.inSet({for (final r in reports) r.reporterId}) &
-          t.university.equals(guestUniversity),
+          t.verification.equals(StudentVerification.verified) &
+          t.university.notEquals(guestUniversity),
       transaction: tx,
     );
-    final counted = reports.length - guests.length;
     if (counted < hideAfterReports) return;
     final review = kind == ReportKind.review;
     await Claim.db.updateRow(
