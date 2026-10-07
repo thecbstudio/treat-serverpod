@@ -60,6 +60,8 @@ See README → "Run it locally" (`cp config/passwords.example.yaml config/passwo
 
 # Video script (< 2:00, aim for 1:50)
 
+Step-by-step recording guide (setup, tools, click path, subtitles, checklist): `docs/VIDEO_PLAN.md`.
+
 Setup: **phone** (or a narrow browser window) = student, **laptop** = business panel, both from the one-tap demo buttons on the live link. Record both and cut side by side. Have the iyzico test card ready.
 
 | Time | Shot | Voice-over / caption |
