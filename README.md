@@ -127,6 +127,11 @@ cp config/passwords.example.yaml config/passwords.yaml   # add your Anthropic ke
 serverpod start          # server + DB + migrations + demo seed + Flutter web app
 ```
 
+Keys in `config/passwords.yaml` (git-ignored):
+- `anthropicApiKey` — **needed for the AI checks** (posts, student cards, documents). Without it the checks retry and then give the claim back with no strike.
+- `iyzicoApiKey` / `iyzicoSecretKey` — **optional, only for gifting**; free sandbox keys from [sandbox-merchant.iyzipay.com](https://sandbox-merchant.iyzipay.com) (see the comments in `passwords.example.yaml`). Without them the Gifts tab says payments aren't set up and everything else works.
+- `demoAccountPassword` — already set in the example; it turns on the one-tap demo buttons and the seeded demo logins.
+
 `serverpod start` prints the app URL. Locally no e-mail is sent: the sign-up verification code is printed in the server console (`Registration code for …`). On Serverpod Cloud the code arrives by e-mail. Tests: `cd treat_server && dart test`.
 
 > Windows note: the first start downloads PostgreSQL (~2 min, no progress bar). If you run it from an MSIX-packaged app, set `SERVERPOD_PG_CACHE_DIR` to a folder outside `%LOCALAPPDATA%` (see `FEEDBACK.md` #4).

@@ -45,7 +45,7 @@ The idea was explored earlier as a React/Firebase prototype, used only as a feat
 
 ## 7. Links & access
 
-- Live app: `TODO https://<project>.serverpod.space after deploy`
+- Live app (optional; BuilderBase only requires demo video, repo and description): `TODO https://<project>.serverpod.space if deployed`
 - Repository: https://github.com/thecbstudio/treat-serverpod (private — share with viktor@serverpod.dev, alexander@serverpod.dev, isak@serverpod.dev) `TODO share`
 - Video: `TODO YouTube/Vimeo link`
 - No sign-up needed. On the welcome screen use **Student**, **Business** and **Try the student-card check** (one tap each). Demo logins (password `TODO production.demoAccountPassword from passwords.yaml`): `student@demo.treat`, `pixel@demo.treat` (Pixel Oyun Kafe), `kirlangic@demo.treat`.
