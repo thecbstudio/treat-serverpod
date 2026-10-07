@@ -12,7 +12,7 @@ Built for "Build Something Real: The Serverpod Hackathon". **Deadline 14 Oct 202
 - All authorization and business rules live on the server, inside transactions. Never swallow errors — every screen has error + retry states.
 - Time zone for business rules: **Europe/Istanbul** (active hours, daily cap day, Monday-based streak weeks).
 - Never print or commit API keys. `config/passwords.yaml` is git-ignored; Çınar pastes the Anthropic key in person.
-- Deploys (`serverpod cloud launch`) and pushes that trigger deploys are run by Çınar — give Çınar PowerShell commands.
+- Deploys: on 8 Oct 2026 Çınar explicitly told Claude to run the Serverpod Cloud deploy itself (`serverpod cloud project create/launch`, `password set`). Claude may do that, but entering payment details or creating accounts stays with Çınar (the plan needs a card on the Serverpod Cloud console, even for the 30-day free trial).
 - Every Serverpod 4 friction point goes into `FEEDBACK.md` (Most Valuable Feedback prize).
 - Serverpod 4 is newer than the model's training data: check `.claude/skills/serverpod-*` and https://docs.serverpod.dev before coding each area. Notes in `docs/serverpod-notes.md`.
 
