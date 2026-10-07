@@ -134,6 +134,7 @@ void run(List<String> args) async {
         session,
         demoPassword: pod.getPassword('demoAccountPassword'),
       );
+      await ensureSeedProofImages(session);
       await resumePendingVerifications(session);
       await resumePendingIdentityChecks(session);
       // Every 5 minutes: finish payments whose browser never came back,

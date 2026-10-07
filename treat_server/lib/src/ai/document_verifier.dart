@@ -14,6 +14,16 @@ const studentCardReasons = [
   'expired',
   'unreadable',
 ];
+
+/// What the model may answer for a card. `expired` is not one of them: it
+/// only reads the printed date, and we compare it with today in code (asked
+/// to judge expiry itself, the model turned inconsistent from one day to the
+/// next).
+final _modelCardReasons = [
+  for (final r in studentCardReasons)
+    if (r != 'expired') r,
+];
+
 const businessDocumentReasons = [
   'not_a_business_document',
   'name_mismatch',
@@ -78,12 +88,12 @@ class AnthropicDocumentVerifier implements DocumentVerifier {
       parseDocumentResponse(
         await postToClaude(_http, apiKey, _request(c)),
         c.kind,
+        today: c.today,
       );
 
   Map<String, Object?> _request(DocumentContext c) {
-    final reasons = c.kind == VerificationKind.studentCard
-        ? studentCardReasons
-        : businessDocumentReasons;
+    final card = c.kind == VerificationKind.studentCard;
+    final reasons = card ? _modelCardReasons : businessDocumentReasons;
     return {
       'model': model,
       'max_tokens': 300,
@@ -109,6 +119,17 @@ class AnthropicDocumentVerifier implements DocumentVerifier {
                 'enum': [...reasons, null],
                 'description': 'Required when approved is false, else null.',
               },
+              if (card)
+                'validUntil': {
+                  'type': ['string', 'null'],
+                  'description':
+                      'The validity / expiry date printed on the card as '
+                      'YYYY-MM-DD, or null if none is printed. If only month '
+                      'and year are printed use the last day of that month. '
+                      'For an academic year such as 2025-2026 use '
+                      '30 September of the second year. Do not decide '
+                      'whether it is still valid.',
+                },
             },
             'required': ['approved', 'reason'],
           },
@@ -139,7 +160,7 @@ String buildDocumentPrompt(DocumentContext c) => switch (c.kind) {
   VerificationKind.studentCard =>
     'A student says they are "${c.name}" and study at "${c.detail}" (they '
         'typed the university themselves, so it may be abbreviated, in '
-        'English or in Turkish). Today is ${c.today}.\n\n'
+        'English or in Turkish).\n\n'
         'Is this a photo of a university student ID card (a physical card or '
         'the university\'s official digital card / e-Devlet student '
         'certificate) belonging to this person?\n\n'
@@ -148,9 +169,9 @@ String buildDocumentPrompt(DocumentContext c) => switch (c.kind) {
         '"name_mismatch" if the name on it is clearly a different person '
         '(ignore letter case, Turkish letters and missing middle names), '
         '"school_mismatch" if it is clearly a different university, '
-        '"expired" if a validity date or academic year on it ended before '
-        'today (no date shown is fine), "unreadable" if you cannot read '
-        'the name or the university. Call report_verdict.',
+        '"unreadable" if you cannot read the name or the university. Also '
+        'report the printed validity date as validUntil (do not judge it '
+        'yourself). Call report_verdict.',
   VerificationKind.businessDocument =>
     'A business on the app is called "${c.name}" and its address is '
         '"${c.detail}".\n\n'
@@ -168,12 +189,35 @@ String buildDocumentPrompt(DocumentContext c) => switch (c.kind) {
         '"unreadable" if you cannot read it. Call report_verdict.',
 };
 
-DocumentVerdict parseDocumentResponse(String body, VerificationKind kind) {
+/// True when [validUntil] (an ISO date the model read off the card) is before
+/// [today] (ISO date). Anything that isn't a plausible date counts as "no
+/// date printed".
+bool cardExpired(Object? validUntil, String today) {
+  if (validUntil is! String ||
+      !RegExp(
+        r'^20\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$',
+      ).hasMatch(validUntil)) {
+    return false;
+  }
+  return validUntil.compareTo(today) < 0;
+}
+
+/// [today] (ISO date) lets a student card be rejected as `expired` when its
+/// printed date has passed.
+DocumentVerdict parseDocumentResponse(
+  String body,
+  VerificationKind kind, {
+  String? today,
+}) {
   final input = toolInputOf(body);
-  if (input['approved'] == true) return const DocumentVerdict.approved();
-  final allowed = kind == VerificationKind.studentCard
-      ? studentCardReasons
-      : businessDocumentReasons;
+  final card = kind == VerificationKind.studentCard;
+  if (input['approved'] == true) {
+    if (card && today != null && cardExpired(input['validUntil'], today)) {
+      return const DocumentVerdict.rejected('expired');
+    }
+    return const DocumentVerdict.approved();
+  }
+  final allowed = card ? _modelCardReasons : businessDocumentReasons;
   final reason = input['reason'];
   return DocumentVerdict.rejected(
     reason is String && allowed.contains(reason) ? reason : 'unreadable',

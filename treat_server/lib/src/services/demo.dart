@@ -46,9 +46,17 @@ const unverifiedGuestName = 'Ali Yılmaz';
 
 /// Sample student card photos (see [SampleCard]) for demo students.
 Future<List<int>> sampleCardBytes(SampleCard kind) => File(
-  'seed_assets/samples/cards/'
-  '${kind == SampleCard.matching ? 'matching' : 'someone_else'}.jpg',
+  seedAssetPath(
+    'samples/cards/'
+    '${kind == SampleCard.matching ? 'matching' : 'someone_else'}.jpg',
+  ),
 ).readAsBytes();
+
+/// Demo screenshots and sample photos live under `web/seed_assets`: `web/` is
+/// the one resource folder every Serverpod Cloud image carries to production
+/// (a top-level `seed_assets/` was not copied there). [relative] is e.g.
+/// `proofs/pixel_5.jpg`.
+String seedAssetPath(String relative) => 'web/seed_assets/$relative';
 
 /// File-name marker for demo sample proofs (see [isSampleProof]).
 const sampleProofMarker = '/sample-';
@@ -82,15 +90,15 @@ void requireNotDemoStudent(Session session, StudentProfile s) {
 /// Real Claude verifies it like any upload.
 Future<List<int>?> sampleProofBytes(Shop shop, SampleProof kind) async {
   if (kind == SampleProof.tagsNobody) {
-    return File('seed_assets/samples/no_mention.jpg').readAsBytes();
+    return File(seedAssetPath('samples/no_mention.jpg')).readAsBytes();
   }
   final key = shop.seedKey;
   if (key == null) return null;
   if (kind == SampleProof.noDisclosure) {
-    final f = File('seed_assets/samples/undisclosed/$key.jpg');
+    final f = File(seedAssetPath('samples/undisclosed/$key.jpg'));
     return f.existsSync() ? f.readAsBytes() : null;
   }
-  final dir = Directory('seed_assets/proofs');
+  final dir = Directory(seedAssetPath('proofs'));
   if (!dir.existsSync()) return null;
   final files =
       dir

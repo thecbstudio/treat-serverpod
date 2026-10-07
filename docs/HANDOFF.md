@@ -40,7 +40,7 @@ Last updated: **30 Sep 2026**. Talk to the user (Çınar) in **Turkish**; code, 
 - Branded splash in `web/index.html`, real title/meta/OG/icons/manifest. Desktop layout ≥900 px (NavigationRail, `AppWidth(wide:)`, `CardGrid`/`SliverCardGrid`, two-column welcome/auth with photo collage); phone layout unchanged.
 - Student: Discover (live drops, "Fresh on the wall", 3-col grid, skeleton loader, ★ score badges, lock-reason pills), claim screen (QR/code/countdown, proof form with copy "@place #işbirliği", post-link field for permanent posts, 3 demo samples, verdicts, appeal, **RateCard**, thanks), My treats, Leaderboard, Profile, place page (score + distribution + verified reviews), student page.
 - Business: Scan, Panel (live feed, open proof, **report removed post**, open post link, ROI + compliance note, **treat score + reviews with private notes**, top students), Offers (Drops/Regular sections, only offerable proof types), Business profile (**Reputation kit**: open public page, copy link, Google review link, print card; profile form).
-- Assets: category photos + 6 Unsplash place photos (`assets/shop/`, credits in README). Seed stories in `treat_server/seed_assets/proofs` carry #işbirliği; undisclosed variants in `seed_assets/samples/undisclosed/`, `samples/no_mention.jpg`.
+- Assets: category photos + 6 Unsplash place photos (`assets/shop/`, credits in README). Seed stories in `treat_server/web/seed_assets/proofs` carry #işbirliği; undisclosed variants in `seed_assets/samples/undisclosed/`, `samples/no_mention.jpg`.
 
 ## Honest gaps (told to Çınar on 30 Sep)
 - **Not deployed** (biggest risk for "works" 30%). Never tested: sign-up e-mail in prod, camera QR on real phones/iOS Safari, TikTok oEmbed against real TikTok, Google-link card front visually.

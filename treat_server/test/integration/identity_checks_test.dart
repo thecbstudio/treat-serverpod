@@ -39,12 +39,20 @@ void main() {
     String body(Object? reason) =>
         '{"content":[{"type":"tool_use","input":{"approved":false,'
         '"reason":${reason == null ? 'null' : '"$reason"'}}}]}';
+    // The model never decides "expired" itself: that answer is not accepted.
     expect(
       parseDocumentResponse(
         body('expired'),
         VerificationKind.studentCard,
       ).reason,
-      'expired',
+      'unreadable',
+    );
+    expect(
+      parseDocumentResponse(
+        body('name_mismatch'),
+        VerificationKind.studentCard,
+      ).reason,
+      'name_mismatch',
     );
     expect(
       parseDocumentResponse(
@@ -57,6 +65,43 @@ void main() {
       parseDocumentResponse(
         '{"content":[{"type":"tool_use","input":{"approved":true}}]}',
         VerificationKind.businessDocument,
+      ).approved,
+      isTrue,
+    );
+  });
+
+  test('a card is expired when its printed date is before today, decided '
+      'in code and not by the model', () {
+    String approved(String? validUntil) =>
+        '{"content":[{"type":"tool_use","input":{"approved":true,'
+        '"reason":null,"validUntil":${validUntil == null ? 'null' : '"$validUntil"'}}}]}';
+    bool ok(String? date, {String today = '2026-10-07'}) =>
+        parseDocumentResponse(
+          approved(date),
+          VerificationKind.studentCard,
+          today: today,
+        ).approved;
+    expect(ok('2028-09-30'), isTrue);
+    expect(ok('2026-10-07'), isTrue, reason: 'valid on its last day');
+    expect(ok('2026-10-06'), isFalse);
+    expect(
+      parseDocumentResponse(
+        approved('2025-06-30'),
+        VerificationKind.studentCard,
+        today: '2026-10-07',
+      ).reason,
+      'expired',
+    );
+    // No date, or something that isn't one, means "none printed".
+    expect(ok(null), isTrue);
+    expect(ok('soon'), isTrue);
+    expect(ok('1999-01-01'), isTrue);
+    // Business documents have no validity check.
+    expect(
+      parseDocumentResponse(
+        approved('2020-01-01'),
+        VerificationKind.businessDocument,
+        today: '2026-10-07',
       ).approved,
       isTrue,
     );

@@ -13,7 +13,7 @@ import '../services/proofs.dart';
 
 /// Demo history so the app looks lived-in for judges: students who already
 /// collected treats over the past weeks, their shared posts (with the proof
-/// screenshots from `seed_assets/proofs`) and thank-you notes.
+/// screenshots from `web/seed_assets/proofs`) and thank-you notes.
 ///
 /// Runs once: skipped when the first demo student already exists. All of it
 /// is demo data and is described as such in the README.
@@ -52,6 +52,28 @@ Future<void> seedDemoHistory(Session session) async {
       if (offer == null) continue;
       student = await _addHistoryClaim(session, student, offer, h, now);
     }
+  }
+}
+
+/// Puts the seed screenshots into storage when they are missing. History is
+/// seeded only once, so a first boot without the files (they were not in the
+/// Docker image) would leave the wall's images broken for good.
+Future<void> ensureSeedProofImages(Session session) async {
+  final dir = Directory(seedAssetPath('proofs'));
+  if (!dir.existsSync()) return;
+  for (final file in dir.listSync().whereType<File>()) {
+    final path = 'proofs/seed/${file.uri.pathSegments.last}';
+    if (await session.storage.fileExists(
+      storageId: proofStorage,
+      path: path,
+    )) {
+      continue;
+    }
+    await session.storage.storeFile(
+      storageId: proofStorage,
+      path: path,
+      byteData: ByteData.sublistView(await file.readAsBytes()),
+    );
   }
 }
 
@@ -101,7 +123,7 @@ Future<StudentProfile> _addHistoryClaim(
   String? proofPath;
   if (approved) {
     proofPath = 'proofs/seed/${h.image}';
-    final file = File('seed_assets/proofs/${h.image}');
+    final file = File(seedAssetPath('proofs/${h.image}'));
     if (await file.exists() &&
         !await session.storage.fileExists(
           storageId: proofStorage,
@@ -228,7 +250,7 @@ class _H {
 
   final String offerKey;
 
-  /// Screenshot in seed_assets/proofs; null = redeemed, post not sent yet.
+  /// Screenshot in web/seed_assets/proofs; null = redeemed, post not sent yet.
   final String? image;
   final int daysAgo;
   final String? thanks;

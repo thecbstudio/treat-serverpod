@@ -133,7 +133,7 @@ void main() {
         fake.answers.add(const ProofVerdict.approved());
         await runProofVerification(sessionBuilder.build(), claimId);
         final pixelStory = await File(
-          'seed_assets/proofs/pixel_5.jpg',
+          'web/seed_assets/proofs/pixel_5.jpg',
         ).readAsBytes();
         expect(fake.seen.single.image, pixelStory);
         final after = await endpoints.claim.get(guest, claimId);
@@ -171,7 +171,7 @@ void main() {
         );
         await runProofVerification(sessionBuilder.build(), claimId);
         final undisclosed = await File(
-          'seed_assets/samples/undisclosed/pixel.jpg',
+          'web/seed_assets/samples/undisclosed/pixel.jpg',
         ).readAsBytes();
         expect(fake.seen.single.image, undisclosed);
         final after = await endpoints.claim.get(guest, claimId);
