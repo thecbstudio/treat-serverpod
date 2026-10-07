@@ -16,6 +16,8 @@ Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web)
 | ![Welcome screen](docs/screenshots/welcome-desktop.png) | ![Discover](docs/screenshots/discover-desktop.png) |
 | **Business: live Panel** | **On a phone** |
 | ![Business panel](docs/screenshots/panel-desktop.png) | <img src="docs/screenshots/discover-phone.png" alt="Discover on a phone" width="260"> |
+| **Gifts: paid with iyzico, collected by QR** | **Panel with gift money** |
+| <img src="docs/screenshots/gift-qr-phone.png" alt="A paid gift with its QR" width="260"> | ![Panel with the gifts card](docs/screenshots/panel-gifts-desktop.png) |
 
 ## The loop
 
@@ -26,6 +28,8 @@ Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web)
 | The QR screen flips to **Redeemed** the instant the shop scans — no refresh. | The **Panel** feed lights up live: claims, redeems, proofs, verdicts. |
 | Uploads a screenshot of the post → **Under review** → **Approved (+1 treat)** or **Rejected** (reason + one appeal). | Sees the proof screenshots, totals and an estimated reach / marketing value. |
 | Profile: treats, week streak, badges, strikes. Leaderboard (name + university only). | |
+| **Gifts** a paid treat to a friend (iyzico checkout, 15 % commission); the friend shows a QR, the place scans it. | The gift shows up in the same scanner and on the Panel (net of the commission). |
+| No `.edu` e-mail? Photographs the **student card**; Claude checks it and the photo is deleted. | Sends a **tax certificate / licence** for the verified badge (Claude checks it, photo deleted). |
 
 ## Architecture
 
@@ -36,12 +40,14 @@ flowchart LR
     B["Business<br/>Scan · live Panel · Offers/Drops"]
   end
   subgraph SP["Serverpod 4 server"]
-    EP["Endpoints<br/>claim · shop · offer · shopOffers<br/>social · leaderboard · profile · demo"]
+    EP["Endpoints<br/>claim · shop · offer · shopOffers · gift<br/>social · leaderboard · profile · verification · demo"]
     R["rules.dart<br/>eligibility, caps, streaks<br/>(Europe/Istanbul)"]
     MSG["Server events<br/>claim:&lt;id&gt; · shop:&lt;id&gt; · drops"]
-    FC["Future calls<br/>ExpireClaim · VerifyProof"]
-    AI["proof_verifier.dart"]
+    FC["Future calls<br/>ExpireClaim · VerifyProof · VerifyIdentity<br/>(+ gift sweep timer)"]
+    AI["proof_verifier.dart<br/>document_verifier.dart"]
+    CB["POST /pay/iyzico/:id<br/>(Relic route)"]
   end
+  PAY["iyzico<br/>hosted checkout (sandbox)"]
   DB[("PostgreSQL<br/>ORM, row locks")]
   ST[("Private file storage<br/>proof screenshots")]
   CL["Claude<br/>(Anthropic Messages API,<br/>forced tool call)"]
@@ -58,7 +64,11 @@ flowchart LR
   FC --> AI
   AI -- "screenshot + place + post type" --> CL
   CL -- "verdict JSON" --> AI
-  AI -- "approve / strike" --> DB
+  AI -- "approve / strike / verified" --> DB
+  S -- "gift: pay on iyzico's page" --> PAY
+  PAY -- "browser returns" --> CB
+  CB -- "signed result lookup" --> PAY
+  CB -- "gift paid" --> DB
 ```
 
 ## How Serverpod is used
