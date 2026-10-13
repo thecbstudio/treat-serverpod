@@ -47,7 +47,7 @@ The idea was explored earlier as a React/Firebase prototype, used only as a feat
 
 - Live app: https://treat-app.serverpod.space (Serverpod Cloud, Starter plan; API at https://treat-app.api.serverpod.space)
 - Repository: https://github.com/thecbstudio/treat-serverpod (public)
-- Video (1:57): https://drive.google.com/file/d/1_Xb20kHJURxhhwdPOoD6unE3w01OiY4C/view?usp=sharing
+- Video (1:57): https://youtu.be/NorT-XtVleM
 - No sign-up needed. On the welcome screen use **Student**, **Business** and **Try the student-card check** (one tap each). Demo logins also exist (password on request): `student@demo.treat`, `pixel@demo.treat` (Pixel Oyun Kafe), `kirlangic@demo.treat`.
 - Test card for the gift payment (iyzico sandbox): `5528 7900 0000 0008`, any future date, CVC `123`.
 - Step-by-step: README → "Demo accounts" (claim → scan → post → verdict, gifting alone in one window, student-card check).
@@ -79,7 +79,7 @@ Setup: **phone** (or a narrow browser window) = student, **laptop** = business p
 
 # Hackathon post (Best Hackathon Post)
 
-> Built **treat.** for the #Serverpod hackathon: students claim free treats from local cafés, post about them, and Claude verifies the post — while the student's phone and the business's panel update live over Serverpod streams. Future calls expire QR codes and run the AI checks; friends can gift a paid treat through iyzico with real refunds; all rules run server-side in locked transactions. Flutter web + Serverpod 4 + Serverpod Cloud, 190 tests. 🎥 https://drive.google.com/file/d/1_Xb20kHJURxhhwdPOoD6unE3w01OiY4C/view?usp=sharing
+> Built **treat.** for the #Serverpod hackathon: students claim free treats from local cafés, post about them, and Claude verifies the post — while the student's phone and the business's panel update live over Serverpod streams. Future calls expire QR codes and run the AI checks; friends can gift a paid treat through iyzico with real refunds; all rules run server-side in locked transactions. Flutter web + Serverpod 4 + Serverpod Cloud, 190 tests. 🎥 https://youtu.be/NorT-XtVleM
 
 # Feedback form
 
