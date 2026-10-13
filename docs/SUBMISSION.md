@@ -1,6 +1,6 @@
 # Submission kit
 
-Everything needed for the BuilderBase form. Fill the `TODO`s on submission day (13 Oct; the deadline is 14 Oct 23:59 CEST). The demo video must be **under 2 minutes** (YouTube or Vimeo).
+Everything needed for the BuilderBase form. Submitted on BuilderBase on 14 Oct 2026 (deadline 14 Oct 23:59 CEST). The demo video must be **under 2 minutes** (YouTube or Vimeo).
 
 ---
 
@@ -46,9 +46,9 @@ The idea was explored earlier as a React/Firebase prototype, used only as a feat
 ## 7. Links & access
 
 - Live app: https://treat-app.serverpod.space (Serverpod Cloud, Starter plan; API at https://treat-app.api.serverpod.space)
-- Repository: https://github.com/thecbstudio/treat-serverpod (private — share with viktor@serverpod.dev, alexander@serverpod.dev, isak@serverpod.dev) `TODO share`
-- Video: `TODO YouTube/Vimeo link`
-- No sign-up needed. On the welcome screen use **Student**, **Business** and **Try the student-card check** (one tap each). Demo logins (password `TODO: production.demoAccountPassword from treat_server/config/passwords.yaml`): `student@demo.treat`, `pixel@demo.treat` (Pixel Oyun Kafe), `kirlangic@demo.treat`.
+- Repository: https://github.com/thecbstudio/treat-serverpod (public)
+- Video (1:57): https://drive.google.com/file/d/1_Xb20kHJURxhhwdPOoD6unE3w01OiY4C/view?usp=sharing
+- No sign-up needed. On the welcome screen use **Student**, **Business** and **Try the student-card check** (one tap each). Demo logins also exist (password on request): `student@demo.treat`, `pixel@demo.treat` (Pixel Oyun Kafe), `kirlangic@demo.treat`.
 - Test card for the gift payment (iyzico sandbox): `5528 7900 0000 0008`, any future date, CVC `123`.
 - Step-by-step: README → "Demo accounts" (claim → scan → post → verdict, gifting alone in one window, student-card check).
 
@@ -79,7 +79,7 @@ Setup: **phone** (or a narrow browser window) = student, **laptop** = business p
 
 # Hackathon post (Best Hackathon Post)
 
-> Built **treat.** for the #Serverpod hackathon: students claim free treats from local cafés, post about them, and Claude verifies the post — while the student's phone and the business's panel update live over Serverpod streams. Future calls expire QR codes and run the AI checks; friends can gift a paid treat through iyzico with real refunds; all rules run server-side in locked transactions. Flutter web + Serverpod 4 + Serverpod Cloud, 190 tests. 🎥 `TODO video link`
+> Built **treat.** for the #Serverpod hackathon: students claim free treats from local cafés, post about them, and Claude verifies the post — while the student's phone and the business's panel update live over Serverpod streams. Future calls expire QR codes and run the AI checks; friends can gift a paid treat through iyzico with real refunds; all rules run server-side in locked transactions. Flutter web + Serverpod 4 + Serverpod Cloud, 190 tests. 🎥 https://drive.google.com/file/d/1_Xb20kHJURxhhwdPOoD6unE3w01OiY4C/view?usp=sharing
 
 # Feedback form
 
