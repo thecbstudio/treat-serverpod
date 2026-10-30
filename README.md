@@ -6,7 +6,7 @@ A student grabs an offer ("medium filter coffee"), shows a QR code at the counte
 
 Built for **Build Something Real: The Serverpod Hackathon** with **Flutter (web) + Serverpod 4**.
 
-> **Live app:** https://treat-app.serverpod.space (Serverpod Cloud; payments run in the iyzico **sandbox**)
+> **Live app:** offline since the hackathon ended (it ran on Serverpod Cloud; payments ran in the iyzico **sandbox**). The demo video below shows the full flow.
 >
 > **Demo video (1:57):** https://youtu.be/NorT-XtVleM
 >
